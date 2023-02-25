@@ -1,6 +1,5 @@
 <script>
   // @ts-nocheck
-  import { maximize } from "../store/stores";
 
   let buttons = [
     {
@@ -20,9 +19,7 @@
       id: 3,
       name: "Maximize",
       color: "#03CA0B",
-      click: () => {
-        maximize.toggle();
-      },
+      click: () => {},
     },
   ];
 

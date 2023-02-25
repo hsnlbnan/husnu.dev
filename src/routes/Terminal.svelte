@@ -3,7 +3,6 @@
 
   import TerminalHead from "../components/TerminalHead.svelte";
   import TerminalBody from "../components/TerminalBody.svelte";
-  import { maximize } from "../store/stores";
   import Dragable from "../components/Dragable.svelte";
   import { browser } from "$app/environment";
 

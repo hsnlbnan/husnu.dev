@@ -92,9 +92,7 @@
     {
       name: "set",
       description: "Set a variable",
-      execute: () => {
-        setContext("isMaximized", !getContext("isMaximized"));
-      },
+      execute: () => {},
     },
     {
       name: "social",
