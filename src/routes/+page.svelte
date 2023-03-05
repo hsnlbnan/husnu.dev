@@ -4,7 +4,10 @@
 
 <svelte:head>
   <title>Welcome to Husnu's Website</title>
-  <meta name="description" content="Svelte demo app" />
+  <meta
+    name="description"
+    content="Husnu Lubnan is a Frontend Developer who loves to build things with JavaScript. He is currently working at a @Nono Company"
+  />
 
   <meta property="og:title" content="Welcome to Husnu's Website" />
   <meta
