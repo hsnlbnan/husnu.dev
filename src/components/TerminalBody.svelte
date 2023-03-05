@@ -36,11 +36,6 @@
       type: "text",
       hasTranslation: true,
     },
-    {
-      text: "terminal.clear",
-      type: "text",
-      hasTranslation: true,
-    },
   ];
 
   let commands = [
@@ -74,14 +69,7 @@
         ];
       },
     },
-    {
-      name: "clear",
-      description: "Clear the terminal",
-      execute: () => {
-        handleFocusInput();
-        terminalTexts = [];
-      },
-    },
+
     {
       name: "set",
       description: "Set a variable",
