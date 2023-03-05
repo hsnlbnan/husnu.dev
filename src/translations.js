@@ -21,14 +21,14 @@ export default {
     "terminal.title": "Merhaba, Dünya!",
     "terminal.welcome": "Web siteme hoşgeldin!",
     "terminal.help":
-      "Buraya yeni geldiyseniz, tüm komutları görmek için 'yardım' komutunu kullanabilirsiniz",
+      "Buraya yeni geldiyseniz, tüm komutları görmek için 'help' komutunu kullanabilirsiniz",
     "terminal.time": "Şu anki zaman: {{time}}",
     "terminal.clear":
       "Eğer terminali temizlemek istiyorsanız, 'temizle' komutunu kullanabilirsiniz",
     "terminal.error":
-      "Komut bulunamadı. Tüm komutları görmek için 'yardım' yazın",
+      "Komut bulunamadı. Tüm komutları görmek için 'help' yazın",
     "terminal.placeholder": "Bir komut yazın ve enter'a basın",
-    "command.help": "yardım",
+    "command.help": "help",
     "description.list": "Kullandığım sosyal medya hesaplarını listele",
     "description.cv": "CV'imi indir",
     "description.mail": "Bana e-posta gönder",

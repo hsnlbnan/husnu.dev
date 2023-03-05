@@ -24,8 +24,4 @@
       padding: 30px;
     }
   }
-
-  h1 {
-    width: 100%;
-  }
 </style>

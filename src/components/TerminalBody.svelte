@@ -1,7 +1,6 @@
 <script>
   // @ts-nocheck
 
-  import { setContext, getContext } from "svelte";
   import { browser } from "$app/environment";
   import { t, locale, locales } from "../i18n";
 
@@ -46,36 +45,30 @@
 
   let commands = [
     {
-      name: `${$t("command.help")}`,
+      name: `help`,
       description: "List all available commands",
       execute: () => {
         handleFocusInput();
         terminalTexts = [
           ...terminalTexts,
           {
-            text: `social -
-            ${$t("description.list")}`,
-
+            text: `social - ${$t("description.list")}`,
             type: "text",
           },
           {
-            text: `cv -
-            ${$t("description.cv")}`,
+            text: `cv - ${$t("description.cv")}`,
             type: "text",
           },
           {
-            text: `mail -
-            ${$t("description.mail")}`,
+            text: `mail - ${$t("description.mail")}`,
             type: "text",
           },
           {
-            text: `lang -
-            ${$t("description.lang")}`,
+            text: `lang - ${$t("description.lang")}`,
             type: "text",
           },
           {
-            text: `theme - 
-            ${$t("description.theme")}`,
+            text: `theme - ${$t("description.theme")}`,
             type: "text",
           },
         ];
