@@ -398,4 +398,10 @@
     background-color: var(--color-bg-tertiary);
     color: var(--color-text-primary);
   }
+
+  @media (max-width: 1280px) {
+    .terminal-input {
+      font-size: 0.7rem;
+    }
+  }
 </style>

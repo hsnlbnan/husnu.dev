@@ -1,5 +1,6 @@
 <script>
   // @ts-nocheck
+  import MediaQuery from "../utils/MediaQuery.svelte";
 
   import TerminalHead from "../components/TerminalHead.svelte";
   import TerminalBody from "../components/TerminalBody.svelte";
@@ -13,12 +14,25 @@
   }
 </script>
 
-<Dragable>
-  <div class="terminal">
-    <TerminalHead />
-    <TerminalBody />
-  </div>
-</Dragable>
+<MediaQuery query="(min-width: 1281px)" let:matches>
+  {#if matches}
+    <Dragable>
+      <div class="terminal">
+        <TerminalHead />
+        <TerminalBody />
+      </div>
+    </Dragable>
+  {/if}
+</MediaQuery>
+
+<MediaQuery query="(max-width: 1280px)" let:matches>
+  {#if matches}
+    <div class="terminal">
+      <TerminalHead />
+      <TerminalBody />
+    </div>
+  {/if}
+</MediaQuery>
 
 <style>
   .terminal {

@@ -17,7 +17,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    flex: 0.6;
+  }
+
+  @media (max-width: 1280px) {
+    section {
+      padding: 30px;
+    }
   }
 
   h1 {

@@ -72,6 +72,13 @@ p {
   line-height: 1.5;
 }
 
+@media (max-width: 1280px) {
+  p {
+    line-height: 2.2;
+    font-size: 14px;
+  }
+}
+
 a {
   color: var(--color-theme-1);
   text-decoration: none;
