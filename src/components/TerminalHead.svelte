@@ -11,15 +11,11 @@
       id: 2,
       name: "Minimize",
       color: "#E2C423",
-      click: () => {
-        changeState();
-      },
     },
     {
       id: 3,
       name: "Maximize",
       color: "#03CA0B",
-      click: () => {},
     },
   ];
 
@@ -51,11 +47,7 @@
 <div class="head">
   <div class="buttons">
     {#each buttons as button (button.id)}
-      <button
-        class={"button"}
-        style={`background-color: ${button.color}`}
-        on:click={button.click}
-      />
+      <button class={"t-button"} style={`background-color: ${button.color}`} />
     {/each}
   </div>
   <h3 class="head-title">hsnlbnan@mac ~ %</h3>
@@ -68,6 +60,7 @@
     width: 100%;
     background-color: var(--color-bg-secondary);
     height: 48px;
+    justify-content: center;
   }
 
   .head-title {
@@ -76,14 +69,18 @@
   }
 
   .buttons {
-    margin-left: 16px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 8px;
+    margin-left: 1rem;
   }
 
-  .button {
+  .t-button {
     width: 16px;
     height: 16px;
     border-radius: 50%;
     border: none;
-    margin: 0 5px;
+    outline: none;
+    padding: 0;
   }
 </style>
