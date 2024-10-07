@@ -175,3 +175,13 @@ pre {
 .animate-draw {
   animation: draw 1s ease-in-out forwards;
 }
+
+/* remove all scrollbars */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* remove all scrollbars */
+::-webkit-scrollbar {
+  display: none;
+}

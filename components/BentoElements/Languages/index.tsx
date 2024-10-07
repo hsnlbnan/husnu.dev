@@ -21,65 +21,67 @@ export type IconProps = React.HTMLAttributes<SVGElement>;
 const Languages = () => {
   return (
     <div className="bg-[#1D1D1D] p-6 md:p-16 rounded-xl">
-      <div className="flex flex-row justify-between items-start gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
         <h3 className="font-light text-2xl text-white">
           My adventure lasting <span className="text-[#dfff1f]">4+ years</span>
           <p className="mt-2 text-sm">20+ projects released</p>
         </h3>
       </div>
-      <div className="relative flex items-start">
-        <Dock direction="middle">
-          <DockIcon size={52}>
-            <Tooltip text="NextJS">
-              <NextJS className="fill-white size-8" />
-            </Tooltip>
-          </DockIcon>
-          <DockIcon size={52}>
-            <Tooltip text="ReactJS">
-              <ReactJs className="w-8 h-8 fill-white" />
-            </Tooltip>
-          </DockIcon>
-          <DockIcon size={52}>
-            <Tooltip text="JavaScript">
-              <JS className="size-6" />
-            </Tooltip>
-          </DockIcon>
-          <DockIcon size={52}>
-            <Tooltip text="TypeScript">
-              <TypeScript className="size-6" />
-            </Tooltip>
-          </DockIcon>
-          <DockIcon size={52}>
-            <Tooltip text="Svelte">
-              <Svelte className="size-6" />
-            </Tooltip>
-          </DockIcon>
-          <DockIcon size={52}>
-            <Tooltip text="NodeJS">
-              <NodeJs className="size-6" />
-            </Tooltip>
-          </DockIcon>
-          <DockIcon size={52}>
-            <Tooltip text="Redux">
-              <Redux className="size-6" />
-            </Tooltip>
-          </DockIcon>
-          <DockIcon size={52}>
-            <Tooltip text="Sass">
-              <Sass className="size-6" />
-            </Tooltip>
-          </DockIcon>
-          <DockIcon size={52}>
-            <Tooltip text="Tailwind">
-              <Tailwind className="size-6" />
-            </Tooltip>
-          </DockIcon>
-          <DockIcon size={52}>
-            <Tooltip text="Framer Motion">
-              <FramerMotion className="size-4" />
-            </Tooltip>
-          </DockIcon>
-        </Dock>
+      <div className="relative overflow-x-auto lg:overflow-hidden">
+        <div className="flex items-start min-w-max pb-4">
+          <Dock direction="middle" >
+            <DockIcon size={52}>
+              <Tooltip text="NextJS">
+                <NextJS className="fill-white size-8" />
+              </Tooltip>
+            </DockIcon>
+            <DockIcon size={52}>
+              <Tooltip text="ReactJS">
+                <ReactJs className="w-8 h-8 fill-white" />
+              </Tooltip>
+            </DockIcon>
+            <DockIcon size={52}>
+              <Tooltip text="JavaScript">
+                <JS className="size-6" />
+              </Tooltip>
+            </DockIcon>
+            <DockIcon size={52}>
+              <Tooltip text="TypeScript">
+                <TypeScript className="size-6" />
+              </Tooltip>
+            </DockIcon>
+            <DockIcon size={52}>
+              <Tooltip text="Svelte">
+                <Svelte className="size-6" />
+              </Tooltip>
+            </DockIcon>
+            <DockIcon size={52}>
+              <Tooltip text="NodeJS">
+                <NodeJs className="size-6" />
+              </Tooltip>
+            </DockIcon>
+            <DockIcon size={52}>
+              <Tooltip text="Redux">
+                <Redux className="size-6" />
+              </Tooltip>
+            </DockIcon>
+            <DockIcon size={52}>
+              <Tooltip text="Sass">
+                <Sass className="size-6" />
+              </Tooltip>
+            </DockIcon>
+            <DockIcon size={52}>
+              <Tooltip text="Tailwind">
+                <Tailwind className="size-6" />
+              </Tooltip>
+            </DockIcon>
+            <DockIcon size={52}>
+              <Tooltip text="Framer Motion">
+                <FramerMotion className="size-4" />
+              </Tooltip>
+            </DockIcon>
+          </Dock>
+        </div>
       </div>
     </div>
   );

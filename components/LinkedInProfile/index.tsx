@@ -44,7 +44,7 @@ const ProfileCard = () => {
         <div className="flex items-center gap-2 mt-4">
           <button
             onClick={handleConnect}
-            className="flex justify-center items-center gap-2 bg-[#dfff1f] hover:bg-[#dfff1f88] px-4 py-2 rounded-full w-full text-sm text-white transition-all duration-300"
+            className="flex justify-center text-black items-center gap-2 bg-[#dfff1f] hover:bg-[#dfff1f88] px-4 py-2 rounded-full w-full text-sm transition-all duration-300"
           >
             <LinkedInConnect className="w-4 h-4" />
             Bağlantı Kur

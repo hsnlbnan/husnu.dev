@@ -18,7 +18,7 @@ const DEFAULT_MAGNIFICATION = 60;
 const DEFAULT_DISTANCE = 140;
 
 const dockVariants = cva(
-  "flex gap-3.5 border-gray-700 bg-[#171717] backdrop-blur-md supports-backdrop-blur:bg-white/10 supports-backdrop-blur:dark:bg-black/10 mt-8 py-8 p-6 border rounded-2xl w-full h-[80px] overflow-hidden lg:overflow-visible"
+  "flex gap-3.5 border-gray-700 bg-[#171717] backdrop-blur-md supports-backdrop-blur:bg-white/10 supports-backdrop-blur:dark:bg-black/10 mt-8 py-8 p-6 border rounded-2xl w-full h-[80px]"
 );
 
 const Dock = React.forwardRef<HTMLDivElement, DockProps>(
@@ -87,7 +87,7 @@ const DockIcon = ({
   const ref = useRef<HTMLDivElement>(null);
 
   const distanceCalc = useTransform(mouseX, (val: number) => {
-    const bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
+    const bounds = ref?.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
 
     return val - bounds.x - bounds.width / 2;
   });
