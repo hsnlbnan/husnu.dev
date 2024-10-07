@@ -87,7 +87,7 @@ export default function Home() {
     <>
       <Header />
       <main className="w-full max-w-screen">
-        <div className="max-h-[100dvh]">
+        <div className="">
           <div className="mx-auto max-w-7xl">
             <div className="flex lg:flex-row flex-col gap-4">
               <div className="w-full lg:w-8/12 max-h-[500px] overflow-y-auto">
