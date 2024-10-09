@@ -33,7 +33,12 @@ const EmailComponent: React.FC<EmailComponentProps> & {
     >
       <div className="flex items-center gap-3 w-full">{children}</div>
      
-      <div className="flex justify-center items-center bg-gray-200 p-6 rounded-full cursor-pointer relative w-16 h-16 overflow-hidden">
+      <div 
+        className="flex justify-center items-center bg-gray-200 p-6 rounded-full cursor-pointer relative w-16 h-16 overflow-hidden"
+        role="button"
+        aria-label="Daha fazla bilgi"
+        tabIndex={0}
+      >
         <AnimatePresence mode="popLayout" initial={false}>
           {!isHovered ? (
             <motion.div
@@ -46,11 +51,11 @@ const EmailComponent: React.FC<EmailComponentProps> & {
               className="absolute"
             >
               {href ? (
-                <Link href={href}>
-                  <ArrowRight className="w-6 h-6 text-gray-700" />
+                <Link href={href} aria-label="Daha fazla bilgi için tıklayın">
+                  <ArrowRight className="w-6 h-6 text-gray-700" aria-hidden="true" />
                 </Link>
               ) : (
-                <ArrowRight className="w-6 h-6 text-gray-700" />
+                <ArrowRight className="w-6 h-6 text-gray-700" aria-hidden="true" />
               )}
             </motion.div>
           ) : (
@@ -63,11 +68,11 @@ const EmailComponent: React.FC<EmailComponentProps> & {
               className="absolute"
             >
               {href ? (
-                <Link href={href}>
-                  <ArrowRight className="w-6 h-6 text-gray-700" />
+                <Link href={href} aria-label="Daha fazla bilgi için tıklayın">
+                  <ArrowRight className="w-6 h-6 text-gray-700" aria-hidden="true" />
                 </Link>
               ) : (
-                <ArrowRight className="w-6 h-6 text-gray-700" />
+                <ArrowRight className="w-6 h-6 text-gray-700" aria-hidden="true" />
               )}
             </motion.div>
           )}
