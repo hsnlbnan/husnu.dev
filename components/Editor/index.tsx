@@ -219,7 +219,7 @@ ${code.render}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.5 }}
-          className="relative bg-black shadow-lg rounded-lg w-full h-[360px] overflow-hidden"
+          className="relative bg-black shadow-lg rounded-lg w-full h-[380px] overflow-hidden"
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}

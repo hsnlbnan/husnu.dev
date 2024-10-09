@@ -85,103 +85,107 @@ export default function Home() {
 
   return (
     <>
-      <Header />
-      <main className="w-full max-w-screen">
-        <div className="">
-          <div className="mx-auto max-w-7xl">
-            <div className="flex lg:flex-row flex-col gap-4">
-              <div className="w-full lg:w-8/12 max-h-[500px] overflow-y-auto">
-                <Languages />
-              </div>
+      <div className="p-4 md:p-0">
+        <Header />
+        <main className="w-full max-w-screen">
+          <div className="">
+            <div className="mx-auto max-w-7xl">
+              <div className="flex lg:flex-row flex-col gap-4">
+                <div className="w-full lg:w-8/12 max-h-[500px] overflow-y-auto">
+                  <Languages />
+                </div>
 
-              <div className="w-full lg:w-4/12">
-                <div className="bg-[#1D1D1D] p-4 rounded-xl w-full h-full max-h-[500px] overflow-y-auto">
-                  <h3 className="flex items-center gap-2 font-light text-white text-xl">
-                    Adventure is live on{" "}
-                    <span className="flex text-[#dfff1f]">
-                      <WordRotate
-                        words={["Github", "Azure DevOps", "Gitlab"]}
-                      />
-                    </span>
-                  </h3>
-                  <p className="text-gray-400 text-sm">
-                    The places change, the adventure does not.
-                  </p>
-                  <GridHeart />
+                <div className="w-full lg:w-4/12">
+                  <div className="bg-[#1D1D1D] p-4 rounded-xl w-full h-full max-h-[500px] overflow-y-auto">
+                    <h3 className="flex items-center gap-2 font-light text-white text-xl">
+                      Adventure is live on{" "}
+                      <span className="flex text-[#dfff1f]">
+                        <WordRotate
+                          words={["Github", "Azure DevOps", "Gitlab"]}
+                        />
+                      </span>
+                    </h3>
+                    <p className="text-gray-400 text-sm">
+                      The places change, the adventure does not.
+                    </p>
+                    <GridHeart />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="flex lg:flex-row flex-col gap-4">
-              <div className="w-full lg:w-9/12">
-                {/* editable code editor here */}
-                <div className="bg-[#1D1D1D] my-5 mb-0 md:mb-10 p-8 rounded-xl w-full overflow-hidden">
-                  <h4 className="mb-8 font-light text-2xl text-white">
-                    The adventure always{" "}
-                    <span className="font-light text-[#dfff1f] text-2xl">
-                      follows the rules
-                    </span>
-                  </h4>
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <EditorBento />
-                  </Suspense>
+              <div className="flex lg:flex-row flex-col gap-4">
+                <div className="w-full lg:w-9/12">
+                  {/* editable code editor here */}
+                  <div className="bg-[#1D1D1D] my-5 mb-0 md:mb-10 p-4 md:p-8 rounded-xl w-full overflow-hidden">
+                    <h4 className="mb-3 md:mb-8 font-light text-2xl text-white">
+                      The adventure always <br className="visible md:hidden" />
+                      <span className="font-light text-[#dfff1f] text-2xl">
+                        follows the rules
+                      </span>
+                    </h4>
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <EditorBento />
+                    </Suspense>
+                  </div>
                 </div>
-              </div>
 
-              <div className="w-full lg:w-3/12">
-                <div className="bg-[#1D1D1D] my-5 mb-10 p-8 rounded-xl w-full overflow-hidden">
-                  <h4 className="mb-8 font-light text-2xl text-white">
-                    follow the{" "}
-                    <span className="font-light text-[#dfff1f] text-2xl">
-                      adventure
-                    </span>
-                  </h4>
+                <div className="w-full lg:w-3/12">
+                  <div className="bg-[#1D1D1D] my-5 mb-10 p-8 rounded-xl w-full overflow-hidden">
+                    <h4 className="mb-8 font-light text-2xl text-white">
+                      follow the{" "}
+                      <span className="font-light text-[#dfff1f] text-2xl">
+                        adventure
+                      </span>
+                      <p className="text-sm text-gray-400">
+                        Can you contact actor?
+                      </p>
+                    </h4>
 
-                  <div className="flex flex-col gap-4">
-                    <ProfileCard />
+                    <div className="flex flex-col gap-4">
+                      <ProfileCard />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="z-10 flex justify-center items-center bg-black rounded-lg min-h-64">
-          <TextReveal text="Projects I took part in action." />
-        </div>
-
-        <main ref={container} className="relative mt-10">
-          {projects.map((project, i) => {
-            const targetScale = 1 - (projects.length - i) * 0.05;
-            return (
-              <Card
-                key={`p_${i}`}
-                i={i}
-                {...project}
-                company={project.company || ""}
-                progress={scrollYProgress}
-                range={[i * 0.25, 1]}
-                targetScale={targetScale}
-                link={project.link || ""}
-              />
-            );
-          })}
-        </main>
-        <main className="relative mt-[10vh] w-full">
-          <div className="top-0 sticky flex flex-col justify-center items-center bg-black w-full h-screen text-white">
-            <VelocityScroll
-              text="Work Experience"
-              default_velocity={1}
-              className="drop-shadow-sm font-bold font-display text-4xl text-center text-white/20 md:text-7xl dark:text-white md:leading-[5rem] tracking-[-0.02em]"
-            />
-            <div className="flex flex-col p-8 w-full min-w-screen max-w-6xl">
-              {work.map((work, i) => {
-                return <Work key={i} {...work} />;
-              })}
-            </div>
+          <div className="z-10 flex justify-center items-center bg-black rounded-lg min-h-64">
+            <TextReveal text="Projects I took part in action." />
           </div>
-        </main>
-      </main>
 
+          <main ref={container} className="relative mt-10">
+            {projects.map((project, i) => {
+              const targetScale = 1 - (projects.length - i) * 0.05;
+              return (
+                <Card
+                  key={`p_${i}`}
+                  i={i}
+                  {...project}
+                  company={project.company || ""}
+                  progress={scrollYProgress}
+                  range={[i * 0.25, 1]}
+                  targetScale={targetScale}
+                  link={project.link || ""}
+                />
+              );
+            })}
+          </main>
+          <main className="relative mt-[10vh] w-full">
+            <div className="top-0 sticky flex flex-col justify-center items-center bg-black w-full h-screen text-white">
+              <VelocityScroll
+                text="Work Experience"
+                default_velocity={1}
+                className="drop-shadow-sm font-bold font-display text-4xl text-center text-white/20 md:text-7xl dark:text-white md:leading-[5rem] tracking-[-0.02em]"
+              />
+              <div className="flex flex-col p-8 w-full min-w-screen max-w-6xl">
+                {work.map((work, i) => {
+                  return <Work key={i} {...work} />;
+                })}
+              </div>
+            </div>
+          </main>
+        </main>
+      </div>
       <Footer />
     </>
   );

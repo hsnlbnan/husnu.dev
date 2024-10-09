@@ -1,51 +1,17 @@
 import React from "react";
-import { TextHoverEffect } from "../AnimatedText";
 import { toast } from "sonner";
-import Link from "next/link";
+import { Email, Phone, ArrowRight } from "@/icons";
+
+import EmailComponent from "../Email";
 
 export default function Content() {
   return (
-    <div className="flex flex-row justify-between bg-[#dfff1f] px-12 py-8 w-full h-full">
-      <Section1 />
-      <Section2 />
+    <div className="flex flex-row justify-between bg-[#dfff1f] px-12 py-8 min-w-full h-full">
+      <Nav />
     </div>
   );
 }
 
-const Section1 = () => {
-  return (
-    <div>
-      <Nav />
-    </div>
-  );
-};
-
-const Section2 = () => {
-  return (
-    <div>
-      <div className="relative flex justify-between items-end">
-        <div className="flex justify-start items-start">
-          <TextHoverEffect text="contact with me" />
-        </div>
-      </div>
-      {/* social media */}
-      <div className="bottom-0 left-0 absolute flex gap-6 bg-black px-6 py-8 rounded-tl-3xl rounded-tr-3xl w-full">
-        <Link href="https://github.com/hsnlbnan" className="text-white">
-          github
-        </Link>
-        <Link href="https://twitter.com/hsnlbnan" className="text-white">
-          twitter
-        </Link>
-        <Link href="https://linkedin.com/in/husnu" className="text-white">
-          linkedin
-        </Link>
-        <Link href="mailto:hsnlbnan@gmail.com" className="text-white">
-          mail
-        </Link>
-      </div>
-    </div>
-  );
-};
 
 const Nav = () => {
   const [formItems, setFormItems] = React.useState<
@@ -146,22 +112,73 @@ const Nav = () => {
   }
 
   return (
-    <div className="flex gap-20 shrink-0">
-      <div className="flex flex-col gap-2">
+    <div className="flex md:flex-row flex-col gap-20 w-full shrink-0 items-end pb-20">
+      <div className="flex flex-col gap-6 w-full md:w-1/2">
+        <div className="inline-flex items-center gap-0.5 bg-black px-5 py-1.5 rounded-full w-auto max-w-40 h-auto max-h-12 text-[#dfff1f]">
+          <Phone className="mt-1.5 w-6 h-6" stroke="#dfff1f" />
+          Contact Me
+        </div>
+        <div className="flex flex-col gap-6">
+          <h4 className="font-semibold text-4xl">Get in Touch with Me</h4>
+          <p className="text-xl">
+            You can contact me with your problems, bugs, new developments or
+            projects.
+          </p>
+
+          <EmailComponent href="mailto:hsnlbnan@gmail.com">
+            <EmailComponent.Icon>
+              <Email className="w-6 h-6" stroke="#333" />
+            </EmailComponent.Icon>
+            <div className="flex flex-col w-full">
+              <EmailComponent.Title>Email</EmailComponent.Title>
+              <EmailComponent.Description>
+                hsnlbnan@gmail.com
+              </EmailComponent.Description>
+            </div>
+          </EmailComponent>
+          <div data-cal-link="husnu" data-cal-config='{"theme":"dark"}'>
+            <EmailComponent>
+              <EmailComponent.Icon>
+                <Email className="w-6 h-6" stroke="#333" />
+              </EmailComponent.Icon>
+              <div className="flex flex-col w-full">
+                <EmailComponent.Title>Or give us a meet</EmailComponent.Title>
+                <EmailComponent.Description>
+                  Book a meeting
+                </EmailComponent.Description>
+              </div>
+            </EmailComponent>
+          </div>
+          <EmailComponent href="tel:+905532200016">
+            <EmailComponent.Icon>
+              <Phone className="w-6 h-6" stroke="#333" />
+            </EmailComponent.Icon>
+            <div className="flex flex-col w-full">
+              <EmailComponent.Title>Phone</EmailComponent.Title>
+              <EmailComponent.Description>
+                +90 553 220 00 16
+              </EmailComponent.Description>
+            </div>
+          </EmailComponent>
+        </div>
+      </div>
+      <div className="flex flex-col gap-2 w-full md:w-1/2">
         {formItems.map((item, index) => (
-          <div key={index} className="flex flex-col gap-2">
-            <label htmlFor={`form-item-${index}`}>{item.label}</label>
+          <div key={index} className="flex flex-col gap-2 w-full">
+            <label 
+            className="w-full"
+            htmlFor={`form-item-${index}`}>{item.label}</label>
             {item.type === "textarea" ? (
               <textarea
                 id={`form-item-${index}`}
                 onChange={(e) => handleOnChange(e, index)}
-                className="bg-transparent p-2 border-b border-black focus:border-b-2 w-96 h-32 focus:outline-none"
+                className="bg-transparent w-full p-2 border-b border-black focus:border-b-2 w-96 h-32 focus:outline-none"
               />
             ) : (
               <input
                 id={`form-item-${index}`}
                 onChange={(e) => handleOnChange(e, index)}
-                className="bg-transparent p-2 border-b border-black focus:border-b-2 w-96 h-12 focus:outline-none"
+                className="w-full bg-transparent p-2 border-b border-black focus:border-b-2 w-96 h-12 focus:outline-none"
                 type={item.type}
               />
             )}
@@ -174,7 +191,6 @@ const Nav = () => {
           Send
         </button>
       </div>
-      <div className="flex flex-col gap-2"></div>
     </div>
   );
 };
