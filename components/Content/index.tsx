@@ -6,12 +6,11 @@ import EmailComponent from "../Email";
 
 export default function Content() {
   return (
-    <div className="flex flex-row justify-between bg-[#dfff1f] px-12 py-8 min-w-full h-full">
+    <div className="flex flex-row justify-between bg-[#dfff1f] px-4 md:px-12 py-8 min-w-full h-full">
       <Nav />
     </div>
   );
 }
-
 
 const Nav = () => {
   const [formItems, setFormItems] = React.useState<
@@ -165,20 +164,20 @@ const Nav = () => {
       <div className="flex flex-col gap-2 w-full md:w-1/2">
         {formItems.map((item, index) => (
           <div key={index} className="flex flex-col gap-2 w-full">
-            <label 
-            className="w-full"
-            htmlFor={`form-item-${index}`}>{item.label}</label>
+            <label className="w-full" htmlFor={`form-item-${index}`}>
+              {item.label}
+            </label>
             {item.type === "textarea" ? (
               <textarea
                 id={`form-item-${index}`}
                 onChange={(e) => handleOnChange(e, index)}
-                className="bg-transparent w-full p-2 border-b border-black focus:border-b-2 w-96 h-32 focus:outline-none"
+                className="bg-transparent w-full p-2 rounded-none border-b border-black focus:border-b-2 w-96 h-32 focus:outline-none"
               />
             ) : (
               <input
                 id={`form-item-${index}`}
                 onChange={(e) => handleOnChange(e, index)}
-                className="w-full bg-transparent p-2 border-b border-black focus:border-b-2 w-96 h-12 focus:outline-none"
+                className="w-full bg-transparent p-2 border-b rounded-none border-black focus:border-b-2 w-96 h-12 focus:outline-none"
                 type={item.type}
               />
             )}

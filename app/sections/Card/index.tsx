@@ -63,7 +63,7 @@ const Card = ({
             <h2 className="m-0 text-[#dfff1f] text-[32px] text-start">
               {title}
               {company && (
-                <span className="text-light text-sm text-white">
+                <span className="text-light text-sm text-white my-1 md:mt-0 block md:inline">
                   @{company}
                 </span>
               )}
