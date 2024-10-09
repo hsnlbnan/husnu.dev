@@ -14,6 +14,10 @@ import Verified from "./Verified";
 import LinkedInConnect from "./LinkedInButton";
 import LinkIcon from "./Link";
 import ResumeIcon from "./Resume";
+import Phone from "./Phone";
+import Email from "./Email";
+import ArrowRight from "./ArrowRight";
+
 export {
   NextJS,
   ReactJs,
@@ -31,4 +35,7 @@ export {
   LinkedInConnect,
   LinkIcon,
   ResumeIcon,
+  Phone,
+  Email,
+  ArrowRight,
 };

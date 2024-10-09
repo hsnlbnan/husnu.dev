@@ -25,6 +25,7 @@ const Header = () => {
       });
     })();
   }, []);
+  
   function handleDownloadResume() {
     window.open("/Husnu-Lubnan-CV.pdf");
   }

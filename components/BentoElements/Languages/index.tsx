@@ -20,7 +20,7 @@ export type IconProps = React.HTMLAttributes<SVGElement>;
 
 const Languages = () => {
   return (
-    <div className="bg-[#1D1D1D] p-6 md:p-16 rounded-xl">
+    <div className="bg-[#1D1D1D] p-6 md:p-12 rounded-xl">
       <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
         <h3 className="font-light text-2xl text-white">
           My adventure lasting <span className="text-[#dfff1f]">4+ years</span>
