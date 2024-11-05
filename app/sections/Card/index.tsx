@@ -56,7 +56,7 @@ const Card = ({
           scale,
           top: `calc(-5vh + ${i * 25}px)`,
         }}
-        className="relative flex flex-col mx-auto p-[50px] rounded-[25px] w-full max-w-7xl h-[calc(100dvh-200px)] md:h-[500px] origin-top"
+        className="relative flex flex-col mx-auto p-[50px] rounded-[25px] w-full lg:container h-[calc(100dvh-200px)] md:h-[500px] origin-top"
       >
         <div className="flex md:flex-row flex-col gap-[10px] md:gap-[50px] mt-[30px] h-full text-white">
           <div className="relative top-[0] w-full md:w-[40%]">

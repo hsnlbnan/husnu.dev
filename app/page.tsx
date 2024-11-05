@@ -89,7 +89,7 @@ export default function Home() {
         <Header />
         <main className="w-full max-w-screen">
           <div className="">
-            <div className="mx-auto max-w-7xl">
+            <div className="md:mx-auto my-4 p-4 rounded-lg w-full lg:container">
               <div className="flex lg:flex-row flex-col gap-4">
                 <div className="w-full lg:w-8/12 max-h-[500px] overflow-y-auto">
                   <Languages />
@@ -171,13 +171,13 @@ export default function Home() {
             })}
           </main>
           <main className="relative mt-[10vh] w-full">
-            <div className="top-0 sticky flex flex-col justify-center items-center bg-black w-full h-screen text-white">
+            <div className="top-0 sticky flex flex-col justify-center items-center bg-black w-full h-screen text-white pb-12">
               <VelocityScroll
                 text="Work Experience"
                 default_velocity={1}
                 className="drop-shadow-sm font-bold font-display text-4xl text-center text-white/20 md:text-7xl dark:text-white md:leading-[5rem] tracking-[-0.02em]"
               />
-              <div className="flex flex-col px-0 md:p-8 w-full min-w-screen max-w-6xl">
+              <div className="flex flex-col px-0 md:p-8 w-full min-w-screen max-w-6xl mt-12">
                 {work.map((work, i) => {
                   return <Work key={i} {...work} />;
                 })}
