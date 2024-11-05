@@ -25,13 +25,13 @@ const Header = () => {
       });
     })();
   }, []);
-  
+
   function handleDownloadResume() {
     window.open("/Husnu-Lubnan-CV.pdf");
   }
 
   return (
-    <div className="flex md:flex-row flex-col justify-between md:items-center gap-4 md:gap-0 bg-[#1D1D1D] md:mx-auto my-4 p-4 rounded-lg w-full lg:container">
+    <div className="flex md:flex-row flex-col justify-between md:items-center gap-4 md:gap-0 md:mx-auto my-4 p-4 rounded-lg w-full lg:container">
       <div className="flex flex-col -gap-1">
         <h1 className="font-light text-2xl text-white">
           Hüsnü <span className="font-medium text-[#dfff1f]">Lübnan</span>

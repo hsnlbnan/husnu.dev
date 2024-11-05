@@ -28,7 +28,7 @@ const Languages = () => {
         </h3>
       </div>
       <div className="relative overflow-x-auto lg:overflow-hidden">
-        <div className="flex items-start min-w-max pb-4">
+        <div className="flex items-start w-full pb-4">
           <Dock direction="middle" >
             <DockIcon size={52}>
               <Tooltip text="NextJS">
