@@ -22,6 +22,16 @@ export const projects = [
     company: "SHFT",
   },
   {
+    title: "Todo App with AI Assistant FastAPI in Nextjs",
+    subtitle: "A modern todo application built with Next.js for the frontend and FastAPI for the backend. The application features real-time updates, AI-powered task summarization, and a clean, responsive interface",
+    description:
+      "Next.js, TypeScript, TailwindCSS, FastAPI, MongoDB, Python, Ollama",
+    src: "/projects/nextjs-fast-api.png",
+    link: "https://github.com/hsnlbnan/next-js-fast-api-mongodb-ollama-todo",
+    color: "#1e1e1e",
+    company: "Hobby Project",
+  },
+  {
     title: "hayal.in",
     subtitle:
       "hayal.in is a platform where people share their dreams completely anonymously, which helps me keep my promise to myself 'I want to make the project that comes to my mind full-stack' before I start writing.",
@@ -31,7 +41,7 @@ export const projects = [
     link: "https://hayal.in",
     color: "#1e1e1e",
   },
-  
+
   {
     title: "Alterego CMS",
     subtitle:
