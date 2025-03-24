@@ -210,7 +210,7 @@ const AnimatedWorkflowCard = ({
           <div
             className={`
               bg-white w-full ${props.title ? '-mt-[1px]' : ''} p-3
-              border-2 transition-all duration-[2000ms]
+              border-2 transition duration-[2000ms]
               ${status === 'completed' ? 'border-green-500' : 'border-gray-100'}
               ${showCircle ? 'rounded-b-lg' : 'rounded-lg'}
             `}
@@ -219,7 +219,7 @@ const AnimatedWorkflowCard = ({
               <div className="flex items-center gap-2">
                 {props.icon && (
                   <div className={`
-                    border-2 rounded-lg p-1.5 transition-all duration-[2000ms]
+                    border-2 rounded-lg p-1.5 transition duration-[2000ms]
                     ${status === 'completed' ? 'border-green-300 bg-green-50' : 'border-blue-300 bg-blue-50'}
                   `}>
                     {props.icon}

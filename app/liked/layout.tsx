@@ -2,7 +2,7 @@
 import Header from '@/components/Header';
 import React from 'react'
 
-export const LikedLayout = ({ children }: { children: React.ReactNode }) => {
+export default function LikedLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Header />
@@ -10,5 +10,3 @@ export const LikedLayout = ({ children }: { children: React.ReactNode }) => {
     </>
   )
 }
-
-export default LikedLayout;
