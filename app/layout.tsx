@@ -3,15 +3,35 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
-const inter = Plus_Jakarta_Sans({ subsets: ["latin"] });
+const inter = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  display: 'swap', // Optimize font loading
+});
 
 export const metadata: Metadata = {
-  title: "Hüsnü Lübnan | Frontend Developer",
-  description: "Hüsnü Lübnan is a frontend developer based in Turkey.",
+  title: "Hüsnü Lübnan | Frontend & Javascript Developer",
+  description: "A frontend developer with 4+ years of experience developing web applications with React, Next.js, and TypeScript, specializing in enterprise projects, CMS systems, and interactive user interfaces.",
+  keywords: [
+    "Hüsnü Lübnan",
+    "Frontend Developer",
+    "Javascript Developer",
+    "React Developer",
+    "Next.js Developer",
+    "Typescript Developer",
+    "Tailwind CSS Developer",
+    "Frontend Developer",
+    "Hüsnü Lübnan kimdir",
+    "Hüsnü Lübnan hakkında",
+    "Hüsnü Lübnan blog",
+    "Hüsnü Lübnan projeler",
+    "Hüsnü Lübnan ile iletişime geç",
+
+  ],
   openGraph: {
     title: "Hüsnü Lübnan | Frontend Developer",
-    description: "Hüsnü Lübnan is a frontend developer based in Turkey.",
+    description: "A frontend developer with 4+ years of experience developing web applications with React, Next.js, and TypeScript, specializing in enterprise projects, CMS systems, and interactive user interfaces.",
     images: [
       {
         url: "/og.png",
@@ -27,7 +47,7 @@ export const metadata: Metadata = {
   twitter: {
     site: "husnu.dev",
     creator: "@hsnlbnan",
-    description: "Hüsnü Lübnan is a frontend developer based in Turkey.",
+    description: "A frontend developer with 4+ years of experience developing web applications with React, Next.js, and TypeScript, specializing in enterprise projects, CMS systems, and interactive user interfaces.",
     title: "Hüsnü Lübnan | Frontend Developer",
     images: [
       {
@@ -46,12 +66,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="tr">
       <body className={inter.className}>
         {children}
-
         <Toaster />
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

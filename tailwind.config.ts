@@ -12,6 +12,14 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    screens: {
+      'xs': '380px',
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
@@ -26,6 +34,7 @@ const config: Config = {
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        'yellow-50': '#fefce8', // Eğer bu renk yoksa ekleyin.
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
@@ -90,19 +99,41 @@ const config: Config = {
             "background-position": "calc(100% + var(--shimmer-width)) 0",
           },
         },
+        'scale-in': {
+          '0%': { transform: 'scale(0)' },
+          '100%': { transform: 'scale(1)' }
+        },
+        'draw': {
+          '0%': { 'stroke-dasharray': '60', 'stroke-dashoffset': '60' },
+          '100%': { 'stroke-dasharray': '60', 'stroke-dashoffset': '0' }
+        },
+        'drawBorder': {
+          '0%': { 'stroke-dashoffset': '1040' },
+          '100%': { 'stroke-dashoffset': '0' }
+        }
       },
       animation: {
         marquee: "marquee var(--duration) infinite linear",
         "marquee-vertical": "marquee-vertical var(--duration) linear infinite",
         "shiny-text": "shiny-text 8s infinite",
+        'scale-in': 'scale-in 0.2s ease-in-out',
+        'draw': 'draw 0.3s ease-in-out forwards',
+        'drawBorder': 'drawBorder 2s ease-in-out forwards'
       },
       gridTemplateColumns: {
         "14": "repeat(14, minmax(0, 1fr))",
       },
+      clipPath: {
+        'house': 'polygon(0% 75%, 50% 0%, 100% 75%, 100% 100%, 0% 100%)',
+      },
     },
   },
 
-  plugins: [addVariablesForColors, require("tailwindcss-animate")],
+  plugins: [
+    addVariablesForColors,
+    require("tailwindcss-animate"),
+    // require("tailwindcss-clip-path"),
+  ],
 };
 export default config;
 

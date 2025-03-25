@@ -22,7 +22,7 @@ const Card = ({ title, subtitle, description, src }: Work) => {
   };
 
   return (
-    <div className="flex md:flex-row flex-col border-gray-400 py-8 border-t border-b w-full">
+    <div className="flex md:flex-row flex-col border-gray-400 py-8 border-t border-b w-full px-4">
       <div
         className="relative w-full md:w-1/2"
         onMouseEnter={() => setIsHovered(true)}
