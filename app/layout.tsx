@@ -8,11 +8,27 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 const inter = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Hüsnü Lübnan | Frontend Developer",
-  description: "Hüsnü Lübnan is a frontend developer based in Turkey.",
+  title: "Hüsnü Lübnan | Frontend & Javascript Developer",
+  description: "React, Next.js ve TypeScript ile web uygulamaları geliştiren, kurumsal projeler, CMS sistemleri ve interaktif kullanıcı arayüzleri konusunda çalışmalar yapan 4+ yıllık deneyime sahip bir frontend developer.",
+  keywords: [
+    "Hüsnü Lübnan",
+    "Frontend Developer",
+    "Javascript Developer",
+    "React Developer",
+    "Next.js Developer",
+    "Typescript Developer",
+    "Tailwind CSS Developer",
+    "Frontend Developer",
+    "Hüsnü Lübnan kimdir",
+    "Hüsnü Lübnan hakkında",
+    "Hüsnü Lübnan blog",
+    "Hüsnü Lübnan projeler",
+    "Hüsnü Lübnan ile iletişime geç",
+
+  ],
   openGraph: {
     title: "Hüsnü Lübnan | Frontend Developer",
-    description: "Hüsnü Lübnan is a frontend developer based in Turkey.",
+    description: "React, Next.js ve TypeScript ile web uygulamaları geliştiren, kurumsal projeler, CMS sistemleri ve interaktif kullanıcı arayüzleri konusunda çalışmalar yapan 4+ yıllık deneyime sahip bir frontend developer.",
     images: [
       {
         url: "/og.png",
@@ -28,7 +44,7 @@ export const metadata: Metadata = {
   twitter: {
     site: "husnu.dev",
     creator: "@hsnlbnan",
-    description: "Hüsnü Lübnan is a frontend developer based in Turkey.",
+    description: "React, Next.js ve TypeScript ile web uygulamaları geliştiren, kurumsal projeler, CMS sistemleri ve interaktif kullanıcı arayüzleri konusunda çalışmalar yapan 4+ yıllık deneyime sahip bir frontend developer.",
     title: "Hüsnü Lübnan | Frontend Developer",
     images: [
       {
