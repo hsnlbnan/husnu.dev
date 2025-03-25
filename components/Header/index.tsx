@@ -59,8 +59,8 @@ const borderVariants = {
 
 const Header = () => {
   const [isBoxVisible, setIsBoxVisible] = useState(false);
-  const [hearts, setHearts] = useState<Array<{id: number, index: number}>>([]);
-  const [sparkles, setSparkles] = useState<Array<{id: number, x: number, y: number}>>([]);
+  const [hearts, setHearts] = useState<Array<{ id: number, index: number }>>([]);
+  const [sparkles, setSparkles] = useState<Array<{ id: number, x: number, y: number }>>([]);
   const heartButtonRef = useRef<HTMLButtonElement>(null);
   const [isHovering, setIsHovering] = useState(false);
   const [lastClicked, setLastClicked] = useState(false);
@@ -102,9 +102,9 @@ const Header = () => {
           if (prev.length >= 5) {
             const newHearts = [...prev];
             newHearts.shift(); // En eski kalbi çıkar
-            return [...newHearts, {id: Date.now(), index: Date.now()}];
+            return [...newHearts, { id: Date.now(), index: Date.now() }];
           }
-          return [...prev, {id: Date.now(), index: Date.now()}];
+          return [...prev, { id: Date.now(), index: Date.now() }];
         });
       }, delay);
     }, 700); // Daha yavaş oluştur
@@ -158,161 +158,182 @@ const Header = () => {
   };
 
   return (
-    <div className="flex flex-col w-full lg:container my-4 p-4 rounded-lg">
-      <div className="flex md:flex-row flex-col justify-between md:items-center gap-4 md:gap-0 w-full">
-        <a href="/" onClick={handleHomeClick} className="flex flex-col -gap-1">
-          <h1 className="font-light text-2xl text-white">
-            Hüsnü <span className="font-medium text-[#dfff1f]">Lübnan</span>
-          </h1>
-          <div className="flex flex-row gap-4">
-            <p className="text-gray-400 text-sm">Frontend Developer</p>
-          </div>
-        </a>
+    <div className="w-full max-w-screen">
+      <div className="md:mx-auto my-4 rounded-lg w-full lg:container">
+        <div className="flex flex-col w-full lg:container my-4 rounded-lg">
+          <div className="flex md:flex-row flex-col justify-between md:items-center gap-4 md:gap-0 w-full">
+            <a href="/" onClick={handleHomeClick} className="flex flex-col -gap-1">
+              <h1 className="font-light text-2xl text-white">
+                Hüsnü <span className="font-medium text-[#dfff1f]">Lübnan</span>
+              </h1>
+              <div className="flex flex-row gap-4">
+                <p className="text-gray-400 text-sm">Frontend Developer</p>
+              </div>
+            </a>
 
-        <div className="flex w-full md:w-auto gap-2 justify-between">
-          <motion.button
-            ref={heartButtonRef}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="w-4/12 md:w-auto flex flex-row items-center justify-center gap-2 group relative cursor-pointer bg-[#2d2d2d] border-none rounded-lg py-1.5 px-3 hover:bg-[#3d3d3d]"
-            onClick={handleLikeClick}
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
-            type="button"
-            aria-label="Liked"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            {/* Minimal border animasyonu */}
-            <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden rounded-lg">
-              <svg
-                width="100%"
-                height="100%"
-                viewBox={`0 0 ${buttonDimensions.width || 100} ${buttonDimensions.height || 40}`}
-                className="absolute inset-0"
-                style={{ overflow: 'visible' }}
+            <div className="flex w-full md:w-auto gap-2 justify-between">
+              <motion.button
+                ref={heartButtonRef}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                className="w-4/12 md:w-auto flex flex-row items-center justify-center gap-2 group relative cursor-pointer bg-[#2d2d2d] border-none rounded-lg py-1.5 px-3 hover:bg-[#3d3d3d]"
+                onClick={handleLikeClick}
+                onMouseEnter={() => setIsHovering(true)}
+                onMouseLeave={() => setIsHovering(false)}
+                type="button"
+                aria-label="Liked"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                <motion.rect
-                  x="0.5"
-                  y="0.5"
-                  width={(buttonDimensions.width || 100) - 1}
-                  height={(buttonDimensions.height || 40) - 1}
-                  rx="8"
-                  ry="8"
-                  fill="none"
-                  stroke={neonGreen}
-                  strokeWidth="0.8"
-                  strokeDasharray="2 3"
-                  variants={borderVariants}
-                  initial="initial"
-                  animate="animate"
-                  style={{
-                    opacity: 0.6,
-                    filter: "drop-shadow(0 0 1px rgba(223, 255, 31, 0.5))"
-                  }}
-                />
-              </svg>
-            </div>
+                {/* Minimal border animasyonu */}
+                <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden rounded-lg">
+                  <svg
+                    width="100%"
+                    height="100%"
+                    viewBox={`0 0 ${buttonDimensions.width || 100} ${buttonDimensions.height || 40}`}
+                    className="absolute inset-0"
+                    style={{ overflow: 'visible' }}
+                  >
+                    <motion.rect
+                      x="0.5"
+                      y="0.5"
+                      width={(buttonDimensions.width || 100) - 1}
+                      height={(buttonDimensions.height || 40) - 1}
+                      rx="8"
+                      ry="8"
+                      fill="none"
+                      stroke={neonGreen}
+                      strokeWidth="0.8"
+                      strokeDasharray="2 3"
+                      variants={borderVariants}
+                      initial="initial"
+                      animate="animate"
+                      style={{
+                        opacity: 0.6,
+                        filter: "drop-shadow(0 0 1px rgba(223, 255, 31, 0.5))"
+                      }}
+                    />
+                  </svg>
+                </div>
 
-            <div className="relative z-10">
-              <motion.div
-                animate={{
-                  scale: [1, 1.1, 1],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              >
-                <FiHeart
-                  className={`text-sm transition-all duration-300 ${lastClicked ? 'fill-[#dfff1f]' : ''} text-[#dfff1f]`}
-                />
-              </motion.div>
-
-              <AnimatePresence>
-                {hearts.map((heart) => (
+                <div className="relative z-10">
                   <motion.div
-                    key={heart.id}
-                    custom={heart.index}
-                    initial="initial"
-                    animate="animate"
-                    exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.3 } }}
-                    variants={floatingHeartsVariants}
-                    className="absolute pointer-events-none"
-                    style={{
-                      left: `${Math.random() * 30 - 15}px`,
-                      top: 0
+                    animate={{
+                      scale: [1, 1.1, 1],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
                     }}
                   >
                     <FiHeart
-                      className="text-xs fill-transparent text-[#dfff1f] opacity-60"
+                      className={`text-sm transition-all duration-300 ${lastClicked ? 'fill-[#dfff1f]' : ''} text-[#dfff1f]`}
                     />
                   </motion.div>
-                ))}
-              </AnimatePresence>
+
+                  <AnimatePresence>
+                    {hearts.map((heart) => (
+                      <motion.div
+                        key={heart.id}
+                        custom={heart.index}
+                        initial="initial"
+                        animate="animate"
+                        exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.3 } }}
+                        variants={floatingHeartsVariants}
+                        className="absolute pointer-events-none"
+                        style={{
+                          left: `${Math.random() * 30 - 15}px`,
+                          top: 0
+                        }}
+                      >
+                        <FiHeart
+                          className="text-xs fill-transparent text-[#dfff1f] opacity-60"
+                        />
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
+
+                {/* Minimal sparkle efekti */}
+                <AnimatePresence>
+                  {sparkles.map((sparkle) => (
+                    <motion.div
+                      key={sparkle.id}
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: [0, 0.8, 0] }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.6 }}
+                      className="absolute pointer-events-none rounded-full z-0"
+                      style={{
+                        left: `${sparkle.x}px`,
+                        top: `${sparkle.y}px`,
+                        width: `${1 + Math.random() * 2}px`,
+                        height: `${1 + Math.random() * 2}px`,
+                        backgroundColor: neonGreen,
+                        boxShadow: `0 0 3px ${neonGreen}`
+                      }}
+                    />
+                  ))}
+                </AnimatePresence>
+
+                <span className="text-white text-sm z-10">
+                  Liked
+                </span>
+              </motion.button>
+
+              <motion.div
+                className="w-8/12 md:w-auto relative group"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div
+                  className="flex w-full h-full group-hover:border-pulse bg-[#2d2d2d] px-3 py-1.5 rounded-lg cursor-pointer justify-center"
+                  onClick={handleToggleBox}
+                >
+                  <div className="flex flex-row items-center gap-4">
+                    <span className="bg-[#dfff1f] rounded-full w-2 h-2 animate-pulse opacity-70"></span>
+                    <button data-cal-link="husnu" data-cal-config='{"theme":"dark"}'>
+                      <p className="text-[#fff] text-sm">Freelance Status</p>
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Desktop CV button - now in regular flow */}
+              <motion.div
+                className="hidden md:block relative group"
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                onClick={handleDownloadResume}
+                whileHover={{ y: -1 }}
+                whileTap={{ y: 1 }}
+              >
+                <div className="flex group-hover:border-pulse bg-[#2d2d2d] px-3 py-1.5 rounded-lg cursor-pointer">
+                  <div className="flex flex-row items-center gap-4">
+                    <ResumeIcon className="h-4 w-4 group-hover:animate-draw opacity-80" />
+                    <button data-cal-link="husnu" data-cal-config='{"theme":"dark"}'>
+                      <p className="text-[#fff] text-sm">CV</p>
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
             </div>
+          </div>
 
-            {/* Minimal sparkle efekti */}
-            <AnimatePresence>
-              {sparkles.map((sparkle) => (
-                <motion.div
-                  key={sparkle.id}
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: 1, opacity: [0, 0.8, 0] }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.6 }}
-                  className="absolute pointer-events-none rounded-full z-0"
-                  style={{
-                    left: `${sparkle.x}px`,
-                    top: `${sparkle.y}px`,
-                    width: `${1 + Math.random() * 2}px`,
-                    height: `${1 + Math.random() * 2}px`,
-                    backgroundColor: neonGreen,
-                    boxShadow: `0 0 3px ${neonGreen}`
-                  }}
-                />
-              ))}
-            </AnimatePresence>
-
-            <span className="text-white text-sm z-10">
-              Liked
-            </span>
-          </motion.button>
-
+          {/* CV button - full width on mobile, normal on web */}
           <motion.div
-            className="w-8/12 md:w-auto relative group"
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <div
-              className="flex w-full h-full group-hover:border-pulse bg-[#2d2d2d] px-3 py-1.5 rounded-lg cursor-pointer justify-center"
-              onClick={handleToggleBox}
-            >
-              <div className="flex flex-row items-center gap-4">
-                <span className="bg-[#dfff1f] rounded-full w-2 h-2 animate-pulse opacity-70"></span>
-                <button data-cal-link="husnu" data-cal-config='{"theme":"dark"}'>
-                  <p className="text-[#fff] text-sm">Freelance Status</p>
-                </button>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Desktop CV button - now in regular flow */}
-          <motion.div
-            className="hidden md:block relative group"
+            className="relative group mt-4 md:hidden w-full"
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
             onClick={handleDownloadResume}
-            whileHover={{ y: -1 }}
-            whileTap={{ y: 1 }}
           >
-            <div className="flex group-hover:border-pulse bg-[#2d2d2d] px-3 py-1.5 rounded-lg cursor-pointer">
+            <div className="flex group-hover:border-pulse bg-[#2d2d2d] px-3 py-2 rounded-lg cursor-pointer w-full justify-center">
               <div className="flex flex-row items-center gap-4">
-                <ResumeIcon className="h-4 w-4 group-hover:animate-draw opacity-80" />
-                <button data-cal-link="husnu" data-cal-config='{"theme":"dark"}'>
+                <ResumeIcon className="h-6 w-6 group-hover:animate-draw" />
+                <button data-cal-link="husnu" data-cal-config='{"theme":"dark"}' className="w-full">
                   <p className="text-[#fff] text-sm">CV</p>
                 </button>
               </div>
@@ -320,23 +341,6 @@ const Header = () => {
           </motion.div>
         </div>
       </div>
-
-      {/* CV button - full width on mobile, normal on web */}
-      <motion.div
-        className="relative group mt-4 md:hidden w-full"
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5 }}
-        onClick={handleDownloadResume}
-      >
-        <div className="flex group-hover:border-pulse bg-[#2d2d2d] px-3 py-2 rounded-lg cursor-pointer w-full justify-center">
-          <div className="flex flex-row items-center gap-4">
-            <ResumeIcon className="h-6 w-6 group-hover:animate-draw" />
-            <button data-cal-link="husnu" data-cal-config='{"theme":"dark"}' className="w-full">
-              <p className="text-[#fff] text-sm">CV</p>
-            </button>
-          </div>
-        </div>
-      </motion.div>
     </div>
   );
 };

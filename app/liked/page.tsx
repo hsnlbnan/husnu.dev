@@ -84,161 +84,160 @@ const LikedPage = () => {
       animate={{ opacity: 1 }}
       className="overflow-x-hidden w-full"
     >
-      <div className="container mx-auto px-2 xs:px-3 sm:px-4 py-6 sm:py-8 md:py-12 max-w-full">
-        <div className="relative mb-4 md:mb-2">
-          {/* Background gradient blur effect */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.5 }}
-            className="absolute -top-0 -left-0 w-32 h-32 bg-[#dfff1f]/20 rounded-full blur-3xl" />
 
-          {/* Animated title container */}
-          <div className="relative flex flex-col items-start">
-            {/* Main title with letter animation */}
-            <div className="flex flex-wrap items-center overflow-hidden">
-              {["C", "o", "m", "p", "o", "n", "e", "n", "t", "s"].map((letter, index) => (
+      <div className="relative mb-4 md:mb-2">
+        {/* Background gradient blur effect */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5, duration: 0.5 }}
+          className="absolute -top-0 -left-0 w-32 h-32 bg-[#dfff1f]/20 rounded-full blur-3xl" />
+
+        {/* Animated title container */}
+        <div className="relative flex flex-col items-start">
+          {/* Main title with letter animation */}
+          <div className="flex flex-wrap items-center overflow-hidden">
+            {["C", "o", "m", "p", "o", "n", "e", "n", "t", "s"].map((letter, index) => (
+              <motion.span
+                key={`title-${index}`}
+                initial={{ y: 40, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{
+                  duration: 0.5,
+                  delay: 0.1 + index * 0.05,
+                  ease: [0.22, 1, 0.36, 1]
+                }}
+                className="text-3xl md:text-4xl lg:text-5xl font-light text-white"
+              >
+                {letter}
+              </motion.span>
+            ))}
+
+            {/* Components */}
+            {/* I */}
+
+            <div className="flex ml-3 md:ml-4">
+              <motion.span
+                key="i-letter"
+                initial={{ y: 40, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{
+                  duration: 0.5,
+                  delay: 0.3,
+                  ease: [0.22, 1, 0.36, 1]
+                }}
+                className="text-3xl md:text-4xl lg:text-5xl font-medium text-[#dfff1f]"
+              >
+                I
+              </motion.span>
+
+              {/* Spacer */}
+              <div className="w-4 md:w-6 lg:w-8"></div>
+
+              {/* "Liked" letters */}
+              {["L", "i", "k", "e", "d"].map((letter, index) => (
                 <motion.span
-                  key={`title-${index}`}
+                  key={`liked-${index}`}
                   initial={{ y: 40, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{
                     duration: 0.5,
-                    delay: 0.1 + index * 0.05,
-                    ease: [0.22, 1, 0.36, 1]
-                  }}
-                  className="text-3xl md:text-4xl lg:text-5xl font-light text-white"
-                >
-                  {letter}
-                </motion.span>
-              ))}
-
-              {/* Components */}
-              {/* I */}
-
-              <div className="flex ml-3 md:ml-4">
-                <motion.span
-                  key="i-letter"
-                  initial={{ y: 40, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{
-                    duration: 0.5,
-                    delay: 0.3,
+                    delay: 0.35 + index * 0.05,
                     ease: [0.22, 1, 0.36, 1]
                   }}
                   className="text-3xl md:text-4xl lg:text-5xl font-medium text-[#dfff1f]"
                 >
-                  I
+                  {letter}
                 </motion.span>
-
-                {/* Spacer */}
-                <div className="w-4 md:w-6 lg:w-8"></div>
-
-                {/* "Liked" letters */}
-                {["L", "i", "k", "e", "d"].map((letter, index) => (
-                  <motion.span
-                    key={`liked-${index}`}
-                    initial={{ y: 40, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{
-                      duration: 0.5,
-                      delay: 0.35 + index * 0.05,
-                      ease: [0.22, 1, 0.36, 1]
-                    }}
-                    className="text-3xl md:text-4xl lg:text-5xl font-medium text-[#dfff1f]"
-                  >
-                    {letter}
-                  </motion.span>
-                ))}
-              </div>
-
-              {/* Counter badge with animation */}
-              <motion.div
-                className="relative ml-3 md:ml-4"
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{
-                  delay: 0.8,
-                  duration: 0.4,
-                  ease: "backOut"
-                }}
-              >
-                <motion.span
-                  className="flex items-center justify-center text-xs font-medium bg-[#dfff1f] text-black px-2 py-1 rounded-full"
-                  animate={{
-                    boxShadow: ['0 0 0px rgba(223, 255, 31, 0)', '0 0 15px rgba(223, 255, 31, 0.5)', '0 0 0px rgba(223, 255, 31, 0)']
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    repeatType: "loop"
-                  }}
-                >
-                  {likedComponents.length}
-                </motion.span>
-              </motion.div>
-            </div>
-
-            {/* Animated underline */}
-            <motion.div
-              className="h-[2px] bg-gradient-to-r from-[#dfff1f]/20 via-[#dfff1f] to-[#dfff1f]/20 mt-2 md:mt-3"
-              initial={{ width: 0, opacity: 0 }}
-              animate={{ width: "100%", opacity: 1 }}
-              transition={{
-                duration: 0.8,
-                delay: 0.6,
-                ease: "easeOut"
-              }}
-            />
-
-            {/* Animated floating particles */}
-            <div className="absolute top-0 left-0 w-full h-full -z-10 overflow-hidden">
-              {[...Array(5)].map((_, i) => (
-                <motion.div
-                  key={`particle-${i}`}
-                  className="absolute rounded-full bg-[#dfff1f]"
-                  style={{
-                    width: Math.random() * 6 + 2,
-                    height: Math.random() * 6 + 2,
-                    top: `${Math.random() * 100}%`,
-                    left: `${Math.random() * 100}%`,
-                  }}
-                  animate={{
-                    y: [0, -20, 0],
-                    opacity: [0, 1, 0]
-                  }}
-                  transition={{
-                    duration: Math.random() * 2 + 1,
-                    delay: Math.random() * 2,
-                    repeat: Infinity,
-                    repeatType: "loop"
-                  }}
-                />
               ))}
             </div>
+
+            {/* Counter badge with animation */}
+            <motion.div
+              className="relative ml-3 md:ml-4"
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{
+                delay: 0.8,
+                duration: 0.4,
+                ease: "backOut"
+              }}
+            >
+              <motion.span
+                className="flex items-center justify-center text-xs font-medium bg-[#dfff1f] text-black px-2 py-1 rounded-full"
+                animate={{
+                  boxShadow: ['0 0 0px rgba(223, 255, 31, 0)', '0 0 15px rgba(223, 255, 31, 0.5)', '0 0 0px rgba(223, 255, 31, 0)']
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  repeatType: "loop"
+                }}
+              >
+                {likedComponents.length}
+              </motion.span>
+            </motion.div>
+          </div>
+
+          {/* Animated underline */}
+          <motion.div
+            className="h-[2px] bg-gradient-to-r from-[#dfff1f]/20 via-[#dfff1f] to-[#dfff1f]/20 mt-2 md:mt-3"
+            initial={{ width: 0, opacity: 0 }}
+            animate={{ width: "100%", opacity: 1 }}
+            transition={{
+              duration: 0.8,
+              delay: 0.6,
+              ease: "easeOut"
+            }}
+          />
+
+          {/* Animated floating particles */}
+          <div className="absolute top-0 left-0 w-full h-full -z-10 overflow-hidden">
+            {[...Array(5)].map((_, i) => (
+              <motion.div
+                key={`particle-${i}`}
+                className="absolute rounded-full bg-[#dfff1f]"
+                style={{
+                  width: Math.random() * 6 + 2,
+                  height: Math.random() * 6 + 2,
+                  top: `${Math.random() * 100}%`,
+                  left: `${Math.random() * 100}%`,
+                }}
+                animate={{
+                  y: [0, -20, 0],
+                  opacity: [0, 1, 0]
+                }}
+                transition={{
+                  duration: Math.random() * 2 + 1,
+                  delay: Math.random() * 2,
+                  repeat: Infinity,
+                  repeatType: "loop"
+                }}
+              />
+            ))}
           </div>
         </div>
+      </div>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9, duration: 0.5 }}
-          className='text-white text-xs md:text-sm mb-6 sm:mb-8 md:mb-12 max-w-full md:max-w-[600px]'
-        >
-          These components were coded using React, Framer-Motion and Tailwind to learn how to make components that I like and see on sites like <span className='text-[#dfff1f]'>Twitter(X), Behance, Dribbble, Figma.</span>  Source codes are not shared out of  <span className='text-[#dfff1f]'>respect for designers.</span>
-        </motion.p>
+      <motion.p
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.9, duration: 0.5 }}
+        className='text-white text-xs md:text-sm mb-6 sm:mb-8 md:mb-12 max-w-full md:max-w-[600px]'
+      >
+        These components were coded using React, Framer-Motion and Tailwind to learn how to make components that I like and see on sites like <span className='text-[#dfff1f]'>Twitter(X), Behance, Dribbble, Figma.</span>  Source codes are not shared out of  <span className='text-[#dfff1f]'>respect for designers.</span>
+      </motion.p>
 
-        <div className="grid grid-cols-1 xs:grid-cols-12 gap-3 xs:gap-4 md:gap-6">
-          {likedComponents.map((component, index) => (
-            <ComponentCard
-              key={component.id}
-              {...component}
-              index={index}
-              className={component.span}
-              isMobile={isMobile}
-            />
-          ))}
-        </div>
+      <div className="grid grid-cols-1 xs:grid-cols-12 gap-3 xs:gap-4 md:gap-6">
+        {likedComponents.map((component, index) => (
+          <ComponentCard
+            key={component.id}
+            {...component}
+            index={index}
+            className={component.span}
+            isMobile={isMobile}
+          />
+        ))}
       </div>
     </motion.div>
   );

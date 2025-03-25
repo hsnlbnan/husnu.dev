@@ -2,6 +2,7 @@ import React from "react";
 import { motion, Variants, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "@/icons";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 const arrowVariants: Variants = {
   visible: { opacity: 1, x: 0, y: 0, rotate: 0 },
@@ -21,19 +22,31 @@ const EmailComponent: React.FC<EmailComponentProps> & {
 } = ({ children, href }) => {
   const [isHovered, setIsHovered] = React.useState(false);
 
+  const handleClick = () => {
+    if (href) {
+      window.open(href, '_blank');
+    }
+  };
+
   return (
     <motion.div
-      className="flex justify-between items-center bg-white shadow-lg p-4 rounded-lg w-full"
+      className={
+        cn(
+          "flex justify-between items-center bg-white shadow-lg p-4 rounded-lg w-full",
+          href ? "cursor-pointer" : "cursor-default"
+        )
+      }
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       whileHover={{ scale: 1.05 }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={handleClick}
     >
       <div className="flex items-center gap-3 w-full">{children}</div>
-     
-      <div 
+
+      <div
         className="flex justify-center items-center bg-gray-200 p-6 rounded-full cursor-pointer relative w-16 h-16 overflow-hidden"
         role="button"
         aria-label="Daha fazla bilgi"
