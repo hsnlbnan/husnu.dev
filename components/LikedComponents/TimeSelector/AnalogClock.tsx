@@ -36,7 +36,7 @@ export const AnalogClock: React.FC<AnalogClockProps> = ({ selectedTime }) => {
 
   return (
     <div
-      className="relative w-40 h-40 rounded-full bg-[#242424] shadow-md flex items-center justify-center"
+      className="relative w-40 h-40 rounded-full bg-[#242424] shadow-md flex items-center justify-center aspect-square"
       role="img"
       aria-label={`Analog clock showing ${selectedTime.hour}:${selectedTime.minute === 0 ? '00' : selectedTime.minute} ${selectedTime.period}`}
     >
@@ -103,7 +103,8 @@ export const AnalogClock: React.FC<AnalogClockProps> = ({ selectedTime }) => {
               top: `calc(50% - ${HAND_WIDTH / 2}px)`,
               left: '50%',
               transformOrigin: 'left center',
-              backgroundColor: NUMBER_COLOR
+              backgroundColor: NUMBER_COLOR,
+              aspectRatio: 1 / 1
             }}
             animate={{ rotate: hourAngle }}
             transition={{

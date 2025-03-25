@@ -12,7 +12,7 @@ const inter = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: "Hüsnü Lübnan | Frontend & Javascript Developer",
-  description: "React, Next.js ve TypeScript ile web uygulamaları geliştiren, kurumsal projeler, CMS sistemleri ve interaktif kullanıcı arayüzleri konusunda çalışmalar yapan 4+ yıllık deneyime sahip bir frontend developer.",
+  description: "A frontend developer with 4+ years of experience developing web applications with React, Next.js, and TypeScript, specializing in enterprise projects, CMS systems, and interactive user interfaces.",
   keywords: [
     "Hüsnü Lübnan",
     "Frontend Developer",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "Hüsnü Lübnan | Frontend Developer",
-    description: "React, Next.js ve TypeScript ile web uygulamaları geliştiren, kurumsal projeler, CMS sistemleri ve interaktif kullanıcı arayüzleri konusunda çalışmalar yapan 4+ yıllık deneyime sahip bir frontend developer.",
+    description: "A frontend developer with 4+ years of experience developing web applications with React, Next.js, and TypeScript, specializing in enterprise projects, CMS systems, and interactive user interfaces.",
     images: [
       {
         url: "/og.png",
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
   twitter: {
     site: "husnu.dev",
     creator: "@hsnlbnan",
-    description: "React, Next.js ve TypeScript ile web uygulamaları geliştiren, kurumsal projeler, CMS sistemleri ve interaktif kullanıcı arayüzleri konusunda çalışmalar yapan 4+ yıllık deneyime sahip bir frontend developer.",
+    description: "A frontend developer with 4+ years of experience developing web applications with React, Next.js, and TypeScript, specializing in enterprise projects, CMS systems, and interactive user interfaces.",
     title: "Hüsnü Lübnan | Frontend Developer",
     images: [
       {
