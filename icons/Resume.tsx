@@ -16,7 +16,7 @@ const ResumeIcon = (props: SVGProps<SVGSVGElement>) => {
       <motion.path
         d="m55.707 11.293-10-10A1.115 1.115 0 0 0 45 1H9a1 1 0 0 0-1 1v60a1 1 0 0 0 1 1h46a1 1 0 0 0 1-1V12a1.092 1.092 0 0 0-.293-.707zM52.586 11H46V4.414zM10 61V3h34v9a1 1 0 0 0 1 1h9v48z"
         style={{
-          fill: "#fff",
+          fill: "#dfff1f",
           stroke: "#000",
           strokeWidth: 2,
           strokeDasharray: "0 1",
@@ -28,7 +28,7 @@ const ResumeIcon = (props: SVGProps<SVGSVGElement>) => {
       <motion.path
         d="M20 20h24v4H20zM20 28h24v4H20zM20 36h24v4H20z"
         style={{
-          fill: "#fff",
+          fill: "#dfff1f",
           stroke: "#000",
           strokeWidth: 2,
           strokeDasharray: "0 1",
