@@ -5,7 +5,10 @@ import { Toaster } from "sonner";
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
-const inter = Plus_Jakarta_Sans({ subsets: ["latin"] });
+const inter = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  display: 'swap', // Optimize font loading
+});
 
 export const metadata: Metadata = {
   title: "Hüsnü Lübnan | Frontend & Javascript Developer",
@@ -63,10 +66,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="tr">
       <body className={inter.className}>
         {children}
-
         <Toaster />
         <Analytics />
         <SpeedInsights />

@@ -1,21 +1,24 @@
 "use client";
-import Languages from "@/components/BentoElements/Languages";
-import { useState, useEffect, useRef, Suspense } from "react";
-import { motion, useScroll } from "framer-motion";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
+import { useScroll } from "framer-motion";
 import WordRotate from "@/components/ui/word-rotate";
-import EditorBento from "@/components/Editor";
-import ProfileCard from "@/components/LinkedInProfile";
 import { projects, work } from "@/data";
 import Card from "./sections/Card";
-import Lenis from "@studio-freight/lenis";
 import TextReveal from "@/components/TextReveal";
 import Work from "./sections/Work";
-import { VelocityScroll } from "@/components/ScrollText";
 import Header from "@/components/Header";
-import Intro from "@/components/Intro";
 import Footer from "@/components/Footer";
 
-const gridSize = { rows: 5, cols: 11 }; // Grid boyutu 11x5
+export const dynamic = 'force-static'
+
+// Lazy load non-critical components
+const Languages = lazy(() => import("@/components/BentoElements/Languages"));
+const EditorBento = lazy(() => import("@/components/Editor"));
+const ProfileCard = lazy(() => import("@/components/LinkedInProfile"));
+const VelocityScroll = lazy(() => import("@/components/ScrollText").then(mod => ({ default: mod.VelocityScroll })));
+
+// Simplified grid size
+const gridSize = { rows: 5, cols: 11 };
 const heartPattern = [
   [0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0],
   [0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0],
@@ -31,7 +34,7 @@ const getRandomGrid = () => {
 };
 
 const GridHeart = () => {
-  const [grid, setGrid] = useState(getRandomGrid());
+  const [grid, setGrid] = useState(() => getRandomGrid());
   const [hovered, setHovered] = useState(false);
 
   useEffect(() => {
@@ -50,19 +53,26 @@ const GridHeart = () => {
     >
       {grid.map((row, rowIndex) =>
         row.map((cell, cellIndex) => (
-          <motion.div
+          <div
             key={`${rowIndex}-${cellIndex}`}
-            className="cell"
-            animate={{
+            className="cell transition-colors duration-300"
+            style={{
               backgroundColor: cell ? "#4caf50" : "#444",
             }}
-            transition={{ duration: 0.5 }}
           />
         ))
       )}
     </div>
   );
 };
+
+// Loading fallback component
+const LoadingFallback = () => (
+  <div className="p-4 animate-pulse bg-[#222] rounded-xl h-full w-full">
+    <div className="h-6 bg-[#333] rounded w-3/4 mb-4"></div>
+    <div className="h-4 bg-[#333] rounded w-1/2"></div>
+  </div>
+);
 
 export default function Home() {
   const container = useRef(null);
@@ -71,28 +81,22 @@ export default function Home() {
     offset: ["start start", "end end"],
   });
 
-  useEffect(() => {
-    const lenis = new Lenis();
+  // Remove Lenis smooth scrolling for maximum performance
+  // We're prioritizing instant page transitions over smooth scrolling
 
-    function raf(time: DOMHighResTimeStamp) {
-      lenis.raf(time);
-
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-  }, []);
 
   return (
     <>
-      <div className="p-4 md:p-0">
+      <div className="md:p-0">
         <Header />
         <main className="w-full max-w-screen">
-          <div className="">
+          <div>
             <div className="md:mx-auto my-4 p-4 rounded-lg w-full lg:container">
               <div className="flex lg:flex-row flex-col gap-4">
                 <div className="w-full lg:w-8/12 max-h-[500px] overflow-y-auto">
-                  <Languages />
+                  <Suspense fallback={<LoadingFallback />}>
+                    <Languages />
+                  </Suspense>
                 </div>
 
                 <div className="w-full lg:w-4/12">
@@ -114,7 +118,6 @@ export default function Home() {
               </div>
               <div className="flex lg:flex-row flex-col gap-4">
                 <div className="w-full lg:w-9/12">
-                  {/* editable code editor here */}
                   <div className="bg-[#1D1D1D] my-5 mb-0 md:mb-10 p-4 md:p-8 rounded-xl w-full overflow-hidden">
                     <h4 className="mb-3 md:mb-8 font-light text-2xl text-white">
                       The adventure always <br className="visible md:hidden" />
@@ -122,7 +125,7 @@ export default function Home() {
                         follows the rules
                       </span>
                     </h4>
-                    <Suspense fallback={<div>Loading...</div>}>
+                    <Suspense fallback={<LoadingFallback />}>
                       <EditorBento />
                     </Suspense>
                   </div>
@@ -141,7 +144,9 @@ export default function Home() {
                     </h4>
 
                     <div className="flex flex-col gap-4">
-                      <ProfileCard />
+                      <Suspense fallback={<LoadingFallback />}>
+                        <ProfileCard />
+                      </Suspense>
                     </div>
                   </div>
                 </div>
@@ -172,11 +177,13 @@ export default function Home() {
           </main>
           <main className="relative mt-[10vh] w-full">
             <div className="top-0 sticky flex flex-col justify-center items-center bg-black w-full h-screen text-white pb-12">
-              <VelocityScroll
-                text="Work Experience"
-                default_velocity={1}
-                className="drop-shadow-sm font-bold font-display text-4xl text-center text-white/20 md:text-7xl dark:text-white md:leading-[5rem] tracking-[-0.02em]"
-              />
+              <Suspense fallback={<h2 className="text-4xl md:text-7xl text-white/20">Work Experience</h2>}>
+                <VelocityScroll
+                  text="Work Experience"
+                  default_velocity={1}
+                  className="drop-shadow-sm font-bold font-display text-4xl text-center text-white/20 md:text-7xl dark:text-white md:leading-[5rem] tracking-[-0.02em]"
+                />
+              </Suspense>
               <div className="flex flex-col px-0 md:p-8 w-full min-w-screen max-w-6xl mt-12">
                 {work.map((work, i) => {
                   return <Work key={i} {...work} />;

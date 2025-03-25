@@ -41,7 +41,7 @@ const likedComponents: LikedComponent[] = [
     title: "Animated House Button",
     description: "Animated house button with framer motion",
     preview: HouseAnimatedButton,
-    inspired: null,
+    inspired: "https://x.com/markoilico/status/1897422797712015516",
     span: "col-span-10 xs:col-span-12 md:col-span-4 lg:col-span-4"
   },
   {
@@ -49,7 +49,7 @@ const likedComponents: LikedComponent[] = [
     title: "Workflow Animation",
     description: "Animated workflow trigger component",
     preview: WorkflowAnimation,
-    inspired: "https://vercel.com/templates/nextjs/time-selector",
+    inspired: null,
     span: "col-span-10 xs:col-span-12 md:col-span-6 lg:col-span-6"
   },
   {
@@ -57,14 +57,14 @@ const likedComponents: LikedComponent[] = [
     title: "Accordion",
     description: "Custom accordion component",
     preview: PeopleAccordion,
-    inspired: "https://vercel.com/templates/nextjs/time-selector",
+    inspired: null,
     span: "col-span-10 xs:col-span-12 md:col-span-6 lg:col-span-6"
   },
 ];
+export const dynamic = 'force-static'
 
 
 const LikedPage = () => {
-
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
