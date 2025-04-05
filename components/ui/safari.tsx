@@ -1,19 +1,48 @@
-import { SVGProps } from "react";
+import { SVGProps, useState, useEffect } from "react";
+import Image from "next/image";
 
 export interface SafariProps extends SVGProps<SVGSVGElement> {
   url?: string;
   src?: string;
   width?: number;
   height?: number;
+  alt?: string; // Erişilebilirlik için alt metni ekledim
 }
 
 export default function Safari({
   src,
-  url,
+  url = "husnu.dev",
   width = 1203,
   height = 753,
+  alt = "Screenshot of website",
   ...props
 }: SafariProps) {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [useFallback, setUseFallback] = useState(false);
+  
+  // Görsel yüklendikten sonra isLoaded'ı true yap
+  const handleImageLoad = () => {
+    setIsLoaded(true);
+  };
+
+  // Görsel yüklenmezse fallback'e geç
+  const handleImageError = () => {
+    setUseFallback(true);
+  };
+
+  // Placeholder çizgilerini göster (isLoaded false iken görüntülenecek)
+  const placeholderLines = Array.from({ length: 10 }).map((_, i) => (
+    <rect 
+      key={i} 
+      x="50" 
+      y={100 + i * 40} 
+      width={1000} 
+      height="20" 
+      rx="4"
+      className="fill-[#E5E5E5] dark:fill-[#404040] animate-pulse"
+    />
+  ));
+
   return (
     <svg
       width={width}
@@ -21,6 +50,8 @@ export default function Safari({
       viewBox={`0 0 ${width} ${height}`}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label={alt}
       {...props}
     >
       <g clipPath="url(#path0)">
@@ -127,15 +158,58 @@ export default function Safari({
             fill="#A3A3A3"
           />
         </g>
-        <image
-          href={src}
-          width="1200"
-          height="700"
-          x="1"
-          y="52"
-          preserveAspectRatio="xMidYMid slice"
-          clipPath="url(#roundedBottom)"
-        />
+        
+        {/* Placeholder lines (görsel yüklenene kadar gösterilir) */}
+        {!isLoaded && !useFallback && (
+          <g>
+            {placeholderLines}
+          </g>
+        )}
+        
+        {/* Modern görsel yükleme yaklaşımı - Next.js Image yerine optimize edilmiş SVG içinde image kullanımı */}
+        {src && !useFallback ? (
+          <foreignObject width="1200" height="700" x="1" y="52" clipPath="url(#roundedBottom)">
+            <div className={`w-full h-full transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+              <img
+                src={src}
+                alt={alt}
+                width="1200"
+                height="700"
+                onLoad={handleImageLoad}
+                onError={handleImageError}
+                loading="lazy"
+                decoding="async"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  borderBottomLeftRadius: '12px',
+                  borderBottomRightRadius: '12px',
+                }}
+              />
+            </div>
+          </foreignObject>
+        ) : (
+          // Fallback içerik - görsel yüklenemezse
+          <g>
+            <rect
+              x="1"
+              y="52"
+              width="1200"
+              height="700"
+              clipPath="url(#roundedBottom)"
+              className="fill-[#2d2d2d] dark:fill-[#1d1d1d]"
+            />
+            <text
+              x="601"
+              y="400"
+              textAnchor="middle"
+              className="fill-white text-xl"
+            >
+              {useFallback ? "Image could not be loaded" : "Loading..."}
+            </text>
+          </g>
+        )}
       </g>
       <defs>
         <clipPath id="path0">

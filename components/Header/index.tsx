@@ -158,11 +158,16 @@ const Header = () => {
   };
 
   return (
-    <div className="w-full max-w-screen">
+    <header className="w-full max-w-screen">
       <div className="md:mx-auto my-4 rounded-lg w-full lg:container">
         <div className="flex flex-col w-full lg:container my-4 rounded-lg">
           <div className="flex md:flex-row flex-col justify-between md:items-center gap-4 md:gap-0 w-full">
-            <a href="/" onClick={handleHomeClick} className="flex flex-col -gap-1">
+            <a 
+              href="/" 
+              onClick={handleHomeClick} 
+              className="flex flex-col -gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#dfff1f] focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-sm" 
+              aria-label="Go to homepage"
+            >
               <h1 className="font-light text-2xl text-white">
                 Hüsnü <span className="font-medium text-[#dfff1f]">Lübnan</span>
               </h1>
@@ -171,23 +176,29 @@ const Header = () => {
               </div>
             </a>
 
-            <div className="flex w-full md:w-auto gap-2 justify-between">
+            <div className="flex w-full md:w-auto gap-2 justify-between" role="navigation" aria-label="Main navigation">
               <motion.button
                 ref={heartButtonRef}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
-                className="w-4/12 md:w-auto flex flex-row items-center justify-center gap-2 group relative cursor-pointer bg-[#2d2d2d] border-none rounded-lg py-1.5 px-3 hover:bg-[#3d3d3d]"
+                className="w-4/12 md:w-auto flex flex-row items-center justify-center gap-2 group relative cursor-pointer bg-[#111] border-none rounded-lg py-1.5 px-3 hover:bg-[#3d3d3d] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#dfff1f] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                 onClick={handleLikeClick}
                 onMouseEnter={() => setIsHovering(true)}
                 onMouseLeave={() => setIsHovering(false)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleLikeClick();
+                  }
+                }}
                 type="button"
-                aria-label="Liked"
+                aria-label="View liked items"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
                 {/* Minimal border animasyonu */}
-                <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden rounded-lg">
+                <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden rounded-lg" aria-hidden="true">
                   <svg
                     width="100%"
                     height="100%"
@@ -230,6 +241,7 @@ const Header = () => {
                   >
                     <FiHeart
                       className={`text-sm transition-all duration-300 ${lastClicked ? 'fill-[#dfff1f]' : ''} text-[#dfff1f]`}
+                      aria-hidden="true"
                     />
                   </motion.div>
 
@@ -247,6 +259,7 @@ const Header = () => {
                           left: `${Math.random() * 30 - 15}px`,
                           top: 0
                         }}
+                        aria-hidden="true"
                       >
                         <FiHeart
                           className="text-xs fill-transparent text-[#dfff1f] opacity-60"
@@ -256,29 +269,7 @@ const Header = () => {
                   </AnimatePresence>
                 </div>
 
-                {/* Minimal sparkle efekti */}
-                <AnimatePresence>
-                  {sparkles.map((sparkle) => (
-                    <motion.div
-                      key={sparkle.id}
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: [0, 0.8, 0] }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.6 }}
-                      className="absolute pointer-events-none rounded-full z-0"
-                      style={{
-                        left: `${sparkle.x}px`,
-                        top: `${sparkle.y}px`,
-                        width: `${1 + Math.random() * 2}px`,
-                        height: `${1 + Math.random() * 2}px`,
-                        backgroundColor: neonGreen,
-                        boxShadow: `0 0 3px ${neonGreen}`
-                      }}
-                    />
-                  ))}
-                </AnimatePresence>
-
-                <span className="text-white text-sm z-10">
+                <span className="text-white font-medium text-sm z-10">
                   Liked
                 </span>
               </motion.button>
@@ -290,13 +281,18 @@ const Header = () => {
                 transition={{ duration: 0.5 }}
               >
                 <div
-                  className="flex w-full h-full group-hover:border-pulse bg-[#2d2d2d] px-3 py-1.5 rounded-lg cursor-pointer justify-center"
+                  className="flex w-full h-full group-hover:border-pulse bg-[#111] px-3 py-1.5 rounded-lg cursor-pointer justify-center focus-within:ring-2 focus-within:ring-[#dfff1f] focus-within:ring-offset-2 focus-within:ring-offset-black"
                   onClick={handleToggleBox}
                 >
                   <div className="flex flex-row items-center gap-4">
-                    <span className="bg-[#dfff1f] rounded-full w-2 h-2 animate-pulse opacity-70"></span>
-                    <button data-cal-link="husnu" data-cal-config='{"theme":"dark"}'>
-                      <p className="text-[#fff] text-sm">Freelance Status</p>
+                    <span className="bg-[#dfff1f] rounded-full w-2 h-2 animate-pulse opacity-100" aria-hidden="true"></span>
+                    <button 
+                      data-cal-link="husnu" 
+                      data-cal-config='{"theme":"dark"}'
+                      aria-label="Check freelance availability status"
+                      className="focus:outline-none"
+                    >
+                      <p className="text-[#fff] font-medium text-sm">Freelance Status</p>
                     </button>
                   </div>
                 </div>
@@ -307,15 +303,20 @@ const Header = () => {
                 className="hidden md:block relative group"
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5 }}
-                onClick={handleDownloadResume}
                 whileHover={{ y: -1 }}
                 whileTap={{ y: 1 }}
               >
-                <div className="flex group-hover:border-pulse bg-[#2d2d2d] px-3 py-1.5 rounded-lg cursor-pointer">
+                <div 
+                  className="flex group-hover:border-pulse bg-[#111] px-3 py-1.5 rounded-lg cursor-pointer focus-within:ring-2 focus-within:ring-[#dfff1f] focus-within:ring-offset-2 focus-within:ring-offset-black"
+                >
                   <div className="flex flex-row items-center gap-4">
-                    <ResumeIcon className="h-4 w-4 group-hover:animate-draw opacity-80" />
-                    <button data-cal-link="husnu" data-cal-config='{"theme":"dark"}'>
-                      <p className="text-[#fff] text-sm">CV</p>
+                    <ResumeIcon className="h-4 w-4 group-hover:animate-draw opacity-80" aria-hidden="true" />
+                    <button 
+                      onClick={handleDownloadResume}
+                      className="focus:outline-none"
+                      aria-label="Download resume (CV)"
+                    >
+                      <p className="text-[#fff] font-medium text-sm">CV</p>
                     </button>
                   </div>
                 </div>
@@ -328,20 +329,25 @@ const Header = () => {
             className="relative group mt-4 md:hidden w-full"
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            onClick={handleDownloadResume}
           >
-            <div className="flex group-hover:border-pulse bg-[#2d2d2d] px-3 py-2 rounded-lg cursor-pointer w-full justify-center">
+            <div 
+              className="flex group-hover:border-pulse bg-[#111] px-3 py-2 rounded-lg cursor-pointer w-full justify-center focus-within:ring-2 focus-within:ring-[#dfff1f] focus-within:ring-offset-2 focus-within:ring-offset-black"
+            >
               <div className="flex flex-row items-center gap-4">
-                <ResumeIcon className="h-6 w-6 group-hover:animate-draw" />
-                <button data-cal-link="husnu" data-cal-config='{"theme":"dark"}' className="w-full">
-                  <p className="text-[#fff] text-sm">CV</p>
+                <ResumeIcon className="h-6 w-6 group-hover:animate-draw" aria-hidden="true" />
+                <button 
+                  onClick={handleDownloadResume}
+                  className="w-full focus:outline-none"
+                  aria-label="Download resume (CV)"
+                >
+                  <p className="text-[#fff] font-medium text-sm">CV</p>
                 </button>
               </div>
             </div>
           </motion.div>
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 

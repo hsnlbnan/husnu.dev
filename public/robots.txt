@@ -1,0 +1,34 @@
+# robots.txt for https://husnu.dev
+# Last updated: 2025-04-05
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /test/
+
+
+# Sitemap
+Sitemap: https://husnu.dev/sitemap.xml
+
+# Google özel tarayıcı direktifleri
+User-agent: Googlebot
+Allow: /
+Allow: /*.js$
+Allow: /*.css$
+
+User-agent: Googlebot-Image
+Allow: /
+
+# Düşük öncelikli tarayıcılar için hız sınırı
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+# Diğer arama motorları
+User-agent: Bingbot
+Allow: /
+
+User-agent: Yandex
+Allow: /

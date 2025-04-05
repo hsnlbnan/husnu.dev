@@ -1,6 +1,14 @@
 import Header from '@/components/Header';
 import React from 'react'
 import type { Metadata } from "next";
+import dynamic from 'next/dynamic';
+/* import Footer from "@/components/Footer";
+ */
+
+const Footer = dynamic(() => import('@/components/Footer'), {
+  ssr: false,
+  loading: () => <div className="w-full h-16 bg-gray-100 dark:bg-gray-800"></div>,
+});
 
 export const metadata: Metadata = {
   title: "Liked | Hüsnü Lübnan",
@@ -54,6 +62,7 @@ export default function LikedLayout({ children }: { children: React.ReactNode })
           {children}
         </div>
       </div>
+      <Footer />
     </main>
   )
 }

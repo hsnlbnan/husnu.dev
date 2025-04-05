@@ -401,7 +401,7 @@ const ActionButton = ({
     tabIndex={0}
   >
     {icon}
-    <span className={`absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs text-white
+    <span className={`absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs font-medium px-2 py-0.5 rounded text-white
                      ${animation ? 'opacity-0 group-hover:opacity-100 transition-opacity' : 'opacity-100'} whitespace-nowrap`}>
       {label}
     </span>

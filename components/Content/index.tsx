@@ -118,8 +118,8 @@ const Nav = () => {
           Contact Me
         </div>
         <div className="flex flex-col gap-6">
-          <h4 className="font-semibold text-4xl">Get in Touch with Me</h4>
-          <p className="text-xl">
+          <h4 className="font-semibold text-4xl text-gray-700">Get in Touch with Me</h4>
+          <p className="text-xl text-gray-500">
             You can contact me with your problems, bugs, new developments or
             projects.
           </p>
@@ -164,7 +164,7 @@ const Nav = () => {
       <div className="flex flex-col gap-2 w-full md:w-1/2">
         {formItems.map((item, index) => (
           <div key={index} className="flex flex-col gap-2 w-full">
-            <label className="w-full" htmlFor={`form-item-${index}`}>
+            <label className="w-full text-gray-900" htmlFor={`form-item-${index}`}>
               {item.label}
             </label>
             {item.type === "textarea" ? (

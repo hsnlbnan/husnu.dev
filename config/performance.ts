@@ -1,155 +1,173 @@
 /**
- * Performance configuration for the application
- *
- * This file centralizes all performance-related settings to make
- * them easier to adjust.
+ * Performance konfigürasyon dosyası
+ * Bu dosya, belirli sayfalar için kritik kaynakları tanımlar
  */
+
+// Resource tipi ve özellikleri
+export type ResourceType = 'font' | 'image' | 'style' | 'script' | 'prefetch';
+
+export interface Resource {
+  path: string;
+  type: ResourceType;
+  fetchPriority?: 'high' | 'low' | 'auto';
+  loadingStrategy?: 'eager' | 'lazy';
+  mediaType?: string; // font/woff2, image/webp gibi
+  viewport?: 'mobile' | 'desktop' | 'all'; // Hangi viewport'da yüklenecek
+  condition?: 'light' | 'dark' | 'reduced-motion' | 'all'; // Hangi koşulda yüklenecek
+}
+
+interface PageResources {
+  [key: string]: Resource[];
+}
 
 /**
- * General performance settings
+ * Her sayfa için kritik kaynaklar
+ * 
+ * Not: Sayfaların optimum performansı için kritik kaynaklar
+ * - fonts: İlk ekranda görünen yazı tipleri
+ * - images: Hero görüntüleri, logo, kritik görseller
+ * - styles: Sayfa stillerinin çekirdek kısmı
+ * - scripts: Sayfa yüklenmesi için gereken kritik JS
  */
-export const performanceConfig = {
-  /**
-   * Controls whether to use the optimized page transition system
-   * Set to false to disable all page transition optimizations
-   */
-  enableOptimizedPageTransitions: true,
-
-  /**
-   * Controls whether to disable animations during page transitions
-   * for faster navigation
-   */
-  disableAnimationsDuringTransition: true,
-
-  /**
-   * Time in milliseconds to wait before re-enabling animations
-   * after a page transition
-   */
-  reEnableAnimationsDelay: 50,
-
-  /**
-   * Controls whether to use lazy loading for non-critical components
-   */
-  useLazyLoadingForComponents: true,
-
-  /**
-   * Controls whether to use image optimization
-   */
-  optimizeImages: true,
-
-  /**
-   * Default quality for optimized images (1-100)
-   */
-  defaultImageQuality: 80,
-
-  /**
-   * Controls whether to preload critical resources
-   */
-  preloadCriticalResources: true,
-
-  /**
-   * List of critical resources to preload
-   */
-  criticalResources: [
-    // Add any critical CSS, fonts, or JavaScript files here
-    '/Husnu-Lubnan-CV.pdf',
+export const criticalResources: PageResources = {
+  '/': [
+    // Ana sayfa için kritik kaynaklar (LCP elementleri)
+    { 
+      path: '/me.webp', 
+      type: 'image',
+      fetchPriority: 'high',
+      loadingStrategy: 'eager',
+      mediaType: 'image/webp',
+      viewport: 'all'
+    },
+    { 
+      path: 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap', 
+      type: 'style',
+      fetchPriority: 'high',
+      viewport: 'all'
+    },
+    { 
+      path: '/logos/shftco.jpeg', 
+      type: 'image',
+      loadingStrategy: 'lazy',
+      viewport: 'desktop'
+    },
+    // Sonraki sayfalar için prefetch
+    {
+      path: '/liked',
+      type: 'prefetch',
+      fetchPriority: 'low'
+    }
   ],
-
-  /**
-   * Controls whether to use intersection observer for
-   * lazy loading off-screen content
-   */
-  useLazyLoadingForOffScreenContent: true,
-
-  /**
-   * Root margin for intersection observer (for lazy loading)
-   */
-  lazyLoadingRootMargin: '200px',
+  '/liked': [
+    // Liked sayfası için kritik kaynaklar
+    { 
+      path: '/og-liked.png', 
+      type: 'image',
+      fetchPriority: 'high',
+      loadingStrategy: 'eager' 
+    },
+    { 
+      path: 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap', 
+      type: 'style',
+      fetchPriority: 'high'
+    }
+  ],
+  // Diğer sayfalar için kritik kaynaklar eklenebilir
 };
 
 /**
- * Critical CSS classes that should always be included in the initial CSS
- * to prevent layout shifts during loading
+ * Önyükleme (preloading) stratejileri
  */
-export const criticalCssClasses = [
-  'container',
-  'flex',
-  'items-center',
-  'justify-between',
-  'p-4',
-];
-
-/**
- * Components that should be preloaded at startup
- * (not lazily loaded) because they are critical for
- * initial UI rendering
- */
-export const preloadComponents = [
-  'Header',
-  'Footer',
-];
-
-/**
- * Settings for Third-Party Script Loading
- */
-export const scriptLoadingStrategy = {
-  /**
-   * Controls how analytics scripts are loaded
-   * Options: 'eager', 'lazy', 'afterInteraction'
-   */
-  analytics: 'lazy',
-
-  /**
-   * Controls how third-party widgets are loaded
-   * Options: 'eager', 'lazy', 'afterInteraction'
-   */
-  widgets: 'afterInteraction',
-
-  /**
-   * Controls how font loading is optimized
-   * Options: 'swap', 'block', 'fallback', 'optional'
-   */
-  fontDisplay: 'swap',
+export const preloadingStrategies = {
+  // Kullanıcı eylem durumları için preloading stratejileri
+  hover: {
+    delay: 200, // hover'dan sonra preload başlaması için ms cinsinden gecikme
+    threshold: 300 // hover'ın ne kadar sürmesi gerektiği
+  },
+  prefetch: {
+    // Görüntü alanına giren linkler için prefetch
+    viewportThreshold: 0.1, // Görüntü alanının %10'unda göründüğünde
+    delay: 500, // ms cinsinden gecikme
+  },
+  idle: {
+    // Boşta kalma durumunda preload
+    timeout: 2000 // sayfa yüklendikten sonra beklenecek süre
+  }
 };
 
 /**
- * Default timeout values
+ * Belirli bir sayfa için kritik kaynakları çeker
+ * @param path Sayfa yolu
+ * @param viewport İsteğe bağlı viewport (mobile, desktop)
  */
-export const timeouts = {
-  /**
-   * Time in milliseconds after which a loading indicator is shown
-   * if the page is still loading
-   */
-  showLoadingIndicator: 300,
-
-  /**
-   * Time in milliseconds before considering a network request as "slow"
-   * and showing a loading indicator
-   */
-  networkRequestTimeout: 5000,
-};
+export function getCriticalResourcesForPath(path: string, viewport?: 'mobile' | 'desktop'): Resource[] {
+  const resources = criticalResources[path] || [];
+  
+  if (!viewport) {
+    return resources;
+  }
+  
+  // Viewport'a göre filtreleme
+  return resources.filter(resource => {
+    return !resource.viewport || resource.viewport === 'all' || resource.viewport === viewport;
+  });
+}
 
 /**
- * Get critical resources based on the current pathname
- * @param pathname Current URL pathname
- * @returns Array of resources that should be preloaded for this page
+ * Kaynak türüne göre önden yükleme stratejisini belirler
  */
-export const getCriticalResourcesForPath = (pathname: string): string[] => {
-  // Base resources that should be loaded for all pages
-  const baseResources = performanceConfig.criticalResources;
+export function getPreloadStrategyForResource(resource: Resource): string {
+  switch (resource.type) {
+    case 'font':
+      return 'font';
+    case 'image':
+      return 'image';
+    case 'style':
+      return 'style';
+    case 'script':
+      return 'script';
+    case 'prefetch':
+      return 'document';
+    default:
+      return '';
+  }
+}
 
-  // Page-specific resources
-  const pageResources: Record<string, string[]> = {
-    '/': [
-      // Critical resources for the home page
-    ],
-    '/liked': [
-      // Critical resources for the liked page
-    ],
-  };
+/**
+ * Sayfada kullanılan viewport'u tespit eder
+ */
+export function detectViewport(): 'mobile' | 'desktop' {
+  if (typeof window === 'undefined') {
+    return 'desktop'; // Server-side rendering durumunda varsayılan
+  }
+  
+  return window.innerWidth < 768 ? 'mobile' : 'desktop';
+}
 
-  // Return combined resources
-  return [...baseResources, ...(pageResources[pathname] || [])];
-};
-
-export default performanceConfig;
+/**
+ * Optimize edilmiş yükleme yöntemini belirler
+ */
+export function getOptimizedLoadingMethod(resource: Resource): 'preload' | 'prefetch' | 'preconnect' | 'dns-prefetch' {
+  // Yüksek öncelikli kaynaklar için preload
+  if (resource.fetchPriority === 'high') {
+    return 'preload';
+  }
+  
+  // İçerik tipine göre stratejiler
+  switch (resource.type) {
+    case 'font':
+      return 'preload'; // Fontlar kritik olduğu için preload edilmeli
+    case 'prefetch':
+      return 'prefetch'; // Sonraki sayfa navigasyonları için prefetch
+    case 'image':
+      // Lazy loading stratejisine göre
+      return resource.loadingStrategy === 'eager' ? 'preload' : 'prefetch';
+    case 'style':
+      return 'preload';
+    case 'script':
+      return 'prefetch'; // Scriptler genelde kritik olmadığı için prefetch
+    default:
+      return 'prefetch';
+  }
+}
