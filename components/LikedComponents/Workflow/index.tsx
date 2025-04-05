@@ -229,8 +229,8 @@ const AnimatedWorkflowCard = ({
               </div>
               {props.label && (
                 typeof props.label === 'string' ? (
-                  <div className="bg-gray-100 rounded-lg py-1 px-2.5 border border-gray-200">
-                    <h4 className="text-xs font-medium">{props.label}</h4>
+                  <div className="bg-purple-700 rounded-lg py-1 px-2.5 border border-gray-200">
+                    <h4 className="text-xs font-medium leading-none">{props.label}</h4>
                   </div>
                 ) : (
                   props.label
@@ -239,7 +239,7 @@ const AnimatedWorkflowCard = ({
             </div>
             {props.description && (
               <div className="flex items-center justify-between mt-2 border-t border-gray-100 pt-2">
-                <span className="text-xs text-gray-500">{props.description}</span>
+                <span className="text-xs text-gray-700">{props.description}</span>
               </div>
             )}
           </div>
@@ -410,7 +410,7 @@ export const WorkflowAnimation = () => {
           isAnimating={isAnimating}
           onAnimationComplete={handleFirstStepComplete}
         >
-          <div className="text-sm font-medium">Record command</div>
+          <div className="text-sm font-medium text-gray-700">Record command</div>
         </AnimatedWorkflowCard>
 
         <div className="flex items-center justify-center mt-2 mb-2">
@@ -478,9 +478,9 @@ export const WorkflowAnimation = () => {
           title=""
           icon={<FiSearch className={`${secondStepComplete ? 'text-green-500' : 'text-blue-500'}`} />}
           label={
-            <div className="flex items-center gap-2 bg-blue-100 rounded-lg py-1 px-2.5 border border-gray-200">
-              <ScanSearch className='w-3.5 h-3.5' />
-              <span className="text-xs font-medium">Agent</span>
+            <div className="flex items-center gap-2 bg-blue-700 rounded-lg py-1 px-2.5 border border-gray-200">
+              <ScanSearch className='w-3 h-3' />
+              <span className="text-xs font-medium !leading-none text-white pb-[1px]">Agent</span>
             </div>
           }
           description="Research on Records"
@@ -489,7 +489,7 @@ export const WorkflowAnimation = () => {
           className={firstStepComplete ? 'opacity-100' : 'opacity-50'}
           showCircle={false}
         >
-          <div className="text-sm font-medium">Research record</div>
+          <div className="text-sm font-medium text-gray-700">Research record</div>
         </AnimatedWorkflowCard>
       </div>
     </div>
