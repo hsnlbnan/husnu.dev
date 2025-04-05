@@ -63,14 +63,14 @@ export default function ClientHome() {
   useEffect(() => {
     // Core Web Vitals metriklerini iyileştir
     applyCoreWebVitalsOptimizations();
-    
+
     // Preconnect to important origins
     preconnectToOrigins([
       'https://fonts.googleapis.com',
       'https://fonts.gstatic.com',
       'https://cdn.vercel-insights.com'
     ]);
-    
+
     // Preload critical resources for homepage
     preloadResources(getCriticalResourcesForPath('/'));
 
@@ -106,11 +106,11 @@ export default function ClientHome() {
             <div>
               <div className="md:mx-auto my-4 rounded-lg w-full lg:container">
                 <div className="flex lg:flex-row flex-col gap-4">
-                  <div className="w-full lg:w-9/12 max-h-[500px] overflow-y-auto">
+                  <div className="w-full lg:w-8/12 max-h-[500px] overflow-y-auto">
                     <Languages />
                   </div>
 
-                  <div className="w-full lg:w-3/12 h-full">
+                  <div className="w-full lg:w-4/12 h-full">
                     <AdventureWidget />
                   </div>
                 </div>
@@ -169,7 +169,7 @@ export default function ClientHome() {
                 );
               })}
             </section>
-            
+
             <section className="relative mt-[10vh] w-full" aria-label="Work Experience">
               <div className="top-0 sticky flex flex-col justify-center items-center bg-black w-full h-screen text-white pb-12">
                 <VelocityScroll
