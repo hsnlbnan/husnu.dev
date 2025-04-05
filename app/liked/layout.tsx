@@ -47,13 +47,13 @@ export const metadata: Metadata = {
 
 export default function LikedLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <main className="px-4 md:px-0">
       <Header />
       <div className="w-full max-w-screen">
         <div className="md:mx-auto my-4 rounded-lg w-full lg:container">
           {children}
         </div>
       </div>
-    </>
+    </main>
   )
 }

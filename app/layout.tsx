@@ -68,7 +68,9 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body className={inter.className}>
-        {children}
+
+    {children}
+
         <Toaster />
         <Analytics />
         <SpeedInsights />

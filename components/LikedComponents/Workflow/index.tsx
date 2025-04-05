@@ -125,7 +125,7 @@ const AnimatedWorkflowCard = ({
   }, [isAnimating, onAnimationComplete, isCompleted])
 
   return (
-    <div className={`w-96 relative ${props.className}`}>
+    <div className={`w-full max-w-[384px] relative ${props.className}`}>
       <div className="relative flex flex-col">
         {props.title && (
           <div className="rounded-tl-xl flex items-center gap-2 rounded-tr-xl bg-gray-50 border border-gray-100 text-xs text-gray-700 px-2 py-1 max-w-24">
@@ -250,6 +250,7 @@ const AnimatedWorkflowCard = ({
                 className="absolute inset-0 w-full h-full"
                 viewBox="0 0 422 100"
                 fill="none"
+                preserveAspectRatio="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <rect
@@ -390,7 +391,7 @@ export const WorkflowAnimation = () => {
   }
 
   return (
-    <div className="relative w-full h-full min-h-screen bg-white dark:bg-gray-900">
+    <div className="relative w-full h-full bg-white dark:bg-gray-900 overflow-hidden">
       <div
         className="absolute inset-0 w-full h-full opacity-20 dark:opacity-30 select-none pointer-events-none -z-1"
         style={{
@@ -400,7 +401,7 @@ export const WorkflowAnimation = () => {
         }}
       />
 
-      <div className="flex items-center justify-center h-screen flex-col gap-4">
+      <div className="flex items-center justify-center h-full w-full px-2 py-4 flex-col gap-4 max-w-full">
         <AnimatedWorkflowCard
           title="Trigger"
           icon={<FiDownloadCloud className={`${firstStepComplete ? 'text-green-500' : 'text-blue-500'}`} />}
@@ -412,9 +413,9 @@ export const WorkflowAnimation = () => {
           <div className="text-sm font-medium">Record command</div>
         </AnimatedWorkflowCard>
 
-        <div className="flex items-center justify-center mt-3">
+        <div className="flex items-center justify-center mt-2 mb-2">
           <svg
-            className="w-6 h-14"
+            className="w-6 h-10 md:h-14"
             viewBox="0 0 24 60"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"

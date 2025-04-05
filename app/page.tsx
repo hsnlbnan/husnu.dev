@@ -87,9 +87,10 @@ export default function Home() {
 
   return (
     <>
-      <div className="md:p-0">
+     <main className="px-4 md:px-0">
+     <div className="md:p-0">
         <Header />
-        <main className="w-full max-w-screen">
+        <div className="w-full max-w-screen">
           <div>
             <div className="md:mx-auto my-4 rounded-lg w-full lg:container">
               <div className="flex lg:flex-row flex-col gap-4">
@@ -191,8 +192,9 @@ export default function Home() {
               </div>
             </div>
           </main>
-        </main>
+        </div>
       </div>
+     </main>
       <Footer />
     </>
   );
