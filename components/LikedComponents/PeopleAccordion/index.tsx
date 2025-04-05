@@ -90,15 +90,15 @@ function AccordionItem({
       <div className='flex items-center justify-between min-h-[24px]'>
         <div className='flex items-center gap-2'>
           <div className="h-6 w-6 rounded-full bg-gray-200"></div>
-          <span className='text-sm font-medium'>
+          <h3 className='text-sm font-medium text-gray-900'>
             {name}
-          </span>
+          </h3>
           <p className='text-xs text-gray-500'>
             {role}
           </p>
         </div>
         <div className='flex items-center justify-center cursor-pointer hover:bg-gray-50 rounded-full p-1'>
-          <MessageCirclePlus className='w-4 h-4' />
+          <MessageCirclePlus className='w-4 h-4 text-gray-900' />
         </div>
       </div>
     </motion.div>
@@ -131,10 +131,10 @@ function AccordionHeader({
     >
       <div className="flex items-center gap-2">
         <div className="flex items-center justify-center">
-          <User2 className="w-4 h-4" />
+          <User2 className="w-4 h-4 text-gray-900" />
         </div>
         <div className='flex items-center gap-2 select-none'>
-          <h4 className="text-sm font-medium">
+          <h4 className="text-sm font-medium text-gray-900">
             {title}
           </h4>
           <motion.span
@@ -150,7 +150,7 @@ function AccordionHeader({
         </div>
       </div>
       <div className="flex items-center justify-center">
-        <div className="flex items-center justify-center gap-1 pr-2 text-xs font-medium select-none">
+        <div className="flex items-center justify-center gap-1 pr-2 text-xs font-medium select-none text-gray-500">
           <motion.span
             initial={{ opacity: 0.8 }}
             animate={{ opacity: 1 }}
