@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+                            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  <!-- Ana Sayfa -->
+  <url>
+    <loc>https://husnu.dev/</loc>
+    <lastmod>2025-04-05T12:00:00+03:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://husnu.dev" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://husnu.dev" />
+    <image:image>
+      <image:loc>https://husnu.dev/me.webp</image:loc>
+      <image:title>Hüsnü Lübnan</image:title>
+      <image:caption>Hüsnü Lübnan - Frontend Developer</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Liked Sayfası -->
+  <url>
+    <loc>https://husnu.dev/liked</loc>
+    <lastmod>2025-04-05T12:00:00+03:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://husnu.dev/liked" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://husnu.dev/liked" />
+  </url>
+
+  <!-- CV / Özgeçmiş Dosyası -->
+  <url>
+    <loc>https://husnu.dev/Husnu-Lubnan-CV.pdf</loc>
+    <lastmod>2025-04-05T12:00:00+03:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>

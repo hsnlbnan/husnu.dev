@@ -90,9 +90,9 @@ function AccordionItem({
       <div className='flex items-center justify-between min-h-[24px]'>
         <div className='flex items-center gap-2'>
           <div className="h-6 w-6 rounded-full bg-gray-200"></div>
-          <h3 className='text-sm font-medium'>
+          <span className='text-sm font-medium'>
             {name}
-          </h3>
+          </span>
           <p className='text-xs text-gray-500'>
             {role}
           </p>

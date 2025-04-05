@@ -96,7 +96,7 @@ const EmailComponent: React.FC<EmailComponentProps> & {
 };
 
 EmailComponent.Title = ({ children }) => (
-  <span className="text-gray-500 text-light text-sm">{children}</span>
+  <span className="!text-gray-700 text-light text-sm">{children}</span>
 );
 
 EmailComponent.Description = ({ children }) => (

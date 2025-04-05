@@ -65,7 +65,9 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
           <div className="flex h-[60vh] md:h-[600px]">
             <div className="p-4 md:p-6 flex items-center justify-center w-full">
               <div className="w-full h-full flex items-center justify-center bg-[#2d2d2d] rounded-xl overflow-hidden">
-                <Component />
+                <div className="w-full h-full max-w-full max-h-full overflow-hidden items-center justify-center flex">
+                  <Component />
+                </div>
               </div>
             </div>
           </div>

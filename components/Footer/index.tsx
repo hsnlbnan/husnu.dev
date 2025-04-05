@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import Content from "../Content";
 
@@ -23,8 +24,6 @@ function useMediaQuery(query: string) {
 
 export default function Footer() {
   const isMobile = useMediaQuery("(max-width: 768px)");
-  // console.log kaldırıldı, gerekirse yorum olarak bırakabilirsiniz
-  // console.log(isMobile);
 
   if (isMobile) {
     return (

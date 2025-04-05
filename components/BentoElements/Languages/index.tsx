@@ -20,16 +20,16 @@ export type IconProps = React.HTMLAttributes<SVGElement>;
 
 const Languages = () => {
   return (
-    <div className="bg-[#1D1D1D] p-6 md:p-12 rounded-xl">
+    <div className="bg-[#1D1D1D] p-6 md:p-6 rounded-xl w-full">
       <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
         <h3 className="font-light text-2xl text-white">
           My adventure lasting <span className="text-[#dfff1f]">4+ years</span>
           <p className="mt-2 text-sm">20+ projects released</p>
         </h3>
       </div>
-      <div className="relative overflow-x-auto lg:overflow-hidden">
-        <div className="flex items-start w-full pb-4">
-          <Dock direction="middle" >
+      <div className="relative overflow-x-auto lg:overflow-visible w-full">
+        <div className="flex items-start w-full pb-4 lg:justify-between lg:min-w-full">
+          <Dock direction="middle" className="w-auto lg:w-full lg:justify-between">
             <DockIcon size={52}>
               <Tooltip text="NextJS">
                 <NextJS className="fill-white size-8" />
