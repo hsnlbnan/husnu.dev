@@ -3,24 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiEye, FiExternalLink } from 'react-icons/fi';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { TimeSelector } from '@/components/LikedComponents/TimeSelector';
-import HouseAnimatedButton from '@/components/LikedComponents/HouseButton';
+import { useRouter, usePathname } from 'next/navigation';
 import { PreviewModal } from '@/components/LikedComponents/PreviewModal';
-import WorkflowAnimation from '@/components/LikedComponents/Workflow';
-import { PeopleAccordion } from '@/components/LikedComponents/PeopleAccordion';
-
-
-interface LikedComponent {
-  id: number;
-  title: string;
-  description: string;
-  tags?: string[];
-  preview: React.ComponentType;
-  inspired?: string | null;
-  span?: string;
-  isMobile?: boolean;
-}
+import { likedComponents, LikedComponent } from '@/data/likedComponents';
 
 interface ComponentCardProps extends LikedComponent {
   className?: string;
@@ -28,40 +13,6 @@ interface ComponentCardProps extends LikedComponent {
   isMobile?: boolean;
 }
 
-export const likedComponents: LikedComponent[] = [
-  {
-    id: 1,
-    title: "Time Selector",
-    description: "Custom time selection component",
-    preview: TimeSelector,
-    inspired: "https://x.com/proskuaaa/status/1901890724452311188",
-    span: "col-span-10 xs:col-span-12 md:col-span-8 lg:col-span-8"
-  },
-  {
-    id: 2,
-    title: "Animated House Button",
-    description: "Animated house button with framer motion",
-    preview: HouseAnimatedButton,
-    inspired: "https://x.com/markoilico/status/1897422797712015516",
-    span: "col-span-10 xs:col-span-12 md:col-span-4 lg:col-span-4"
-  },
-  {
-    id: 3,
-    title: "Workflow Animation",
-    description: "Animated workflow trigger component",
-    preview: WorkflowAnimation,
-    inspired: null,
-    span: "col-span-10 xs:col-span-12 md:col-span-6 lg:col-span-6"
-  },
-  {
-    id: 4,
-    title: "Accordion",
-    description: "Custom accordion component",
-    preview: PeopleAccordion,
-    inspired: null,
-    span: "col-span-10 xs:col-span-12 md:col-span-6 lg:col-span-6"
-  },
-];
 export const dynamic = 'force-static'
 
 
@@ -227,15 +178,37 @@ const LikedPage = () => {
         These components were coded using React, Framer-Motion and Tailwind to learn how to make components that I like and see on sites like <span className='text-[#dfff1f]'>Twitter(X), Behance, Dribbble, Figma.</span>  Source codes are not shared out of  <span className='text-[#dfff1f]'>respect for designers.</span>
       </motion.p>
 
-      <div className="grid grid-cols-1 xs:grid-cols-12 gap-3 xs:gap-4 md:gap-6">
-        {likedComponents.map((component, index) => (
+      <div className="grid grid-cols-1 xs:grid-cols-12 md:grid-cols-12 lg:grid-cols-12 gap-3 xs:gap-4 md:gap-6">
+        {/* İlk sıra: Time Selector ve House Button */}
+        <div className="col-span-full md:col-span-8 lg:col-span-8">
           <ComponentCard
-            key={component.id}
-            {...component}
-            index={index}
-            className={component.span}
+            key={likedComponents[0].id}
+            {...likedComponents[0]}
+            index={0}
+            className={"col-span-10 xs:col-span-12 md:col-span-8 lg:col-span-8"}
             isMobile={isMobile}
           />
+        </div>
+        <div className="col-span-full md:col-span-4 lg:col-span-4">
+          <ComponentCard
+            key={likedComponents[1].id}
+            {...likedComponents[1]}
+            index={1}
+            className={"col-span-10 xs:col-span-12 md:col-span-4 lg:col-span-4"}
+            isMobile={isMobile}
+          />
+        </div>
+        
+        {/* İkinci sıra: Workflow ve Accordion */}
+        {likedComponents.slice(2).map((component, index) => (
+          <div key={component.id} className="col-span-full md:col-span-6 lg:col-span-6">
+            <ComponentCard
+              {...component}
+              index={index + 2}
+              className={"col-span-10 xs:col-span-12 md:col-span-6 lg:col-span-6"}
+              isMobile={isMobile}
+            />
+          </div>
         ))}
       </div>
     </motion.div>
@@ -257,7 +230,7 @@ const ComponentCard = ({
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
-  
+
   // Modal'ı açma fonksiyonu - route'a yönlendirir
   const openPreview = () => {
     // Tam URL'yi kullanarak yönlendirme yap - hash kullanarak farklı bir route olduğunu belirt
@@ -271,7 +244,7 @@ const ComponentCard = ({
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.1 }}
         whileHover="hover"
-        className={`group relative bg-[#2d2d2d] rounded-xl p-3 xs:p-4 md:p-5 box-border w-full ${className}`}
+        className={`group relative bg-[#2d2d2d] rounded-xl p-3 xs:p-4 md:p-5 box-border w-full ${className || ""}`}
       >
         {/* Preview Area */}
         <div className="relative h-36 xs:h-40 md:h-48 bg-[#1d1d1d] rounded-lg mb-3 xs:mb-4 md:mb-5 overflow-hidden">

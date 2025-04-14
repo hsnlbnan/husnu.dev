@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { likedComponents } from '../../../page';
+
 import { PreviewModal } from '@/components/LikedComponents/PreviewModal';
+import { likedComponents } from '@/data/likedComponents';
 
 export default function InterceptedPreviewPage() {
   const params = useParams();

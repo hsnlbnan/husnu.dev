@@ -1,8 +1,9 @@
 "use client";
 
 import { useParams, useRouter } from 'next/navigation';
-import { likedComponents } from '../../page';
+
 import { PreviewModal } from '@/components/LikedComponents/PreviewModal';
+import { likedComponents } from '@/data/likedComponents';
 
 export default function PreviewPage() {
     const params = useParams();

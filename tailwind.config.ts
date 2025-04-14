@@ -54,15 +54,15 @@ const config: Config = {
     willChange: false,
   },
   theme: {
-    screens: {
-      'xs': '380px',
-      'sm': '640px',
-      'md': '768px',
-      'lg': '1024px',
-      'xl': '1280px',
-      '2xl': '1536px',
-    },
     extend: {
+      screens: {
+        'xs': '480px',
+        'sm': '640px',
+        'md': '768px',
+        'lg': '1024px',
+        'xl': '1280px',
+        '2xl': '1536px',
+      },
       // Add font variables
       fontFamily: {
         sans: ['var(--font-jakarta)', 'system-ui', 'sans-serif'],

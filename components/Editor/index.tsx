@@ -287,7 +287,6 @@ ${code.render}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
           onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
         >
           {/* Background glow effect */}
           <motion.div 
