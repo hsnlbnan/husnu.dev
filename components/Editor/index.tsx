@@ -118,22 +118,48 @@ const EditorBento = () => {
   const [isBlurred, setIsBlurred] = useState(false);
   const [blurredSide, setBlurredSide] = useState<"left" | "right" | null>(null);
   const [lastSplitPos, setLastSplitPos] = useState(50);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Define spring-based easing for more natural animations
+  const springTransition = {
+    type: "spring",
+    stiffness: 300,
+    damping: 20,
+    mass: 0.5
+  };
 
   const badCode: CodeType<{ count: number; data: string[] }, string> = {
     component: "BadComponent",
     props: { count: 0, data: [] },
     dataType: "string",
     effect: `
+  // Multiple problems in this effect:
+  // 1. Dependency on count causes infinite loop
+  // 2. No error handling
+  // 3. No loading state
+  // 4. Direct state mutation in dependency
   useEffect(() => {
-    setCount(count + 1)
+    console.log("Fetching data...")
+    setCount(count + 1) // This causes infinite re-renders!
     fetch('https://api.example.com/data')
+      .then(response => response.json())
       .then(data => setData(data))
-  }, [count])`,
+      // Missing error handling completely
+  }, [count]) // Incorrect dependency causes infinite loop`,
     render: `
+  // Multiple problems in rendering:
+  // 1. Missing key or using random keys
+  // 2. No loading or error states
+  // 3. Inefficient event handler
   return (
     <div>
+      {/* Random keys cause full re-renders and break component state */}
       {data.map(item => <div key={Math.random()}>{item}</div>)}
-      <button onClick={() => setCount(count + 1)}>Count: {count}</button>
+      
+      {/* Inline function creates new function each render */}
+      <button onClick={() => setCount(count + 1)}>
+        Count: {count}
+      </button>
     </div>
   )`,
   };
@@ -143,18 +169,55 @@ const EditorBento = () => {
     props: { count: 0, data: [] },
     dataType: "string",
     effect: `
+  // Good practices:
+  // 1. Using an empty dependency array to run once
+  // 2. Proper async/await with error handling
+  // 3. Using loading state
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<Error | null>(null)
+
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetch('https://api.example.com/data')
-      setData(await result.json())
+      try {
+        setIsLoading(true)
+        setError(null)
+        const response = await fetch('https://api.example.com/data')
+        if (!response.ok) {
+          throw new Error(\`HTTP error! Status: \${response.status}\`)
+        }
+        const result = await response.json()
+        setData(result)
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error('Unknown error'))
+        console.error('Fetch error:', err)
+      } finally {
+        setIsLoading(false)
+      }
     }
     fetchData()
-  }, [])`,
+  }, []) // Empty dependency array runs once on mount`,
     render: `
+  // Good practices:
+  // 1. Handling loading and error states
+  // 2. Stable key prop using index
+  // 3. Function updater pattern for state
+  // 4. Memoization opportunities
+  if (isLoading) return <div>Loading data...</div>
+  if (error) return <div>Error: {error.message}</div>
+
   return (
     <div>
-      {data.map((item, index) => <div key={index}>{item}</div>)}
-      <button onClick={() => setCount(prev => prev + 1)}>Count: {count}</button>
+      {data.length === 0 ? (
+        <div>No data available</div>
+      ) : (
+        // Using index as key is OK when list is static
+        data.map((item, index) => <div key={index}>{item}</div>)
+      )}
+      
+      {/* Using function updater form prevents stale closures */}
+      <button onClick={() => setCount(prev => prev + 1)}>
+        Count: {count}
+      </button>
     </div>
   )`,
   };
@@ -215,27 +278,42 @@ ${code.render}
     <AnimatePresence>
       {isLoaded && (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.5 }}
-          className="relative bg-black shadow-lg rounded-lg w-full h-[380px] overflow-hidden"
+          initial={{ opacity: 0, y: 20, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -20, scale: 0.98 }}
+          transition={springTransition}
+          className="relative bg-black shadow-lg rounded-xl w-full h-[380px] overflow-hidden border border-[#1d1d1d]"
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
+          {/* Background glow effect */}
+          <motion.div 
+            className="absolute inset-0 pointer-events-none"
+            animate={{ 
+              boxShadow: isHovered 
+                ? "inset 0 0 15px rgba(223, 255, 31, 0.1)" 
+                : "inset 0 0 0px rgba(223, 255, 31, 0)"
+            }}
+            transition={{ duration: 0.6 }}
+          />
+
+          {/* Editor panels container */}
           <div className="flex h-full">
             <motion.div
               className="h-full overflow-hidden"
               style={{ width: `${splitPos}%` }}
-              transition={{ duration: 0.1 }}
+              transition={{ duration: 0.15, ease: "easeOut" }}
               animate={{ width: `${splitPos}%` }}
             >
               <motion.div
                 className="p-4 h-full font-mono text-sm text-white whitespace-pre-wrap"
                 animate={{
                   filter: blurredSide === "left" ? "blur(2px)" : "blur(0px)",
-                  transition: { duration: 0.2 },
+                  opacity: blurredSide === "left" ? 0.7 : 1,
+                  transition: { duration: 0.3 },
                 }}
               >
                 <SyntaxHighlighter language="javascript" style={style}>
@@ -244,29 +322,67 @@ ${code.render}
               </motion.div>
             </motion.div>
 
-            {/* Ayırıcı */}
+            {/* Separator with enhanced styling and animation */}
             <motion.div
-              className="relative bg-[#111] w-1 cursor-ew-resize"
+              className="relative bg-[#111] w-1 cursor-ew-resize flex items-center justify-center"
               onMouseDown={handleMouseDown}
-              whileHover={{ scale: 1.5 }}
+              whileHover={{ scale: [1, 1.8, 1.5], backgroundColor: "#222" }}
               whileTap={{ scale: 0.9 }}
+              animate={isDragging ? { 
+                backgroundColor: "#dfff1f",
+                boxShadow: "0 0 8px rgba(223, 255, 31, 0.5)"
+              } : {}}
+              transition={springTransition}
             >
-              {/* seperator icon */}
-              <Seperator className="top-1/2 left-1/2 absolute transform -translate-x-1/2 -translate-y-1/2" />
+              {/* Separator icon with animation */}
+              <motion.div 
+                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                animate={isDragging ? { 
+                  rotate: [0, 90, 180, 270, 360],
+                  transition: { duration: 1.5, repeat: Infinity, ease: "linear" }
+                } : {}}
+              >
+                <Seperator className="text-[#dfff1f] opacity-80" />
+              </motion.div>
+              
+              {/* Glowing dots on the divider */}
+              {isDragging && (
+                <>
+                  <motion.div 
+                    className="absolute w-1 h-1 rounded-full bg-[#dfff1f]"
+                    style={{ top: '20%' }}
+                    animate={{ 
+                      opacity: [0.3, 1, 0.3],
+                      boxShadow: ["0 0 2px #dfff1f", "0 0 5px #dfff1f", "0 0 2px #dfff1f"]
+                    }}
+                    transition={{ duration: 1.2, repeat: Infinity }}
+                  />
+                  <motion.div 
+                    className="absolute w-1 h-1 rounded-full bg-[#dfff1f]"
+                    style={{ top: '80%' }}
+                    animate={{ 
+                      opacity: [0.3, 1, 0.3],
+                      boxShadow: ["0 0 2px #dfff1f", "0 0 5px #dfff1f", "0 0 2px #dfff1f"]
+                    }}
+                    transition={{ duration: 1.2, delay: 0.3, repeat: Infinity }}
+                  />
+                </>
+              )}
             </motion.div>
 
-            {/* Sağ (İyi Kod) */}
+            {/* Right (Good Code) */}
             <motion.div
               className="bg-black h-full overflow-hidden"
               style={{ width: `${100 - splitPos}%` }}
-              transition={{ duration: 0.1 }}
+              transition={{ duration: 0.15, ease: "easeOut" }}
               animate={{ width: `${100 - splitPos}%` }}
             >
               <motion.div
                 className="p-4 h-full font-mono text-sm text-white whitespace-pre-wrap"
                 animate={{
                   filter: blurredSide === "right" ? "blur(2px)" : "blur(0px)",
-                  transition: { duration: 0.2 },
+                  opacity: blurredSide === "right" ? 0.7 : 1,
+                  transition: { duration: 0.3 },
                 }}
               >
                 <SyntaxHighlighter language="javascript" style={style}>
@@ -275,6 +391,39 @@ ${code.render}
               </motion.div>
             </motion.div>
           </div>
+          
+          {/* Labels */}
+          <motion.div 
+            className="absolute top-3 left-3 text-xs text-[#dfff1f]/60 font-mono"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            Bad Practice
+          </motion.div>
+          <motion.div 
+            className="absolute top-3 right-3 text-xs text-[#dfff1f]/60 font-mono"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            Good Practice
+          </motion.div>
+          
+          {/* Interactive drag hint - shows only initially */}
+          <AnimatePresence>
+            {!isDragging && splitPos === 50 && (
+              <motion.div 
+                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#111]/80 px-3 py-1.5 rounded-full text-xs text-white"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 0.8, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.3 }}
+              >
+                Drag to compare
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
       )}
     </AnimatePresence>

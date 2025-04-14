@@ -4,9 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import WordRotate from '@/components/ui/word-rotate';
 
-// Simplified grid size
-const gridSize = { rows: 5, cols: 11 };
-const heartPattern = [
+// Base grid size - will be responsive
+const baseGridSize = { rows: 5, cols: 11 };
+
+// Heart patterns for different sizes
+const heartPatternBase = [
   [0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0],
   [0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0],
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -14,9 +16,52 @@ const heartPattern = [
   [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
 ];
 
+// Larger heart pattern for wider screens - still 5 rows
+const heartPatternLarge = [
+  [0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0],
+  [0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+  [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+];
+
+// Extra large heart pattern for desktop screens
+const heartPatternExtraLarge = [
+  [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
+  [0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0],
+  [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+];
+
 const AdventureWidget = () => {
+  const [gridSize, setGridSize] = useState(baseGridSize);
   const [grid, setGrid] = useState(() => getRandomGrid());
   const [hovered, setHovered] = useState(false);
+  const [heartPattern, setHeartPattern] = useState(heartPatternBase);
+
+  // Ekran boyutuna göre grid boyutunu ayarla
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      
+      if (width >= 1024) { // lg ve üstü ekranlar
+        setGridSize({ rows: heartPatternExtraLarge.length, cols: heartPatternExtraLarge[0].length });
+        setHeartPattern(heartPatternExtraLarge);
+      } else if (width >= 768) { // md ve üstü ekranlar
+        setGridSize({ rows: heartPatternLarge.length, cols: heartPatternLarge[0].length });
+        setHeartPattern(heartPatternLarge);
+      } else { // küçük ekranlar
+        setGridSize({ rows: heartPatternBase.length, cols: heartPatternBase[0].length });
+        setHeartPattern(heartPatternBase);
+      }
+    };
+    
+    // İlk yüklemede ve ekran boyutu değiştiğinde çalıştır
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Daha verimli random grid oluşturma
   function getRandomGrid() {
@@ -25,14 +70,10 @@ const AdventureWidget = () => {
     );
   }
 
-  // Grid değişimi için useEffect
+  // Ekran boyutu değiştiğinde veya ilk yüklemede grid'i güncelle
   useEffect(() => {
-    if (hovered) {
-      setGrid(heartPattern as (0 | 1)[][]);
-    } else {
-      setGrid(getRandomGrid());
-    }
-  }, [hovered]);
+    setGrid(hovered ? heartPattern as (0 | 1)[][] : getRandomGrid());
+  }, [gridSize, hovered, heartPattern]);
 
   return (
     <div className="bg-[#1D1D1D] p-4 md:p-5 rounded-xl w-full h-full flex flex-col">
@@ -70,10 +111,10 @@ const AdventureWidget = () => {
             display: 'grid',
             gridTemplateColumns: `repeat(${gridSize.cols}, 1fr)`,
             gridTemplateRows: `repeat(${gridSize.rows}, 1fr)`,
-            gap: '4px',
+            gap: '3px',
             width: '100%',
-            maxWidth: '300px',
-            margin: '0 '
+            maxWidth: gridSize.cols >= 16 ? '500px' : gridSize.cols >= 13 ? '400px' : '300px',
+            margin: '0 auto'
           }}
         >
           {grid.map((row, rowIndex) =>

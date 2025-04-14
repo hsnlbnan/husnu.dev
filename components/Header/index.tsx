@@ -10,6 +10,7 @@ import { FiHeart } from "react-icons/fi";
 import Link from "next/link";
 import AnimatedLink from "../AnimatedLink";
 import usePageTransition from "@/hooks/usePageTransition";
+import { usePathname } from "next/navigation";
 
 // Neon yeşil renk paleti
 const neonGreen = "#dfff1f";
@@ -66,6 +67,8 @@ const Header = () => {
   const [lastClicked, setLastClicked] = useState(false);
   const [buttonDimensions, setButtonDimensions] = useState({ width: 0, height: 0 });
   const { navigateTo } = usePageTransition();
+  const pathname = usePathname();
+  const isLikedPage = pathname === '/liked';
 
   const handleToggleBox = () => {
     setIsBoxVisible(!isBoxVisible);
@@ -144,11 +147,9 @@ const Header = () => {
 
   function handleLikeClick() {
     createSparkles();
-
-    // Use optimized navigation instead of default
-    setTimeout(() => {
-      navigateTo("/liked");
-    }, 10);
+    
+    // Doğrudan yönlendirme yap, gecikme olmadan
+    navigateTo("/liked");
   }
 
   // Handle optimized home navigation
@@ -240,7 +241,7 @@ const Header = () => {
                     }}
                   >
                     <FiHeart
-                      className={`text-sm transition-all duration-300 ${lastClicked ? 'fill-[#dfff1f]' : ''} text-[#dfff1f]`}
+                      className={`text-sm transition-all duration-300 ${isLikedPage || lastClicked ? 'fill-[#dfff1f]' : ''} text-[#dfff1f]`}
                       aria-hidden="true"
                     />
                   </motion.div>

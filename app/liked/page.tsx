@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiEye, FiExternalLink } from 'react-icons/fi';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { TimeSelector } from '@/components/LikedComponents/TimeSelector';
 import HouseAnimatedButton from '@/components/LikedComponents/HouseButton';
 import { PreviewModal } from '@/components/LikedComponents/PreviewModal';
@@ -27,7 +28,7 @@ interface ComponentCardProps extends LikedComponent {
   isMobile?: boolean;
 }
 
-const likedComponents: LikedComponent[] = [
+export const likedComponents: LikedComponent[] = [
   {
     id: 1,
     title: "Time Selector",
@@ -75,8 +76,6 @@ const LikedPage = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-
 
   return (
     <motion.div
@@ -245,6 +244,7 @@ const LikedPage = () => {
 
 // Component Card
 const ComponentCard = ({
+  id,
   title,
   description,
   tags = [],
@@ -255,6 +255,14 @@ const ComponentCard = ({
   isMobile
 }: ComponentCardProps) => {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+  
+  // Modal'ı açma fonksiyonu - route'a yönlendirir
+  const openPreview = () => {
+    // Tam URL'yi kullanarak yönlendirme yap - hash kullanarak farklı bir route olduğunu belirt
+    router.push(`/liked/preview/${id}#modal`, { scroll: false });
+  };
 
   return (
     <>
@@ -295,7 +303,7 @@ const ComponentCard = ({
               <ActionButton
                 icon={<FiEye />}
                 label="Preview"
-                onClick={() => setIsPreviewOpen(true)}
+                onClick={openPreview}
               />
 
               {inspired && (
@@ -334,7 +342,7 @@ const ComponentCard = ({
               <ActionButton
                 icon={<FiEye />}
                 label=""
-                onClick={() => setIsPreviewOpen(true)}
+                onClick={openPreview}
                 animation={false}
               />
 
@@ -367,7 +375,7 @@ const ComponentCard = ({
         </motion.div>
       </motion.div>
 
-      {/* Preview Modal */}
+      {/* Preview Modal - Eski yöntem için fallback olarak kalıyor */}
       <PreviewModal
         isOpen={isPreviewOpen}
         onClose={() => setIsPreviewOpen(false)}

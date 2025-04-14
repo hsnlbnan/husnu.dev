@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Dialog } from '@headlessui/react';
 import { FiX, FiExternalLink } from 'react-icons/fi';
 
@@ -16,6 +16,7 @@ interface PreviewModalProps {
   title: string;
   inspired?: string | null;
   files?: CodeFile[];
+  isIntercepted?: boolean;
 }
 
 export const PreviewModal: React.FC<PreviewModalProps> = ({
@@ -24,10 +25,28 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   component: Component,
   title,
   inspired,
+  isIntercepted,
 }) => {
+  // İntercepted modunda veya normal modda açık olup olmadığını kontrol et
+  const modalIsOpen = isIntercepted || isOpen;
+  
+  // Modalın görünür olduğundan emin olmak için React.useEffect kullanma
+  React.useEffect(() => {
+    if (modalIsOpen) {
+      // Modal görünür olduğunda body scroll'u engelle
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Modal kapandığında body scroll'u geri getir
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [modalIsOpen]);
+    
   return (
     <Dialog
-      open={isOpen}
+      open={modalIsOpen}
       onClose={onClose}
       className="relative z-50"
     >
