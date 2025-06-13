@@ -11,6 +11,7 @@ interface ComponentCardProps extends LikedComponent {
   className?: string;
   index: number;
   isMobile?: boolean;
+  isNew?: boolean;
 }
 
 export const dynamic = 'force-static'
@@ -225,7 +226,8 @@ const ComponentCard = ({
   inspired,
   className = "",
   index,
-  isMobile
+  isMobile,
+  isNew
 }: ComponentCardProps) => {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const router = useRouter();
@@ -301,11 +303,13 @@ const ComponentCard = ({
         >
           <h3 className="text-white font-medium text-sm xs:text-base md:text-lg mb-1 md:mb-2 flex items-center gap-2">
             {title}
+            {isNew && (
             <motion.div
               className="h-1 w-1 rounded-full bg-[#dfff1f]"
               animate={{ scale: [1, 1.5, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
             />
+            )}
           </h3>
           <p className="text-gray-400 text-xs md:text-sm mb-2 xs:mb-3 md:mb-4">{description}</p>
 
