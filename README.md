@@ -20,6 +20,24 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
+## Lighthouse (Performance/SEO) local run
+
+To generate Lighthouse reports locally:
+
+1) Install Lighthouse as a dev dependency (or globally):
+
+- Dev dep: `npm i -D lighthouse`
+- Global: `npm i -g lighthouse`
+
+2) Start the app and run audits (in two terminals):
+
+- Terminal A: `npm run dev` (or `npm run start` after a build)
+- Terminal B: `npm run lh:desktop` and `npm run lh:mobile`
+
+Reports are saved to `.lighthouse/desktop.json` and `.lighthouse/mobile.json`.
+
+Note: For the production-like run, prefer: `npm run build && npm run start` before running Lighthouse.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

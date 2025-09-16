@@ -1,41 +1,41 @@
-"use client";
+import { PreviewRouteClient } from "@/components/LikedComponents/PreviewRouteClient";
+import { createMetadata } from "@/config/seo";
+import { likedComponents } from "@/data/likedComponents";
+import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
-import React from 'react';
-import { useParams, useRouter } from 'next/navigation';
+export const dynamic = "force-static";
 
-import { PreviewModal } from '@/components/LikedComponents/PreviewModal';
-import { likedComponents } from '@/data/likedComponents';
+export function generateStaticParams() {
+  return likedComponents.map((component) => ({ id: component.id.toString() }));
+}
 
-export default function InterceptedPreviewPage() {
-  const params = useParams();
-  const router = useRouter();
+export function generateMetadata({ params }: { params: { id: string } }): Metadata {
   const id = Number(params.id);
-  
-  // Force render after mounting
-  const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
+  const component = likedComponents.find((item) => item.id === id);
 
-  // Find the component with matching id
-  const component = likedComponents.find(comp => comp.id === id);
+  const base = createMetadata({
+    title: component ? `${component.title} Preview` : "Liked Preview",
+    description: component?.description ?? "Preview detail showcasing interactive UI components from my liked collection.",
+    path: `/liked/preview/${params.id}`,
+  });
 
-  // If component not found, redirect back to /liked
+  return {
+    ...base,
+    robots: {
+      index: false,
+      follow: false,
+    },
+  };
+}
+
+export default function InterceptedPreviewPage({ params }: { params: { id: string } }) {
+  const id = Number(params.id);
+  const component = likedComponents.find((item) => item.id === id);
+
   if (!component) {
-    router.push('/liked');
-    return null;
+    notFound();
   }
 
-  const { title, preview: PreviewComponent, inspired } = component;
-
-  return (
-    <PreviewModal
-      isOpen={true}
-      onClose={() => router.back()}
-      component={PreviewComponent}
-      title={title}
-      inspired={inspired}
-      isIntercepted={true}
-    />
-  );
+  return <PreviewRouteClient id={component.id} mode="modal" />;
 }

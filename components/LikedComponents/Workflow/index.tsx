@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from 'react'
 import { FiDownloadCloud, FiSearch } from 'react-icons/fi'
 import { motion, AnimatePresence } from 'framer-motion'

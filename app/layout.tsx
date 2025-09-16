@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
@@ -6,6 +5,7 @@ import { Toaster } from "sonner";
 import dynamic from 'next/dynamic';
 import PerformanceMonitor from "@/components/PerformanceMonitor";
 import Script from "next/script";
+import { baseMetadata, dnsPrefetchLinks, faviconLinks, preconnectLinks, structuredData, viewportContent } from "@/config/seo";
 
 // Dynamically import Vercel analytics components only in production
 const Analytics = dynamic(() => import('@vercel/analytics/react').then(mod => mod.Analytics))
@@ -19,78 +19,7 @@ const inter = Plus_Jakarta_Sans({
   variable: '--font-jakarta', // Tailwind'de kullanmak için değişken ekle
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL('https://husnu.dev'),
-  title: "Hüsnü Lübnan | Frontend & Javascript Developer",
-  description: "A frontend developer with 4+ years of experience developing web applications with React, Next.js, and TypeScript, specializing in enterprise projects, CMS systems, and interactive user interfaces.",
-  keywords: [
-    "Hüsnü Lübnan",
-    "Frontend Developer",
-    "Javascript Developer",
-    "React Developer",
-    "Next.js Developer",
-    "Typescript Developer",
-    "Tailwind CSS Developer",
-    "Frontend Developer",
-    "Hüsnü Lübnan kimdir",
-    "Hüsnü Lübnan hakkında",
-    "Hüsnü Lübnan blog",
-    "Hüsnü Lübnan projeler",
-    "Hüsnü Lübnan ile iletişime geç",
-  ],
-  alternates: {
-    canonical: '/',
-  },
-  openGraph: {
-    title: "Hüsnü Lübnan | Frontend Developer",
-    description: "A frontend developer with 4+ years of experience developing web applications with React, Next.js, and TypeScript, specializing in enterprise projects, CMS systems, and interactive user interfaces.",
-    url: 'https://husnu.dev',
-    siteName: 'Hüsnü Lübnan',
-    locale: 'tr_TR',
-    type: 'website',
-    images: [
-      {
-        url: "/og.png",
-        width: 1200,
-        height: 630,
-        alt: "Hüsnü Lübnan | Frontend Developer",
-      },
-    ],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  authors: [{ name: "Hüsnü Lübnan", url: "https://husnu.dev" }],
-  creator: "Hüsnü Lübnan",
-  publisher: "Hüsnü Lübnan",
-  twitter: {
-    card: 'summary_large_image',
-    site: "@hsnlbnan",
-    creator: "@hsnlbnan",
-    description: "A frontend developer with 4+ years of experience developing web applications with React, Next.js, and TypeScript, specializing in enterprise projects, CMS systems, and interactive user interfaces.",
-    title: "Hüsnü Lübnan | Frontend Developer",
-    images: [
-      {
-        url: "/og.png",
-        width: 1200,
-        height: 630,
-        alt: "Hüsnü Lübnan | Frontend Developer",
-      },
-    ],
-  },
-  // Structured Data için JSON-LD
-  other: {
-    'google-site-verification': 'YOUR_VERIFICATION_CODE', // Google Site Doğrulama Kodu Ekleyin
-  },
-};
+export const metadata = baseMetadata;
 
 export default function RootLayout({
   children,
@@ -105,73 +34,48 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* Temel favicons */}
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link
-          rel="apple-touch-icon"
-          href="/apple-touch-icon.png"
-          type="image/png"
-          sizes="180x180"
-        />
-        <link
-          rel="icon"
-          href="/favicon-32x32.png"
-          type="image/png"
-          sizes="32x32"
-        />
-        <link
-          rel="icon"
-          href="/favicon-16x16.png"
-          type="image/png"
-          sizes="16x16"
-        />
-        
-        {/* Performance: Kritik kaynaklar için preconnect */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        
-        {/* Performance: DNS prefetch */}
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://cdn.vercel-insights.com" />
-        
-        {/* SEO: Canonical URL */}
-        <link rel="canonical" href="https://husnu.dev" />
-        
-        {/* Accessibility: Viewport kontrolü */}
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        {faviconLinks.map((link) => (
+          <link
+            key={`${link.rel}-${link.href}`}
+            rel={link.rel}
+            href={link.href}
+            sizes={link.sizes}
+            type={link.type}
+            crossOrigin={link.crossOrigin}
+          />
+        ))}
+
+        {preconnectLinks.map((link) => (
+          <link
+            key={`${link.rel}-${link.href}`}
+            rel={link.rel}
+            href={link.href}
+            crossOrigin={link.crossOrigin}
+          />
+        ))}
+
+        {dnsPrefetchLinks.map((link) => (
+          <link key={`${link.rel}-${link.href}`} rel={link.rel} href={link.href} />
+        ))}
+
+        <meta name="viewport" content={viewportContent} />
         
         {/* Performance & SEO: Meta tags */}
         <meta name="theme-color" content="#000000" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        
-        {/* SEO: Structured Data - Personal website */}
-        <script 
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ 
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Person",
-              "name": "Hüsnü Lübnan",
-              "url": "https://husnu.dev",
-              "jobTitle": "Frontend Developer",
-              "sameAs": [
-                "https://github.com/hsnlbnan",
-                "https://twitter.com/hsnlbnan",
-                "https://www.linkedin.com/in/husnulubnan/"
-              ],
-              "knowsAbout": ["JavaScript", "React", "Next.js", "TypeScript", "TailwindCSS"],
-              "worksFor": {
-                "@type": "Organization",
-                "name": "Freelance"
-              }
-            })
-          }}
-        />
+
+        {structuredData.map((schema, index) => (
+          <script
+            key={`structured-data-${index}`}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          />
+        ))}
       </head>
       <body 
-        className={`${inter.className} antialiased bg-[#1D1D1D] text-white`}
+        className={`${inter.className} antialiased bg-[#1D1D1D] text-white overflow-x-hidden`}
         // Erişilebilirlik: Screen reader yardımı
         tabIndex={-1}
       >

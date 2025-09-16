@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import WordRotate from '@/components/ui/word-rotate';
 
 // Base grid size - will be responsive
@@ -39,6 +39,7 @@ const AdventureWidget = () => {
   const [grid, setGrid] = useState(() => getRandomGrid());
   const [hovered, setHovered] = useState(false);
   const [heartPattern, setHeartPattern] = useState(heartPatternBase);
+  const prefersReducedMotion = useReducedMotion();
 
   // Ekran boyutuna göre grid boyutunu ayarla
   useEffect(() => {
@@ -76,16 +77,16 @@ const AdventureWidget = () => {
   }, [gridSize, hovered, heartPattern]);
 
   return (
-    <div className="bg-[#1D1D1D] p-4 md:p-5 rounded-xl w-full h-full flex flex-col">
+    <div className="bg-[#1D1D1D] p-4 md:p-5 rounded-xl w-full h-full flex flex-col overflow-hidden">
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
+        initial={prefersReducedMotion ? undefined : { opacity: 0, y: 10 }}
+        animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+        transition={prefersReducedMotion ? undefined : { duration: 0.5, delay: 0.2 }}
         className="mb-4"
       >
         <h3 className="flex flex-wrap items-center gap-2 font-light text-white text-xl">
           Adventure is live on{" "}
-          <span className="flex text-[#dfff1f]">
+          <span className="flex text-[#dfff1f] min-w-[12ch]">
             <WordRotate words={["Github", "Azure DevOps", "Gitlab"]} />
           </span>
         </h3>
@@ -95,13 +96,13 @@ const AdventureWidget = () => {
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
+        initial={prefersReducedMotion ? undefined : { opacity: 0 }}
+        animate={prefersReducedMotion ? undefined : { opacity: 1 }}
+        transition={prefersReducedMotion ? undefined : { duration: 0.5, delay: 0.4 }}
         className="flex-grow flex items-start justify-start"
       >
         <div
-          className="grid w-full"
+          className="grid w-full overflow-hidden"
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
           aria-label="Interactive grid heart pattern"
@@ -122,16 +123,16 @@ const AdventureWidget = () => {
               <motion.div
                 key={`${rowIndex}-${cellIndex}`}
                 className="cell aspect-square rounded-sm"
-                initial={{ scale: 0.6 }}
+                initial={prefersReducedMotion ? undefined : { scale: 0.6 }}
                 animate={{ 
-                  scale: 1,
+                  scale: prefersReducedMotion ? 1 : 1,
                   backgroundColor: cell ? "#4caf50" : "#444" 
                 }}
-                transition={{ 
+                transition={prefersReducedMotion ? undefined : { 
                   duration: 0.3,
                   delay: (rowIndex * gridSize.cols + cellIndex) * 0.005
                 }}
-                whileHover={{ scale: 1.2 }}
+                whileHover={prefersReducedMotion ? undefined : { scale: 1.1 }}
               />
             ))
           )}

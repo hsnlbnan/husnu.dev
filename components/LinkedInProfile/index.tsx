@@ -12,7 +12,8 @@ const ProfileCard = () => {
           <Image
             src="/me.webp" // Buraya resim dosyasının yolunu koy.
             alt="Profile Picture"
-            layout="fill"
+            fill
+            sizes="96px"
             className="rounded-full object-cover"
           />
         </div>

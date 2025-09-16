@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lh:desktop": "lighthouse http://localhost:3000 --only-categories=performance,accessibility,seo,best-practices --preset=desktop --output=json --output-path=.lighthouse/desktop.json --quiet",
+    "lh:mobile": "lighthouse http://localhost:3000 --only-categories=performance,accessibility,seo,best-practices --preset=mobile --output=json --output-path=.lighthouse/mobile.json --quiet"
   },
   "dependencies": {
     "@calcom/embed-react": "^1.5.1",
@@ -58,6 +60,7 @@
     "cssnano": "^7.0.6",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
+    "lighthouse": "^12.8.2",
     "postcss": "^8",
     "postcss-rename": "^0.6.1",
     "tailwindcss": "^3.4.1",

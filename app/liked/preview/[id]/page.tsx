@@ -1,34 +1,41 @@
-"use client";
+import { PreviewRouteClient } from "@/components/LikedComponents/PreviewRouteClient";
+import { createMetadata } from "@/config/seo";
+import { likedComponents } from "@/data/likedComponents";
+import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
-import { useParams, useRouter } from 'next/navigation';
+export const dynamic = "force-static";
 
-import { PreviewModal } from '@/components/LikedComponents/PreviewModal';
-import { likedComponents } from '@/data/likedComponents';
+export function generateStaticParams() {
+  return likedComponents.map((component) => ({ id: component.id.toString() }));
+}
 
-export default function PreviewPage() {
-    const params = useParams();
-    const router = useRouter();
-    const id = Number(params.id);
+export function generateMetadata({ params }: { params: { id: string } }): Metadata {
+  const id = Number(params.id);
+  const component = likedComponents.find((item) => item.id === id);
 
-    const component = likedComponents.find(comp => comp.id === id);
+  const base = createMetadata({
+    title: component ? `${component.title} Preview` : "Liked Preview",
+    description: component?.description ?? "Preview detail showcasing interactive UI components from my liked collection.",
+    path: `/liked/preview/${params.id}`,
+  });
 
-    if (!component) {
-        router.push('/liked');
-        return null;
-    }
+  return {
+    ...base,
+    robots: {
+      index: false,
+      follow: false,
+    },
+  };
+}
 
-    const { title, preview: PreviewComponent, inspired } = component;
+export default function PreviewPage({ params }: { params: { id: string } }) {
+  const id = Number(params.id);
+  const component = likedComponents.find((item) => item.id === id);
 
-    return (
-        <div className="min-h-screen flex items-center justify-center bg-[#1e1e1e]">
-            <PreviewModal
-                isOpen={true}
-                onClose={() => router.push('/liked')}
-                component={PreviewComponent}
-                title={title}
-                inspired={inspired}
-                isIntercepted={true}
-            />
-        </div>
-    );
+  if (!component) {
+    notFound();
+  }
+
+  return <PreviewRouteClient id={component.id} mode="page" />;
 }

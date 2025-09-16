@@ -177,7 +177,7 @@ export default function ClientHome() {
                   default_velocity={1}
                   className="drop-shadow-sm font-bold font-display text-4xl text-center text-white/20 md:text-7xl dark:text-white md:leading-[5rem] tracking-[-0.02em]"
                 />
-                <div className="flex flex-col px-0 md:p-8 w-full min-w-screen max-w-6xl mt-12 pb-12 mb-4">
+                <div className="flex flex-col px-0 md:p-8 w-full max-w-6xl mt-12 pb-12 mb-4">
                   {work.map((work, i) => {
                     return <Work key={i} {...work} />;
                   })}

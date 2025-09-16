@@ -4,6 +4,7 @@ import HouseAnimatedButton from '@/components/LikedComponents/HouseButton';
 import WorkflowAnimation from '@/components/LikedComponents/Workflow';
 import { PeopleAccordion } from '@/components/LikedComponents/PeopleAccordion';
 import CarBookingComponent from '@/components/DynamicIsland';
+import Volume from '@/components/Volume';
 
 export interface LikedComponent {
   id: number;
@@ -18,6 +19,16 @@ export interface LikedComponent {
 }
 
 export const likedComponents: LikedComponent[] = [
+  {
+    id: 5,
+    title: "Volume",
+    description: "Custom volume component",
+    preview: Volume,
+    inspired: null,
+    span: "col-span-10 xs:col-span-12 md:col-span-6 lg:col-span-6",
+    isNew: true
+  },    
+  
   {
     id: 0,
     title: "Car Booking",
@@ -63,5 +74,6 @@ export const likedComponents: LikedComponent[] = [
     span: "col-span-10 xs:col-span-12 md:col-span-6 lg:col-span-6",
     isNew: false
   },
+ 
 
 ];
