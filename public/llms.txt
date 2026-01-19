@@ -20,6 +20,23 @@ Hüsnü Lübnan is a Senior Frontend Developer and Creative Technologist based i
 - **Open Source:** Active contributor to the React and Next.js ecosystem in Turkey.
 - **Community:** Frequent sharer of knowledge regarding "Best Frontend Practices" and "Modern Web Development".
 
+## Professional Experience & Key Projects
+
+### **Otokoç 2. El (Koç Holding)**
+A high-traffic used car sales platform built with **Micro Frontend architecture**.
+- **Tech Stack:** Next.js 14, TypeScript, Turbopack, OIDC Authentication, Zustand.
+- **Key Contributions:** Implemented advanced security scenarios, SEO optimizations, and a scalable micro-frontend structure.
+
+### **Fizbot**
+A real estate intelligence platform matching agents with opportunities.
+- **Tech Stack:** React, TypeScript, Apollo Client (GraphQL), Redux Toolkit, Map Integration.
+- **Impact:** Developed complex map-based filtering and real-time opportunity tracking for real estate consultants.
+
+### **Innovative Side Projects**
+- **AI-Powered Todo App:** A modern application integrating **Next.js** with **FastAPI** and **Ollama** (AI) for task summarization.
+- **hayal.in:** An anonymous dream sharing platform utilizing the full **Vercel Ecosystem** (Edge Functions, Redis, Postgres).
+- **Alterego & Yeditepe GO:** Custom CMS solutions for tourism and logistics sectors, featuring multi-tenant architectures.
+
 ## Contact & Profiles
 - **Portfolio:** https://husnu.dev
 - **GitHub:** https://github.com/hsnlbnan (Verified Code Quality)
