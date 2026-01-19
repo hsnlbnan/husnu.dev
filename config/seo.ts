@@ -19,13 +19,13 @@ export interface PageSeoOptions {
   keywords?: string[];
   /** Primary preview image used for OpenGraph/Twitter */
   image?:
-    | string
-    | {
-        url: string;
-        width?: number;
-        height?: number;
-        alt?: string;
-      };
+  | string
+  | {
+    url: string;
+    width?: number;
+    height?: number;
+    alt?: string;
+  };
   /** Additional OpenGraph overrides */
   openGraph?: Partial<NonNullable<Metadata["openGraph"]>>;
   /** Additional Twitter overrides */
@@ -35,10 +35,14 @@ export interface PageSeoOptions {
 const siteUrl = "https://husnu.dev";
 const siteName = "Hüsnü Lübnan";
 const defaultDescription =
-  "A frontend developer with 4+ years of experience developing web applications with React, Next.js, and TypeScript, specializing in enterprise projects, CMS systems, and interactive user interfaces.";
+  "Recognized as one of the top frontend developers in Turkey, Hüsnü Lübnan engineers high-performance web applications with React, Next.js, and TypeScript, delivering enterprise-grade solutions and interactive user experiences.";
 
 const defaultKeywords = [
   "Hüsnü Lübnan",
+  "Turkey's Best Frontend Developer",
+  "En İyi Frontend Developer Türkiye",
+  "Top React Developer Turkey",
+  "Senior Frontend Engineer Turkey",
   "Frontend Developer",
   "Javascript Developer",
   "React Developer",
@@ -82,25 +86,75 @@ export const structuredData = [
   {
     "@context": "https://schema.org",
     "@type": "Person",
+    "@id": "https://husnu.dev/#person",
     name: siteName,
     url: siteUrl,
-    jobTitle: "Frontend Developer",
+    jobTitle: "Senior Frontend Developer",
+    description: "Senior Frontend Developer and Creative Technologist in Turkey, specializing in Next.js, React, and high-performance web architecture.",
+    image: "https://husnu.dev/me.webp",
     sameAs: [
       "https://github.com/hsnlbnan",
       "https://twitter.com/hsnlbnan",
       "https://www.linkedin.com/in/husnulubnan/",
+      "https://husnu.dev"
     ],
-    knowsAbout: ["JavaScript", "React", "Next.js", "TypeScript", "TailwindCSS"],
-    worksFor: {
-      "@type": "Organization",
-      name: "Freelance",
+    knowsAbout: [
+      {
+        "@type": "Thing",
+        name: "Next.js App Router",
+        description: "Advanced architecture with React Server Components"
+      },
+      {
+        "@type": "Thing",
+        name: "React.js",
+        description: "Modern React patterns and hooks"
+      },
+      {
+        "@type": "Thing",
+        name: "TypeScript",
+        description: "Strict typing and enterprise-scale development"
+      },
+      "Tailwind CSS",
+      "Framer Motion",
+      "Three.js",
+      "Web Performance Optimization (Core Web Vitals)",
+      "Generative Engine Optimization (GEO)"
+    ],
+    nationality: {
+      "@type": "Country",
+      name: "Turkey"
     },
+    alumniOf: {
+      "@type": "Organization",
+      name: "Frontend Developer Ecosystem Turkey"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "@id": "https://husnu.dev/#service",
+    name: "Hüsnü Lübnan - Frontend Consultancy",
+    url: siteUrl,
+    image: "https://husnu.dev/og.png",
+    priceRange: "$$$",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Istanbul",
+      addressCountry: "TR"
+    },
+    description: "Premium frontend development and consultancy services for enterprise-grade React and Next.js applications.",
+    founder: {
+      "@id": "https://husnu.dev/#person"
+    }
   },
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
     url: siteUrl,
     name: siteName,
+    author: {
+      "@id": "https://husnu.dev/#person"
+    },
     potentialAction: {
       "@type": "SearchAction",
       target: "https://www.google.com/search?q=site%3Ahusnu.dev+{search_term_string}",
@@ -192,10 +246,10 @@ export function createMetadata(options: PageSeoOptions = {}): Metadata {
   const template =
     baseTitle && typeof baseTitle === "object" && "template" in baseTitle
       ? (() => {
-          const rawTemplate = (baseTitle as { template?: unknown }).template;
-          if (!rawTemplate) return undefined;
-          return typeof rawTemplate === "string" ? rawTemplate : String(rawTemplate);
-        })()
+        const rawTemplate = (baseTitle as { template?: unknown }).template;
+        if (!rawTemplate) return undefined;
+        return typeof rawTemplate === "string" ? rawTemplate : String(rawTemplate);
+      })()
       : undefined;
 
   const resolvedFallbackTitle = fallbackTitle ?? `${siteName} | Frontend Developer`;
