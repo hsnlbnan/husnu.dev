@@ -34,7 +34,7 @@
     "lodash": "^4.17.21",
     "love": "^3.4.1",
     "lucide-react": "^0.446.0",
-    "next": "14.2.3",
+    "next": "14.2.35",
     "nodemailer": "^6.9.15",
     "prismjs": "^1.30.0",
     "react": "^18",
