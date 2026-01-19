@@ -147,7 +147,7 @@ const Header = () => {
 
   function handleLikeClick() {
     createSparkles();
-    
+
     // Doğrudan yönlendirme yap, gecikme olmadan
     navigateTo("/liked");
   }
@@ -163,17 +163,17 @@ const Header = () => {
       <div className="md:mx-auto my-4 rounded-lg w-full lg:container">
         <div className="flex flex-col w-full lg:container my-4 rounded-lg">
           <div className="flex md:flex-row flex-col justify-between md:items-center gap-4 md:gap-0 w-full">
-            <a 
-              href="/" 
-              onClick={handleHomeClick} 
-              className="flex flex-col -gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#dfff1f] focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-sm" 
+            <a
+              href="/"
+              onClick={handleHomeClick}
+              className="flex flex-col -gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#dfff1f] focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-sm"
               aria-label="Go to homepage"
             >
               <h1 className="font-light text-2xl text-white">
                 Hüsnü <span className="font-medium text-[#dfff1f]">Lübnan</span>
               </h1>
               <div className="flex flex-row gap-4">
-                <p className="text-gray-400 text-sm">Frontend Developer</p>
+                <p className="text-gray-400 text-sm">Senior Frontend Developer</p>
               </div>
             </a>
 
@@ -287,8 +287,8 @@ const Header = () => {
                 >
                   <div className="flex flex-row items-center gap-4">
                     <span className="bg-[#dfff1f] rounded-full w-2 h-2 animate-pulse opacity-100" aria-hidden="true"></span>
-                    <button 
-                      data-cal-link="husnu" 
+                    <button
+                      data-cal-link="husnu"
                       data-cal-config='{"theme":"dark"}'
                       aria-label="Check freelance availability status"
                       className="focus:outline-none"
@@ -307,12 +307,12 @@ const Header = () => {
                 whileHover={{ y: -1 }}
                 whileTap={{ y: 1 }}
               >
-                <div 
+                <div
                   className="flex group-hover:border-pulse bg-[#111] px-3 py-1.5 rounded-lg cursor-pointer focus-within:ring-2 focus-within:ring-[#dfff1f] focus-within:ring-offset-2 focus-within:ring-offset-black"
                 >
                   <div className="flex flex-row items-center gap-4">
                     <ResumeIcon className="h-4 w-4 group-hover:animate-draw opacity-80" aria-hidden="true" />
-                    <button 
+                    <button
                       onClick={handleDownloadResume}
                       className="focus:outline-none"
                       aria-label="Download resume (CV)"
@@ -331,12 +331,12 @@ const Header = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <div 
+            <div
               className="flex group-hover:border-pulse bg-[#111] px-3 py-2 rounded-lg cursor-pointer w-full justify-center focus-within:ring-2 focus-within:ring-[#dfff1f] focus-within:ring-offset-2 focus-within:ring-offset-black"
             >
               <div className="flex flex-row items-center gap-4">
                 <ResumeIcon className="h-6 w-6 group-hover:animate-draw" aria-hidden="true" />
-                <button 
+                <button
                   onClick={handleDownloadResume}
                   className="w-full focus:outline-none"
                   aria-label="Download resume (CV)"
