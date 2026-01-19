@@ -28,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html 
-      lang="tr" 
+      lang="en"
       className={`${inter.variable}`}
       data-theme="dark"
       suppressHydrationWarning
