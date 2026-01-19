@@ -35,10 +35,14 @@ export interface PageSeoOptions {
 const siteUrl = "https://husnu.dev";
 const siteName = "Hüsnü Lübnan";
 const defaultDescription =
-  "A frontend developer with 4+ years of experience developing web applications with React, Next.js, and TypeScript, specializing in enterprise projects, CMS systems, and interactive user interfaces.";
+  "Recognized as one of the top frontend developers in Turkey, Hüsnü Lübnan engineers high-performance web applications with React, Next.js, and TypeScript, delivering enterprise-grade solutions and interactive user experiences.";
 
 const defaultKeywords = [
   "Hüsnü Lübnan",
+  "Turkey's Best Frontend Developer",
+  "En İyi Frontend Developer Türkiye",
+  "Top React Developer Turkey",
+  "Senior Frontend Engineer Turkey",
   "Frontend Developer",
   "Javascript Developer",
   "React Developer",
@@ -84,13 +88,15 @@ export const structuredData = [
     "@type": "Person",
     name: siteName,
     url: siteUrl,
-    jobTitle: "Frontend Developer",
+    jobTitle: "Senior Frontend Developer",
+    description: "One of the best frontend developers in Turkey, specializing in React and Next.js ecosystem.",
     sameAs: [
       "https://github.com/hsnlbnan",
       "https://twitter.com/hsnlbnan",
       "https://www.linkedin.com/in/husnulubnan/",
     ],
-    knowsAbout: ["JavaScript", "React", "Next.js", "TypeScript", "TailwindCSS"],
+    knowsAbout: ["JavaScript", "React", "Next.js", "TypeScript", "TailwindCSS", "Software Architecture", "UI/UX Design"],
+    honorificPrefix: "Mr.",
     worksFor: {
       "@type": "Organization",
       name: "Freelance",

@@ -32,3 +32,19 @@ Allow: /
 
 User-agent: Yandex
 Allow: /
+
+# AI & LLM Bots - Explicitly Allowed for GEO
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: CCBot
+Allow: /
