@@ -1,203 +1,394 @@
 "use client";
 
-import { Dock, DockIcon } from "@/components/Dock";
-import Tooltip from "@/components/Tooltip";
-import {
-  FramerMotion,
-  JS,
-  NextJS,
-  NodeJs,
-  ReactJs,
-  Redux,
-  Sass,
-  Svelte,
-  Tailwind,
-  TypeScript,
-} from "@/icons";
-import React from "react";
+import { motion, useReducedMotion, animate } from "framer-motion";
+import { useEffect, useState } from "react";
 
-export type IconProps = React.HTMLAttributes<SVGElement>;
+// ─── Data ─────────────────────────────────────────────────────────────────────
+
+const STACK_ITEMS = [
+  {
+    category: "Core Stack",
+    skills: ["Next.js", "Svelte", "React", "TypeScript", "JavaScript"],
+    color: "#dfff1f",
+    icon: "⬡",
+  },
+  {
+    category: "UI Layer",
+    skills: ["Tailwind CSS", "Sass", "Design Systems", "Shadcn UI"],
+    color: "#a8ff78",
+    icon: "◈",
+  },
+  {
+    category: "Motion",
+    skills: ["Framer Motion", "GSAP", "CSS Animations", "Three.js"],
+    color: "#78ffd6",
+    icon: "◎",
+  },
+  {
+    category: "State & API",
+    skills: ["Redux", "Zustand", "GraphQL", "REST"],
+    color: "#b8b8ff",
+    icon: "◇",
+  },
+
+  {
+    category: "Backend",
+    skills: ["Node.js", "NestJS", "Elysia.js", "Bun", "PostgreSQL", "MongoDB"],
+    color: "#ffb3c1",
+    icon: "◈",
+  },
+  {
+    category: "Testing",
+    skills: ["Playwright", "Cypress", "Vitest", "Jest"],
+    color: "#ff9f9f",
+    icon: "◎",
+    wide: true,
+  },
+  {
+    category: "DevOps & Git",
+    skills: ["Git", "GitHub", "GitLab", "Azure DevOps"],
+    color: "#ffd6a5",
+    icon: "◉",
+  },
+] as const;
+
+const METRICS = [
+  { value: 4, suffix: "+", label: "Years" },
+  { value: 20, suffix: "+", label: "Shipped" },
+  { value: 98, suffix: "", label: "Perf" },
+];
+
+// ─── Counter ──────────────────────────────────────────────────────────────────
+
+function Counter({ value, suffix }: { value: number; suffix: string }) {
+  const [display, setDisplay] = useState(0);
+  const prefersReducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      setDisplay(value);
+      return;
+    }
+    const controls = animate(0, value, {
+      duration: 1.4,
+      ease: [0.16, 1, 0.3, 1],
+      onUpdate: (v) => setDisplay(Math.floor(v)),
+    });
+    return controls.stop;
+  }, [value, prefersReducedMotion]);
+
+  return (
+    <span>
+      {display}
+      {suffix}
+    </span>
+  );
+}
+
+// ─── Skill Pill ───────────────────────────────────────────────────────────────
+
+function SkillPill({ skill }: { skill: string }) {
+  return (
+    <span
+      className="inline-flex cursor-default items-center rounded-[4px] px-[10px] py-[3px] transition-all duration-150"
+      style={{
+        fontFamily: "ui-monospace,'SF Mono',monospace",
+        fontSize: 11,
+        fontWeight: 400,
+        letterSpacing: "0.03em",
+        border: "1px solid rgba(255,255,255,0.08)",
+        color: "rgba(255,255,255,0.5)",
+        background: "rgba(255,255,255,0.03)",
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)";
+        (e.currentTarget as HTMLElement).style.borderColor =
+          "rgba(255,255,255,0.2)";
+        (e.currentTarget as HTMLElement).style.background =
+          "rgba(255,255,255,0.06)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.5)";
+        (e.currentTarget as HTMLElement).style.borderColor =
+          "rgba(255,255,255,0.08)";
+        (e.currentTarget as HTMLElement).style.background =
+          "rgba(255,255,255,0.03)";
+      }}
+    >
+      {skill}
+    </span>
+  );
+}
+
+// ─── Stack Group ──────────────────────────────────────────────────────────────
+
+function StackGroup({
+  category,
+  skills,
+  color,
+  icon,
+  wide,
+  groupIndex,
+}: {
+  category: string;
+  skills: readonly string[];
+  color: string;
+  icon: string;
+  wide?: boolean;
+  groupIndex: number;
+}) {
+  const prefersReducedMotion = useReducedMotion();
+  return (
+    <motion.div
+      className={`flex h-full flex-col ${wide ? "xl:col-span-2" : ""}`}
+      initial={prefersReducedMotion ? undefined : { opacity: 0, x: -8 }}
+      animate={prefersReducedMotion ? undefined : { opacity: 1, x: 0 }}
+      transition={
+        prefersReducedMotion
+          ? undefined
+          : {
+              duration: 0.4,
+              delay: 0.15 + groupIndex * 0.06,
+              ease: [0.16, 1, 0.3, 1],
+            }
+      }
+    >
+      <div className="mb-[7px] flex items-center gap-[6px]">
+        <span style={{ fontSize: 11, color, lineHeight: 1 }}>{icon}</span>
+        <span
+          style={{
+            fontFamily: "ui-monospace,monospace",
+            fontSize: 9,
+            textTransform: "uppercase",
+            letterSpacing: "0.22em",
+            color: color + "88",
+          }}
+        >
+          {category}
+        </span>
+        <div
+          style={{
+            height: 1,
+            flex: 1,
+            background: `linear-gradient(to right, ${color}22, transparent)`,
+          }}
+        />
+      </div>
+      <div className="flex flex-wrap gap-[5px]">
+        {skills.map((s) => (
+          <SkillPill key={s} skill={s} />
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
+// ─── Scan Line ────────────────────────────────────────────────────────────────
+
+function ScanLine() {
+  return (
+    <div
+      className="pointer-events-none absolute inset-x-0 h-px"
+      style={{
+        background:
+          "linear-gradient(to right, transparent, rgba(223,255,31,0.4), rgba(223,255,31,0.8), rgba(223,255,31,0.4), transparent)",
+        animation: "scanDown 6s linear infinite",
+        animationDelay: "1.5s",
+        opacity: 0,
+      }}
+    />
+  );
+}
+
+// ─── Main ─────────────────────────────────────────────────────────────────────
 
 const Languages = () => {
-  return (
-    <div className="bg-[#1D1D1D] p-6 md:p-6 rounded-xl w-full">
-      <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
-        <h3 className="font-light text-2xl text-white">
-          My adventure lasting <span className="text-[#dfff1f]">4+ years</span>
-          <p className="mt-2 text-sm">20+ projects released</p>
-        </h3>
-      </div>
-      <div className="relative overflow-x-auto lg:overflow-visible w-full">
-        <div className="flex items-start w-full pb-4 lg:justify-between lg:min-w-full">
-          <Dock direction="middle" className="w-auto lg:w-full lg:justify-between">
-            <DockIcon size={52}>
-              <Tooltip text="NextJS">
-                <NextJS className="fill-white size-8" />
-              </Tooltip>
-            </DockIcon>
-            <DockIcon size={52}>
-              <Tooltip text="ReactJS">
-                <ReactJs className="w-8 h-8 fill-white" />
-              </Tooltip>
-            </DockIcon>
-            <DockIcon size={52}>
-              <Tooltip text="JavaScript">
-                <JS className="size-6" />
-              </Tooltip>
-            </DockIcon>
-            <DockIcon size={52}>
-              <Tooltip text="TypeScript">
-                <TypeScript className="size-6" />
-              </Tooltip>
-            </DockIcon>
-            <DockIcon size={52}>
-              <Tooltip text="Svelte">
-                <Svelte className="size-6" />
-              </Tooltip>
-            </DockIcon>
-            <DockIcon size={52}>
-              <Tooltip text="NodeJS">
-                <NodeJs className="size-6" />
-              </Tooltip>
-            </DockIcon>
-            <DockIcon size={52}>
-              <Tooltip text="Redux">
-                <Redux className="size-6" />
-              </Tooltip>
-            </DockIcon>
-            <DockIcon size={52}>
-              <Tooltip text="Sass">
-                <Sass className="size-6" />
-              </Tooltip>
-            </DockIcon>
-            <DockIcon size={52}>
-              <Tooltip text="Tailwind">
-                <Tailwind className="size-6" />
-              </Tooltip>
-            </DockIcon>
-            <DockIcon size={52}>
-              <Tooltip text="Framer Motion">
-                <FramerMotion className="size-4" />
-              </Tooltip>
-            </DockIcon>
-          </Dock>
-        </div>
-      </div>
-    </div>
-  );
-};
+  const prefersReducedMotion = useReducedMotion();
 
-const Icons = {
-  gitHub: (props: IconProps) => (
-    <svg viewBox="0 0 438.549 438.549" {...props}>
-      <path
-        fill="currentColor"
-        d="M409.132 114.573c-19.608-33.596-46.205-60.194-79.798-79.8-33.598-19.607-70.277-29.408-110.063-29.408-39.781 0-76.472 9.804-110.063 29.408-33.596 19.605-60.192 46.204-79.8 79.8C9.803 148.168 0 184.854 0 224.63c0 47.78 13.94 90.745 41.827 128.906 27.884 38.164 63.906 64.572 108.063 79.227 5.14.954 8.945.283 11.419-1.996 2.475-2.282 3.711-5.14 3.711-8.562 0-.571-.049-5.708-.144-15.417a2549.81 2549.81 0 01-.144-25.406l-6.567 1.136c-4.187.767-9.469 1.092-15.846 1-6.374-.089-12.991-.757-19.842-1.999-6.854-1.231-13.229-4.086-19.13-8.559-5.898-4.473-10.085-10.328-12.56-17.556l-2.855-6.57c-1.903-4.374-4.899-9.233-8.992-14.559-4.093-5.331-8.232-8.945-12.419-10.848l-1.999-1.431c-1.332-.951-2.568-2.098-3.711-3.429-1.142-1.331-1.997-2.663-2.568-3.997-.572-1.335-.098-2.43 1.427-3.289 1.525-.859 4.281-1.276 8.28-1.276l5.708.853c3.807.763 8.516 3.042 14.133 6.851 5.614 3.806 10.229 8.754 13.846 14.842 4.38 7.806 9.657 13.754 15.846 17.847 6.184 4.093 12.419 6.136 18.699 6.136 6.28 0 11.704-.476 16.274-1.423 4.565-.952 8.848-2.383 12.847-4.285 1.713-12.758 6.377-22.559 13.988-29.41-10.848-1.14-20.601-2.857-29.264-5.14-8.658-2.286-17.605-5.996-26.835-11.14-9.235-5.137-16.896-11.516-22.985-19.126-6.09-7.614-11.088-17.61-14.987-29.979-3.901-12.374-5.852-26.648-5.852-42.826 0-23.035 7.52-42.637 22.557-58.817-7.044-17.318-6.379-36.732 1.997-58.24 5.52-1.715 13.706-.428 24.554 3.853 10.85 4.283 18.794 7.952 23.84 10.994 5.046 3.041 9.089 5.618 12.135 7.708 17.705-4.947 35.976-7.421 54.818-7.421s37.117 2.474 54.823 7.421l10.849-6.849c7.419-4.57 16.18-8.758 26.262-12.565 10.088-3.805 17.802-4.853 23.134-3.138 8.562 21.509 9.325 40.922 2.279 58.24 15.036 16.18 22.559 35.787 22.559 58.817 0 16.178-1.958 30.497-5.853 42.966-3.9 12.471-8.941 22.457-15.125 29.979-6.191 7.521-13.901 13.85-23.131 18.986-9.232 5.14-18.182 8.85-26.84 11.136-8.662 2.286-18.415 4.004-29.263 5.146 9.894 8.562 14.842 22.077 14.842 40.539v60.237c0 3.422 1.19 6.279 3.572 8.562 2.379 2.279 6.136 2.95 11.276 1.995 44.163-14.653 80.185-41.062 108.068-79.226 27.88-38.161 41.825-81.126 41.825-128.906-.01-39.771-9.818-76.454-29.414-110.049z"
-      ></path>
-    </svg>
-  ),
-  notion: (props: IconProps) => (
-    <svg
-      width="100"
-      height="100"
-      viewBox="0 0 100 100"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <path
-        d="M6.017 4.313l55.333 -4.087c6.797 -0.583 8.543 -0.19 12.817 2.917l17.663 12.443c2.913 2.14 3.883 2.723 3.883 5.053v68.243c0 4.277 -1.553 6.807 -6.99 7.193L24.467 99.967c-4.08 0.193 -6.023 -0.39 -8.16 -3.113L3.3 79.94c-2.333 -3.113 -3.3 -5.443 -3.3 -8.167V11.113c0 -3.497 1.553 -6.413 6.017 -6.8z"
-        fill="#fff"
-      />
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M61.35 0.227l-55.333 4.087C1.553 4.7 0 7.617 0 11.113v60.66c0 2.723 0.967 5.053 3.3 8.167l13.007 16.913c2.137 2.723 4.08 3.307 8.16 3.113l64.257 -3.89c5.433 -0.387 6.99 -2.917 6.99 -7.193V20.64c0 -2.21 -0.873 -2.847 -3.443 -4.733L74.167 3.143c-4.273 -3.107 -6.02 -3.5 -12.817 -2.917zM25.92 19.523c-5.247 0.353 -6.437 0.433 -9.417 -1.99L8.927 11.507c-0.77 -0.78 -0.383 -1.753 1.557 -1.947l53.193 -3.887c4.467 -0.39 6.793 1.167 8.54 2.527l9.123 6.61c0.39 0.197 1.36 1.36 0.193 1.36l-54.933 3.307 -0.68 0.047zM19.803 88.3V30.367c0 -2.53 0.777 -3.697 3.103 -3.893L86 22.78c2.14 -0.193 3.107 1.167 3.107 3.693v57.547c0 2.53 -0.39 4.67 -3.883 4.863l-60.377 3.5c-3.493 0.193 -5.043 -0.97 -5.043 -4.083zm59.6 -54.827c0.387 1.75 0 3.5 -1.75 3.7l-2.91 0.577v42.773c-2.527 1.36 -4.853 2.137 -6.797 2.137 -3.107 0 -3.883 -0.973 -6.21 -3.887l-19.03 -29.94v28.967l6.02 1.363s0 3.5 -4.857 3.5l-13.39 0.777c-0.39 -0.78 0 -2.723 1.357 -3.11l3.497 -0.97v-38.3L30.48 40.667c-0.39 -1.75 0.58 -4.277 3.3 -4.473l14.367 -0.967 19.8 30.327v-26.83l-5.047 -0.58c-0.39 -2.143 1.163 -3.7 3.103 -3.89l13.4 -0.78z"
-        fill="#000"
-      />
-    </svg>
-  ),
-  googleDrive: (props: IconProps) => (
-    <svg viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <path
-        d="m6.6 66.85 3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8h-27.5c0 1.55.4 3.1 1.2 4.5z"
-        fill="#0066da"
-      />
-      <path
-        d="m43.65 25-13.75-23.8c-1.35.8-2.5 1.9-3.3 3.3l-25.4 44a9.06 9.06 0 0 0 -1.2 4.5h27.5z"
-        fill="#00ac47"
-      />
-      <path
-        d="m73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5h-27.502l5.852 11.5z"
-        fill="#ea4335"
-      />
-      <path
-        d="m43.65 25 13.75-23.8c-1.35-.8-2.9-1.2-4.5-1.2h-18.5c-1.6 0-3.15.45-4.5 1.2z"
-        fill="#00832d"
-      />
-      <path
-        d="m59.8 53h-32.3l-13.75 23.8c1.35.8 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.45 4.5-1.2z"
-        fill="#2684fc"
-      />
-      <path
-        d="m73.4 26.5-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3l-13.75 23.8 16.15 28h27.45c0-1.55-.4-3.1-1.2-4.5z"
-        fill="#ffba00"
-      />
-    </svg>
-  ),
-  whatsapp: (props: IconProps) => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 175.216 175.552"
-      {...props}
-    >
-      <defs>
-        <linearGradient
-          id="b"
-          x1="85.915"
-          x2="86.535"
-          y1="32.567"
-          y2="137.092"
-          gradientUnits="userSpaceOnUse"
+  return (
+    <>
+      <style>{`
+        @keyframes scanDown {
+          0%   { top: -2%; opacity: 0; }
+          5%   { opacity: 1; }
+          85%  { opacity: 1; }
+          100% { top: 102%; opacity: 0; }
+        }
+      `}</style>
+
+      <motion.div
+        initial={prefersReducedMotion ? undefined : { opacity: 0, y: 16 }}
+        animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+        transition={
+          prefersReducedMotion
+            ? undefined
+            : { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+        }
+        className="relative h-full overflow-hidden rounded-xl px-5 py-6 md:px-7 md:py-7"
+        style={{
+          background: "#141414",
+          border: "1px solid rgba(255,255,255,0.06)",
+          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)",
+        }}
+      >
+        <div
+          className="pointer-events-none absolute left-0 top-0 h-16 w-16"
+          style={{
+            background:
+              "radial-gradient(circle at 0 0, rgba(223,255,31,0.07), transparent 70%)",
+          }}
+        />
+        <div
+          className="pointer-events-none absolute bottom-0 right-0 h-24 w-24"
+          style={{
+            background:
+              "radial-gradient(circle at 100% 100%, rgba(223,255,31,0.03), transparent 70%)",
+          }}
+        />
+
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-2 bottom-0 select-none text-[7rem] font-light leading-none tracking-[-0.08em]"
+          style={{ color: "rgba(255,255,255,0.022)" }}
         >
-          <stop offset="0" stopColor="#57d163" />
-          <stop offset="1" stopColor="#23b33a" />
-        </linearGradient>
-        <filter
-          id="a"
-          width="1.115"
-          height="1.114"
-          x="-.057"
-          y="-.057"
-          colorInterpolationFilters="sRGB"
-        >
-          <feGaussianBlur stdDeviation="3.531" />
-        </filter>
-      </defs>
-      <path
-        fill="#b3b3b3"
-        d="m54.532 138.45 2.235 1.324c9.387 5.571 20.15 8.518 31.126 8.523h.023c33.707 0 61.139-27.426 61.153-61.135.006-16.335-6.349-31.696-17.895-43.251A60.75 60.75 0 0 0 87.94 25.983c-33.733 0-61.166 27.423-61.178 61.13a60.98 60.98 0 0 0 9.349 32.535l1.455 2.312-6.179 22.558zm-40.811 23.544L24.16 123.88c-6.438-11.154-9.825-23.808-9.821-36.772.017-40.556 33.021-73.55 73.578-73.55 19.681.01 38.154 7.669 52.047 21.572s21.537 32.383 21.53 52.037c-.018 40.553-33.027 73.553-73.578 73.553h-.032c-12.313-.005-24.412-3.094-35.159-8.954zm0 0"
-        filter="url(#a)"
-      />
-      <path
-        fill="#fff"
-        d="m12.966 161.238 10.439-38.114a73.42 73.42 0 0 1-9.821-36.772c.017-40.556 33.021-73.55 73.578-73.55 19.681.01 38.154 7.669 52.047 21.572s21.537 32.383 21.53 52.037c-.018 40.553-33.027 73.553-73.578 73.553h-.032c-12.313-.005-24.412-3.094-35.159-8.954z"
-      />
-      <path
-        fill="url(#linearGradient1780)"
-        d="M87.184 25.227c-33.733 0-61.166 27.423-61.178 61.13a60.98 60.98 0 0 0 9.349 32.535l1.455 2.312-6.179 22.559 23.146-6.069 2.235 1.324c9.387 5.571 20.15 8.518 31.126 8.524h.023c33.707 0 61.14-27.426 61.153-61.135a60.75 60.75 0 0 0-17.895-43.251 60.75 60.75 0 0 0-43.235-17.929z"
-      />
-      <path
-        fill="url(#b)"
-        d="M87.184 25.227c-33.733 0-61.166 27.423-61.178 61.13a60.98 60.98 0 0 0 9.349 32.535l1.455 2.313-6.179 22.558 23.146-6.069 2.235 1.324c9.387 5.571 20.15 8.517 31.126 8.523h.023c33.707 0 61.14-27.426 61.153-61.135a60.75 60.75 0 0 0-17.895-43.251 60.75 60.75 0 0 0-43.235-17.928z"
-      />
-      <path
-        fill="#fff"
-        fillRule="evenodd"
-        d="M68.772 55.603c-1.378-3.061-2.828-3.123-4.137-3.176l-3.524-.043c-1.226 0-3.218.46-4.902 2.3s-6.435 6.287-6.435 15.332 6.588 17.785 7.506 19.013 12.718 20.381 31.405 27.75c15.529 6.124 18.689 4.906 22.061 4.6s10.877-4.447 12.408-8.74 1.532-7.971 1.073-8.74-1.685-1.226-3.525-2.146-10.877-5.367-12.562-5.981-2.91-.919-4.137.921-4.746 5.979-5.819 7.206-2.144 1.381-3.984.462-7.76-2.861-14.784-9.124c-5.465-4.873-9.154-10.891-10.228-12.73s-.114-2.835.808-3.751c.825-.824 1.838-2.147 2.759-3.22s1.224-1.84 1.836-3.065.307-2.301-.153-3.22-4.032-10.011-5.666-13.647"
-      />
-    </svg>
-  ),
+          DEV
+        </span>
+
+        <div className="relative flex h-full flex-col gap-[1.4rem]">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <motion.p
+                initial={prefersReducedMotion ? undefined : { opacity: 0 }}
+                animate={prefersReducedMotion ? undefined : { opacity: 1 }}
+                transition={
+                  prefersReducedMotion ? undefined : { duration: 0.4 }
+                }
+                style={{
+                  fontFamily: "ui-monospace,monospace",
+                  fontSize: 10,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.3em",
+                  color: "rgba(255,255,255,0.28)",
+                  margin: "0 0 6px",
+                }}
+              >
+                Frontend Developer
+              </motion.p>
+              <motion.h3
+                initial={
+                  prefersReducedMotion ? undefined : { opacity: 0, y: 10 }
+                }
+                animate={
+                  prefersReducedMotion ? undefined : { opacity: 1, y: 0 }
+                }
+                transition={
+                  prefersReducedMotion
+                    ? undefined
+                    : { duration: 0.5, delay: 0.06, ease: [0.16, 1, 0.3, 1] }
+                }
+                style={{
+                  margin: 0,
+                  fontSize: "clamp(1.6rem,2.8vw,2.6rem)",
+                  fontWeight: 300,
+                  lineHeight: 0.95,
+                  letterSpacing: "-0.05em",
+                  color: "#fff",
+                }}
+              >
+                I build interfaces
+                <br />
+                <span style={{ color: "#dfff1f" }}>people remember.</span>
+              </motion.h3>
+            </div>
+
+            <div className="hidden shrink-0 items-start gap-5 pt-0.5 md:flex">
+              {METRICS.map((m, i) => (
+                <motion.div
+                  key={m.label}
+                  initial={
+                    prefersReducedMotion ? undefined : { opacity: 0, y: -8 }
+                  }
+                  animate={
+                    prefersReducedMotion ? undefined : { opacity: 1, y: 0 }
+                  }
+                  transition={
+                    prefersReducedMotion
+                      ? undefined
+                      : { duration: 0.4, delay: 0.1 + i * 0.06 }
+                  }
+                  className="text-right"
+                >
+                  <p
+                    style={{
+                      fontSize: "1.3rem",
+                      fontWeight: 300,
+                      letterSpacing: "-0.03em",
+                      color: "#fff",
+                      margin: 0,
+                    }}
+                  >
+                    <Counter value={m.value} suffix={m.suffix} />
+                  </p>
+                  <p
+                    style={{
+                      fontFamily: "ui-monospace,monospace",
+                      fontSize: 9,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.2em",
+                      color: "rgba(255,255,255,0.25)",
+                      margin: "2px 0 0",
+                    }}
+                  >
+                    {m.label}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          <motion.div
+            initial={prefersReducedMotion ? undefined : { scaleX: 0 }}
+            animate={prefersReducedMotion ? undefined : { scaleX: 1 }}
+            transition={
+              prefersReducedMotion
+                ? undefined
+                : { duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }
+            }
+            className="h-px origin-left flex-shrink-0"
+            style={{
+              background:
+                "linear-gradient(to right, rgba(255,255,255,0.07), rgba(255,255,255,0.03), transparent)",
+            }}
+          />
+
+          <div className="grid min-h-0 flex-1 content-start gap-x-[1.2rem] gap-y-[0.9rem] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {STACK_ITEMS.map((item, i) => (
+              <StackGroup key={item.category} {...item} groupIndex={i} />
+            ))}
+          </div>
+
+          <motion.p
+            initial={prefersReducedMotion ? undefined : { opacity: 0 }}
+            animate={prefersReducedMotion ? undefined : { opacity: 1 }}
+            transition={
+              prefersReducedMotion ? undefined : { duration: 0.4, delay: 0.6 }
+            }
+            className="flex-shrink-0 border-t pt-[0.85rem]"
+            style={{
+              borderColor: "rgba(255,255,255,0.05)",
+              fontSize: 11,
+              lineHeight: 1.6,
+              color: "rgba(255,255,255,0.25)",
+              margin: 0,
+            }}
+          >
+            Also strong on performance, a11y, responsive systems &amp;
+            maintainable architecture.
+          </motion.p>
+        </div>
+      </motion.div>
+    </>
+  );
 };
 
 export default Languages;

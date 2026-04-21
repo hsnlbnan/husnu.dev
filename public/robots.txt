@@ -1,8 +1,13 @@
+# https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Allow: /
+Disallow: /api/
 
-# LLM Crawlers
+# LLM Crawlers - Explicitly allow access
 User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
 Allow: /
 
 User-agent: Google-Extended
@@ -14,7 +19,18 @@ Allow: /
 User-agent: anthropic-ai
 Allow: /
 
-# Sitemaps & Context
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+# Sitemap & LLM Context
 Sitemap: https://husnu.dev/sitemap.xml
-Disallow: /api/
-Allow: /public/llms.txt
+
+# LLM-friendly content
+# See https://llmstxt.org for the llms.txt specification
+# Full context: https://husnu.dev/llms.txt

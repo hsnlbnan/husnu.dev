@@ -111,14 +111,14 @@ body {
   }
 }
 
-.grid {
+.adventure-grid {
   display: grid;
   grid-template-columns: repeat(11, 30px);
   grid-gap: 5px;
   margin-top: 16px;
 }
 
-.cell {
+.adventure-cell {
   width: 24px;
   height: 24px;
   background-color: #a2a2a2;

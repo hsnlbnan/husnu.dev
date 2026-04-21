@@ -11,3 +11,5 @@ node_modules
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .next
+.playwright-mcp/console-2026-04-03T12-00-57-119Z.log
+/.playwright-mcp

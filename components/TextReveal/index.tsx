@@ -1,14 +1,15 @@
 "use client";
 
-import { FC, ReactNode, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-
+import { FC, useRef } from "react";
+import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface TextRevealByWordProps {
   text: string;
   className?: string;
 }
+
+const ACCENT_WORDS = ["Projects", "action."];
 
 export const TextRevealByWord: FC<TextRevealByWordProps> = ({
   text,
@@ -18,27 +19,26 @@ export const TextRevealByWord: FC<TextRevealByWordProps> = ({
 
   const { scrollYProgress } = useScroll({
     target: targetRef,
+    offset: ["start 0.9", "start 0.25"],
   });
+
   const words = text.split(" ");
 
   return (
-    <div ref={targetRef} className={cn("relative z-0 h-[200vh]", className)}>
-      <div
-        className={
-          "sticky top-0 mx-auto flex h-[50%] max-w-4xl items-center bg-transparent px-[1rem] py-[5rem]"
-        }
-      >
-        <p
-          ref={targetRef}
-          className={
-            "flex flex-wrap p-5 text-4xl leading-[2] justify-center md:text-2xl font-bold text-white/50 dark:text-white/70 md:p-8 md:text-3xl lg:p-10 lg:text-4xl xl:text-5xl"
-          }
-        >
+    <div ref={targetRef} className={cn("relative z-0 h-[50vh]", className)}>
+      <div className="sticky top-0 mx-auto flex h-[50vh] max-w-5xl items-center justify-center px-4">
+        <p className="flex flex-wrap justify-center text-3xl md:text-5xl lg:text-6xl font-semibold leading-[1.3] md:leading-[1.2] tracking-tight">
           {words.map((word, i) => {
             const start = i / words.length;
             const end = start + 1 / words.length;
+            const isAccent = ACCENT_WORDS.includes(word);
             return (
-              <Word key={i} progress={scrollYProgress} range={[start, end]}>
+              <Word
+                key={i}
+                progress={scrollYProgress}
+                range={[start, end]}
+                isAccent={isAccent}
+              >
                 {word}
               </Word>
             );
@@ -50,19 +50,34 @@ export const TextRevealByWord: FC<TextRevealByWordProps> = ({
 };
 
 interface WordProps {
-  children: ReactNode;
-  progress: any;
+  children: string;
+  progress: MotionValue<number>;
   range: [number, number];
+  isAccent: boolean;
 }
 
-const Word: FC<WordProps> = ({ children, progress, range }) => {
+const Word: FC<WordProps> = ({ children, progress, range, isAccent }) => {
   const opacity = useTransform(progress, range, [0, 1]);
+  const y = useTransform(progress, range, [16, 0]);
+
   return (
-    <span className="xl:lg-3 relative mx-1 lg:mx-2.5">
-      <span className={"absolute opacity-50"}>{children}</span>
+    <span className="relative mt-1 mb-1 md:mt-2 md:mb-2 mx-[0.2em] lg:mx-[0.25em] inline-block">
+      <span
+        className={cn(
+          "select-none",
+          isAccent ? "text-[#dfff1f]/[0.08]" : "text-white/[0.06]",
+        )}
+      >
+        {children}
+      </span>
       <motion.span
-        style={{ opacity: opacity }}
-        className={"text-white dark:text-white font-semibold"}
+        style={{ opacity, y }}
+        className={cn(
+          "absolute inset-0",
+          isAccent
+            ? "text-[#dfff1f] drop-shadow-[0_0_20px_rgba(223,255,31,0.15)]"
+            : "text-white",
+        )}
       >
         {children}
       </motion.span>

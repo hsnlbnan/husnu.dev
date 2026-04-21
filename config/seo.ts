@@ -161,6 +161,94 @@ export const structuredData = [
       "query-input": "required name=search_term_string",
     },
   },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "@id": "https://husnu.dev/#projects",
+    name: "Projects by Hüsnü Lübnan",
+    description: "Featured web development projects",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        item: {
+          "@type": "SoftwareApplication",
+          name: "Otokoç 2. El",
+          description: "Used car sales platform for Koç Holding with micro frontend architecture",
+          url: "https://www.otokocikinciel.com/",
+          applicationCategory: "WebApplication",
+          operatingSystem: "Web",
+          programmingLanguage: "TypeScript",
+          offers: { "@type": "Offer", price: "0", priceCurrency: "TRY" },
+        },
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        item: {
+          "@type": "SoftwareApplication",
+          name: "Fizbot",
+          description: "Real estate intelligence platform with map-based opportunity matching",
+          applicationCategory: "WebApplication",
+          operatingSystem: "Web",
+          programmingLanguage: "TypeScript",
+        },
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        item: {
+          "@type": "SoftwareApplication",
+          name: "hayal.in",
+          description: "Anonymous dream sharing platform with edge-first architecture",
+          url: "https://hayal.in",
+          applicationCategory: "WebApplication",
+          operatingSystem: "Web",
+          programmingLanguage: "TypeScript",
+        },
+      },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "@id": "https://husnu.dev/#work-history",
+    name: "Work Experience - Hüsnü Lübnan",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        item: {
+          "@type": "OrganizationRole",
+          roleName: "Frontend Developer",
+          startDate: "2024-06",
+          worksFor: { "@type": "Organization", name: "Nuevo Software House" },
+        },
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        item: {
+          "@type": "OrganizationRole",
+          roleName: "Frontend Developer",
+          startDate: "2023-10",
+          endDate: "2024-06",
+          worksFor: { "@type": "Organization", name: "SHFT" },
+        },
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        item: {
+          "@type": "OrganizationRole",
+          roleName: "Frontend Developer",
+          startDate: "2022-09",
+          endDate: "2023-10",
+          worksFor: { "@type": "Organization", name: "NoNo Company" },
+        },
+      },
+    ],
+  },
 ];
 
 export const baseMetadata: Metadata = {
@@ -179,7 +267,7 @@ export const baseMetadata: Metadata = {
     description: defaultDescription,
     url: siteUrl,
     siteName: siteName,
-    locale: "tr_TR",
+    locale: "en_US",
     type: "website",
     images: [defaultImage],
   },
@@ -205,9 +293,7 @@ export const baseMetadata: Metadata = {
     description: defaultDescription,
     images: [defaultImage],
   },
-  other: {
-    "google-site-verification": "YOUR_VERIFICATION_CODE",
-  },
+  other: {},
 };
 
 export function createMetadata(options: PageSeoOptions = {}): Metadata {
@@ -286,4 +372,22 @@ export function createMetadata(options: PageSeoOptions = {}): Metadata {
     openGraph,
     twitter,
   };
+}
+
+export interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
+export function createBreadcrumbJsonLd(items: BreadcrumbItem[]): string {
+  return JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  });
 }

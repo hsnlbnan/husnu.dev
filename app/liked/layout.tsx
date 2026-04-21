@@ -1,34 +1,12 @@
 import Header from '@/components/Header';
 import React from 'react'
 import dynamic from 'next/dynamic';
-import { createMetadata } from "@/config/seo";
 /* import Footer from "@/components/Footer";
  */
 
 const Footer = dynamic(() => import('@/components/Footer'), {
   ssr: false,
   loading: () => <div className="w-full h-16 bg-gray-100 dark:bg-gray-800"></div>,
-});
-
-export const metadata = createMetadata({
-  title: "Liked",
-  description: "A curated collection of my favorite React and Tailwind CSS implementations that I've discovered and saved for inspiration.",
-  path: "/liked",
-  keywords: [
-    "React examples",
-    "Tailwind CSS samples",
-    "UI component collection",
-    "Frontend code examples",
-    "React UI inspiration",
-    "Tailwind UI designs",
-    "Code favorites",
-  ],
-  image: {
-    url: "/og-liked.png",
-    width: 1200,
-    height: 630,
-    alt: "My favorite React and Tailwind CSS implementations",
-  },
 });
 
 export default function LikedLayout({ 
