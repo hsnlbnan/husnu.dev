@@ -2,12 +2,13 @@ export const projects = [
   {
     title: "Otokoç 2. El",
     description:
-      "Next.JS v14, TypeScript,  Turbopack, OIDC Authentication, Axios, Zustand, TailwindCSS, HeadlessUI",
+      "Next.JS v14, TypeScript, Turbopack, OIDC Authentication, Axios, Zustand, TailwindCSS, HeadlessUI",
     subtitle:
-      "Otokoç 2. El is a used car sales platform within Koç Holding. It is built with micro frontend architecture with Turbopack, and many special edits and scenarios such as security vulnerabilities, seo have been made.",
+      "Developed the used car sales platform for Koç Holding, Turkey's largest conglomerate. Built with micro frontend architecture serving 100K+ monthly users, implementing OIDC authentication, advanced SEO strategies, and security vulnerability mitigations across the platform.",
     src: "/projects/otokoc.png",
     link: "https://www.otokocikinciel.com/",
     color: "#1e1e1e",
+    accent: "#dfff1f",
     company: "Nuevo Software House",
   },
   {
@@ -15,51 +16,56 @@ export const projects = [
     description:
       "React, TypeScript, TailwindCSS, styled-components, Redux Toolkit, Apollo Client, Sentry",
     subtitle:
-      "Fizbot is one of the leading startups in Turkey where real estate agents can follow their consultants and opportunities. It is a platform where you can see the opportunities in your area on the map and match these opportunities with buyers/sellers.",
+      "Frontend lead at one of Turkey's leading PropTech startups. Built real-time map-based opportunity matching platform connecting real estate agents with buyers/sellers. Implemented complex geolocation features, real-time data visualization, and error monitoring with Sentry.",
     src: "/projects/fizbot.png",
     link: "",
     color: "#1e1e1e",
+    accent: "#6366F1",
     company: "SHFT",
   },
   {
     title: "Todo App with AI Assistant FastAPI in Nextjs",
-    subtitle: "A modern todo application built with Next.js for the frontend and FastAPI for the backend. The application features real-time updates, AI-powered task summarization, and a clean, responsive interface",
+    subtitle: "Full-stack AI-powered task management application combining Next.js with FastAPI backend. Features real-time task summarization using Ollama LLM, MongoDB integration for persistent storage, and a responsive interface with AI-driven productivity insights.",
     description:
       "Next.js, TypeScript, TailwindCSS, FastAPI, MongoDB, Python, Ollama",
     src: "/projects/nextjs-fast-api.png",
     link: "https://github.com/hsnlbnan/next-js-fast-api-mongodb-ollama-todo",
     color: "#1e1e1e",
+    accent: "#10B981",
     company: "Hobby Project",
   },
   {
     title: "hayal.in",
     subtitle:
-      "hayal.in is a platform where people share their dreams completely anonymously, which helps me keep my promise to myself 'I want to make the project that comes to my mind full-stack' before I start writing.",
+      "Full-stack anonymous social platform where users share and explore dreams. Built with edge-first architecture using Vercel Edge Functions, real-time data handling with Redis, and optimized performance through serverless Postgres integration.",
     description:
       "Next.JS, TypeScript, Vercel Postgres, Vercel Redis, Vercel Edge Functions, Tailwind, Redux Toolkit",
     src: "/projects/hayalin.png",
     link: "https://hayal.in",
     color: "#1e1e1e",
+    accent: "#8B5CF6",
   },
 
   {
     title: "Alterego CMS",
     subtitle:
-      "Alterego is a company with several tourism companies. For them it is a project where they can manage multiple sites in different role configurations and each site can work on the same domain.",
+      "Enterprise multi-tenant CMS powering multiple tourism companies under one group. Implemented role-based access control with CASL, multi-site management on shared domains, and complex permission hierarchies for diverse organizational structures.",
     description:
       "Next.JS, Redux Toolkit, Redux Toolkit Query, MUI, @casl",
     src: "/projects/alterego.png",
     link: "",
     color: "#1e1e1e",
+    accent: "#F59E0B",
     company: "NoNoCompany",
   },
   {
     title: "Yeditepe GO",
     subtitle:
-      "Yeditepe Go is a CMS application that facilitates logistics tracking for Yeditepe Logistics, one of the leading transportation companies in Izmir and Turkey.",
+      "Logistics management CMS for one of Turkey's leading transportation companies. Built real-time shipment tracking dashboard, optimized state management with Redux Toolkit Query for live data feeds, and streamlined operations across regional branches.",
     description: "React, Sass, Redux Toolkit, Redux Toolkit Query, Boostrap",
     src: "/projects/yeditepe.png",
     color: "#1e1e1e",
+    accent: "#EF4444",
     company: "NoNoCompany",
   },
 ];
@@ -71,6 +77,7 @@ export const work = [
     description: "June 2024 - Present",
     src: "/logos/nuevo.jpeg",
     color: "#1e1e1e",
+    accent: "#dfff1f",
   },
   {
     title: "SHFT",
@@ -78,6 +85,7 @@ export const work = [
     description: "October 2023 - June 2024",
     src: "/logos/shftco.jpeg",
     color: "#1e1e1e",
+    accent: "#6366F1",
   },
   {
     title: "Nono Company",
@@ -85,6 +93,7 @@ export const work = [
     description: "September 2022 - October 2023",
     src: "/logos/nonoco.jpeg",
     color: "#1e1e1e",
+    accent: "#F59E0B",
   },
   {
     title: "Appricot Software Agency",
@@ -92,6 +101,7 @@ export const work = [
     description: "March 2022 - September 2022",
     src: "/logos/appricot.jpeg",
     color: "#1e1e1e",
+    accent: "#10B981",
   },
   {
     title: "Age Dijital Ajans",
@@ -99,5 +109,6 @@ export const work = [
     description: "March 2021 - March 2022",
     src: "/logos/age.jpeg",
     color: "#1e1e1e",
+    accent: "#EF4444",
   },
 ];

@@ -58,8 +58,6 @@ export default function RootLayout({
           <link key={`${link.rel}-${link.href}`} rel={link.rel} href={link.href} />
         ))}
 
-        <meta name="viewport" content={viewportContent} />
-        
         {/* Performance & SEO: Meta tags */}
         <meta name="theme-color" content="#000000" />
         <meta name="mobile-web-app-capable" content="yes" />

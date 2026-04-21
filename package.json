@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@calcom/embed-react": "^1.5.1",
+    "@gsap/react": "^2.1.2",
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
     "@monaco-editor/react": "^4.6.0",
@@ -31,6 +32,7 @@
     "critters": "^0.0.25",
     "framer-motion": "^11.9.0",
     "github-contributions-canvas": "^0.7.0",
+    "gsap": "^3.14.2",
     "lodash": "^4.17.21",
     "love": "^3.4.1",
     "lucide-react": "^0.446.0",

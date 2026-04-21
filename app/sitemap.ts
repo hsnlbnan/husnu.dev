@@ -1,18 +1,27 @@
 import { MetadataRoute } from 'next';
+import { likedComponents } from '@/data/likedComponents';
+
+const baseUrl = 'https://husnu.dev';
+const lastModified = new Date('2026-04-21');
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://husnu.dev';
-
-    // Define static routes
-    const routes = [
-        '',
-        '/liked',
+    const staticRoutes = [
+        { path: '', priority: 1 },
+        { path: '/liked', priority: 0.8 },
+        { path: '/ses', priority: 0.6 },
     ].map((route) => ({
-        url: `${baseUrl}${route}`,
-        lastModified: new Date(),
+        url: `${baseUrl}${route.path}`,
+        lastModified,
         changeFrequency: 'monthly' as const,
-        priority: route === '' ? 1 : 0.8,
+        priority: route.priority,
     }));
 
-    return routes;
+    const previewRoutes = likedComponents.map((component) => ({
+        url: `${baseUrl}/liked/preview/${component.id}`,
+        lastModified,
+        changeFrequency: 'monthly' as const,
+        priority: 0.5,
+    }));
+
+    return [...staticRoutes, ...previewRoutes];
 }
