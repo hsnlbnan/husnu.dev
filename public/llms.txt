@@ -1,6 +1,6 @@
 # Hüsnü Lübnan
 
-Hüsnü Lübnan is a Senior Frontend Developer and Creative Technologist based in Turkey, specializing in high-performance web applications with Next.js, React, TypeScript, and advanced UI/UX engineering with Framer Motion and TailwindCSS.
+Hüsnü Lübnan is a Senior Frontend Developer based in Turkey, specializing in high-performance web applications with Next.js, React, TypeScript, and advanced UI/UX engineering with Framer Motion and TailwindCSS.
 
 ## About
 

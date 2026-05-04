@@ -35,14 +35,11 @@ export interface PageSeoOptions {
 const siteUrl = "https://husnu.dev";
 const siteName = "Hüsnü Lübnan";
 const defaultDescription =
-  "Recognized as one of the top frontend developers in Turkey, Hüsnü Lübnan engineers high-performance web applications with React, Next.js, and TypeScript, delivering enterprise-grade solutions and interactive user experiences.";
+  "Hüsnü Lübnan engineers high-performance web applications with React, Next.js, and TypeScript, delivering robust solutions and interactive user experiences.";
 
 const defaultKeywords = [
   "Hüsnü Lübnan",
-  "Turkey's Best Frontend Developer",
-  "En İyi Frontend Developer Türkiye",
-  "Top React Developer Turkey",
-  "Senior Frontend Engineer Turkey",
+  "Senior Frontend Developer Turkey",
   "Frontend Developer",
   "Javascript Developer",
   "React Developer",
@@ -90,7 +87,7 @@ export const structuredData = [
     name: siteName,
     url: siteUrl,
     jobTitle: "Senior Frontend Developer",
-    description: "Senior Frontend Developer and Creative Technologist in Turkey, specializing in Next.js, React, and high-performance web architecture.",
+    description: "Senior Frontend Developer in Turkey, specializing in Next.js, React, and high-performance web architecture.",
     image: "https://husnu.dev/me.webp",
     sameAs: [
       "https://github.com/hsnlbnan",
@@ -142,7 +139,7 @@ export const structuredData = [
       addressLocality: "Istanbul",
       addressCountry: "TR"
     },
-    description: "Premium frontend development and consultancy services for enterprise-grade React and Next.js applications.",
+    description: "Professional frontend development and consultancy services for enterprise-grade React and Next.js applications.",
     founder: {
       "@id": "https://husnu.dev/#person"
     }
