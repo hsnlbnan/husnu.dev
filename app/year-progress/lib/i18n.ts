@@ -34,6 +34,8 @@ export interface Dict {
   linkHint: string;
   shortcutTitle: string;
   shortcutIntro: string;
+  icloudInstall: string;
+  icloudHint: string;
   steps: string[];
   shortcutNote: string;
   downloadShortcut: string;
@@ -85,6 +87,9 @@ export const DICT: Record<Lang, Dict> = {
     shortcutTitle: "iOS'te otomatik güncellenen duvar kağıdı",
     shortcutIntro:
       "iOS uygulamaların duvar kağıdını doğrudan değiştirmesine izin vermez. Yöntem: bir Kısayol + günlük otomasyon. Bir kez kurarsın.",
+    icloudInstall: "Hazır kısayolu yükle (iCloud)",
+    icloudHint:
+      "En kolay yol: bu hazır kısayolu yükle, içindeki “URL İçeriğini Al” adımına yukarıda kopyaladığın kendi linkini yapıştır. Ardından aşağıdaki 4–5. adımlarla günlük otomasyonu kur.",
     steps: [
       "Mevcut duvar kağıdın sabit bir Fotoğraf olmalı (Photo Shuffle değil): Ayarlar → Duvar Kağıdı.",
       "Kısayollar → + → Get Contents of URL (yukarıdaki linki yapıştır) ekle.",
@@ -144,6 +149,9 @@ export const DICT: Record<Lang, Dict> = {
     shortcutTitle: "Auto-updating wallpaper on iOS",
     shortcutIntro:
       "iOS doesn't let apps change the wallpaper directly. The way to do it: a Shortcut + a daily automation. Set it up once.",
+    icloudInstall: "Install ready-made shortcut (iCloud)",
+    icloudHint:
+      "Easiest path: install this ready-made shortcut, then paste your own copied link (above) into its “Get Contents of URL” step. Then set up the daily automation with steps 4–5 below.",
     steps: [
       "Your current wallpaper must be a static Photo (not Photo Shuffle): Settings → Wallpaper.",
       "Shortcuts → + → add Get Contents of URL (paste the link above).",

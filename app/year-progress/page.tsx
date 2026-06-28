@@ -20,6 +20,11 @@ import LockScreen from "./components/LockScreen";
 const PREVIEW_W = 360;
 const PREVIEW_H = 780; // ~ 1290 : 2796 device aspect
 
+// Ready-made iCloud shortcut (Get Contents of URL → Set Wallpaper). After
+// importing, the user swaps in their own copied wallpaper link.
+const ICLOUD_SHORTCUT =
+  "https://www.icloud.com/shortcuts/24771c04e9344736860c765433252e71";
+
 export default function Home() {
   const reduce = useReducedMotion() ?? false;
 
@@ -196,7 +201,7 @@ export default function Home() {
 
           <AnimatePresence initial={false} mode="popLayout">
             {config.style === "grid" && (
-              <motion.div key="grid-opts" {...collapse} style={{ overflow: "hidden" }}>
+              <motion.div key="grid-opts" {...collapse} style={{ overflow: "hidden", paddingBottom: 8 }}>
                 <Field label={t.shape}>
                   <Segmented
                     group="shape"
@@ -286,6 +291,19 @@ export default function Home() {
         <motion.div className="card steps" {...staggerMotion(reduce, 5)}>
           <h2>{t.shortcutTitle}</h2>
           <p className="steps-intro">{t.shortcutIntro}</p>
+
+          <div className="icloud">
+            <a
+              className="btn primary"
+              href={ICLOUD_SHORTCUT}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {t.icloudInstall}
+            </a>
+            <p className="hint">{t.icloudHint}</p>
+          </div>
+
           <ol>
             {t.steps.map((s) => (
               <li key={s}>{s}</li>

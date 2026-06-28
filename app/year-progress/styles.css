@@ -171,6 +171,18 @@
   border-radius: 42px;
   overflow: hidden;
 }
+/* On phones narrower than the mockup (~394px wide) the device would push the
+   page sideways. Scale the whole phone down to fit instead of overflowing.
+   The negative margin reclaims the layout height the transform leaves behind
+   (transform-origin: top center keeps it visually pinned to the top). */
+@media (max-width: 440px) {
+  .yp-scope .phone {
+    --yp-fit: min(1, calc((100vw - 36px) / 394px));
+    transform: scale(var(--yp-fit));
+    transform-origin: top center;
+    margin-bottom: calc(-814px * (1 - var(--yp-fit)));
+  }
+}
 .yp-scope .island {
   position: absolute;
   top: 16px;
@@ -279,6 +291,9 @@
 .yp-scope .seg-btn {
   position: relative;
   flex: 1;
+  /* Allow buttons to shrink below their label width so long options
+     (e.g. "Geri sayım") wrap instead of widening the row past the viewport. */
+  min-width: 0;
   /* ~40px tall hit area; radius concentric with the 12px track (−4px padding). */
   padding: 10px 6px;
   border-radius: 8px;
@@ -424,6 +439,13 @@
 }
 .yp-scope .steps li b {
   font-weight: 600;
+}
+
+/* Recommended one-tap iCloud install, sitting above the manual steps. */
+.yp-scope .icloud {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 .yp-scope .steps li i {
   font-style: normal;
