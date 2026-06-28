@@ -1,8 +1,29 @@
-import { hex, type Hex } from "./hex";
+import { hex, mix, contrast, withAlpha, type Hex } from "./hex";
+import type { CSSProperties } from "react";
 
 export interface ThemePreset {
   readonly fg: Hex;
   readonly bg: Hex;
+}
+
+// Derive the whole control-panel palette from the user's chosen filled (fg /
+// accent) and background (bg) colors, so the page reskins itself to match the
+// wallpaper. Returned as CSS custom properties to set inline on `.yp-scope`.
+export function pageTheme(fg: Hex, bg: Hex): CSSProperties {
+  const text = contrast(bg); // readable foreground for the surface
+  return {
+    "--bg": bg,
+    "--panel": mix(bg, text, 0.05),
+    "--panel-2": mix(bg, text, 0.09),
+    "--line": withAlpha(text, 0.08),
+    "--line-strong": withAlpha(text, 0.16),
+    "--text": text,
+    "--muted": withAlpha(text, 0.5),
+    "--muted-2": withAlpha(text, 0.35),
+    "--accent": fg,
+    "--on-accent": contrast(fg), // text/icon color on top of an accent fill
+    "--ind": withAlpha(text, 0.1), // segmented active-pill fill
+  } as CSSProperties;
 }
 
 export const THEMES: readonly ThemePreset[] = [

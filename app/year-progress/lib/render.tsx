@@ -3,16 +3,166 @@
 // preview is pixel-faithful to the generated wallpaper.
 
 import type { CSSProperties } from "react";
-import { WallpaperSpec } from "./spec";
+import { WallpaperSpec, Shape } from "./spec";
 import { withAlpha } from "./hex";
+
+const FONT =
+  'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
 
 const flex = (extra: CSSProperties = {}): CSSProperties => ({
   display: "flex",
   ...extra,
 });
 
+// A wrapping run of dots — the first `filled` are accent-coloured, the rest faint.
+// `perRow * cell` fixes the row width so exactly `perRow` dots fit per line, which
+// is how both the month blocks (7-wide) and the life grid (52-wide) stay aligned.
+function dotGrid(
+  count: number,
+  filled: number,
+  perRow: number,
+  cell: number,
+  fg: string,
+  dim: string,
+  shape: Shape
+) {
+  const dot = Math.max(2, Math.round(cell * 0.62));
+  const m = (cell - dot) / 2;
+  const radius = shape === "square" ? Math.max(1, Math.round(dot * 0.22)) : dot / 2;
+  const dots = [];
+  for (let i = 0; i < count; i++) {
+    dots.push(
+      <div
+        key={i}
+        style={{
+          width: dot,
+          height: dot,
+          margin: m,
+          borderRadius: radius,
+          backgroundColor: i < filled ? fg : dim,
+        }}
+      />
+    );
+  }
+  return (
+    <div style={{ display: "flex", flexWrap: "wrap", width: perRow * cell, alignContent: "flex-start" }}>
+      {dots}
+    </div>
+  );
+}
+
+// The year as 12 month blocks (mockup): each block is that month's days, with the
+// elapsed ones filled — past months full, the current month up to today.
+function renderMonths(spec: WallpaperSpec) {
+  const { w, h, fg, bg, dim } = spec;
+  // Guaranteed by buildSpec whenever style === "months".
+  const yearGrid = spec.yearGrid!;
+  const containerW = Math.round(w * 0.86);
+  const gap = Math.round(w * 0.028);
+  const blockW = Math.floor((containerW - gap * 2) / 3);
+  const cell = blockW / 7;
+
+  return (
+    <div
+      style={{
+        width: w,
+        height: h,
+        backgroundColor: bg,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        paddingTop: Math.round(h * 0.18),
+        fontFamily: FONT,
+      }}
+    >
+      <div
+        style={flex({
+          color: fg,
+          fontSize: Math.round(w * 0.05),
+          fontWeight: 600,
+          letterSpacing: 1,
+          marginBottom: Math.round(h * 0.016),
+        })}
+      >
+        {spec.headline || yearGrid.year}
+      </div>
+      <div style={{ display: "flex", flexWrap: "wrap", width: containerW, justifyContent: "space-between" }}>
+        {yearGrid.months.map((mb) => (
+          <div key={mb.month} style={{ display: "flex", width: blockW, marginBottom: gap }}>
+            {dotGrid(mb.days, mb.filled, 7, cell, fg, dim, spec.shape)}
+          </div>
+        ))}
+      </div>
+      <div
+        style={flex({
+          marginTop: Math.round(h * 0.028),
+          color: withAlpha(fg, 0.5),
+          fontSize: Math.round(w * 0.03),
+          letterSpacing: 1,
+        })}
+      >
+        {spec.caption}
+      </div>
+    </div>
+  );
+}
+
+// A whole life as a grid of weeks — 52 per row, one row per year (Wait But Why).
+function renderLife(spec: WallpaperSpec) {
+  const { w, h, fg, bg, dim } = spec;
+  // Guaranteed by buildSpec whenever style === "life".
+  const life = spec.life!;
+  const gridW = Math.round(w * 0.9);
+  const cell = gridW / life.perRow;
+
+  return (
+    <div
+      style={{
+        width: w,
+        height: h,
+        backgroundColor: bg,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        paddingTop: Math.round(h * 0.16),
+        fontFamily: FONT,
+      }}
+    >
+      {spec.secondary && (
+        <div
+          style={flex({
+            color: withAlpha(fg, 0.6),
+            fontSize: Math.round(w * 0.034),
+            fontWeight: 500,
+            letterSpacing: 0.5,
+            marginBottom: Math.round(h * 0.016),
+          })}
+        >
+          {spec.secondary}
+        </div>
+      )}
+      {dotGrid(life.totalWeeks, life.livedWeeks, life.perRow, cell, fg, dim, spec.shape)}
+      <div
+        style={flex({
+          marginTop: Math.round(h * 0.028),
+          color: withAlpha(fg, 0.5),
+          fontSize: Math.round(w * 0.03),
+          letterSpacing: 1,
+        })}
+      >
+        {spec.caption}
+      </div>
+    </div>
+  );
+}
+
 export function renderWallpaper(spec: WallpaperSpec) {
   const { w, h, fg, bg, dim } = spec;
+
+  if (spec.style === "months") return renderMonths(spec);
+  if (spec.style === "life") return renderLife(spec);
 
   const root: CSSProperties = {
     width: w,

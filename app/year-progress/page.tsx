@@ -7,7 +7,7 @@ import { renderWallpaper } from "./lib/render";
 import { toWallpaperParams } from "./lib/config";
 import { buildShortcutUrl, buildWallpaperUrl } from "./lib/wallpaper-url";
 import { collapseMotion, enterMotion, staggerMotion } from "./lib/animations";
-import { THEMES } from "./lib/theme";
+import { THEMES, pageTheme } from "./lib/theme";
 import { DICT } from "./lib/i18n";
 import { useWallpaperConfig } from "./hooks/useWallpaperConfig";
 import { useRuntime } from "./hooks/useRuntime";
@@ -57,12 +57,12 @@ export default function Home() {
   const dayWarn = config.mode === "period" && config.unit === "day";
   const freqNote = dayWarn ? t.freqDay : t.freqGood;
 
-  const structuralKey = `${config.style}-${config.shape}-${config.cols}-${config.rows}-${config.mode}-${config.unit}-${config.lang}`;
+  const structuralKey = `${config.style}-${config.shape}-${config.cols}-${config.rows}-${config.lifespan}-${config.mode}-${config.unit}-${config.lang}`;
   const enter = enterMotion(reduce);
   const collapse = collapseMotion(reduce);
 
   return (
-    <div className="yp-scope"><div className="wrap">
+    <div className="yp-scope" style={pageTheme(config.fg, config.bg)}><div className="wrap">
       {/* ---------- Preview ---------- */}
       <motion.section className="preview-col" {...staggerMotion(reduce, 0)}>
         <div className="phone">
@@ -195,13 +195,19 @@ export default function Home() {
                 { value: "grid", label: t.styleGrid },
                 { value: "bar", label: t.styleBar },
                 { value: "number", label: t.styleNumber },
+                { value: "months", label: t.styleMonths },
+                { value: "life", label: t.styleLife },
               ]}
             />
           </Field>
 
           <AnimatePresence initial={false} mode="popLayout">
             {config.style === "grid" && (
-              <motion.div key="grid-opts" {...collapse} style={{ overflow: "hidden", paddingBottom: 8 }}>
+              <motion.div
+                key="grid-opts"
+                {...collapse}
+                style={{ overflow: "hidden", display: "flex", flexDirection: "column", gap: 16 }}
+              >
                 <Field label={t.shape}>
                   <Segmented
                     group="shape"
@@ -234,6 +240,49 @@ export default function Home() {
                     />
                   </Field>
                 </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence initial={false} mode="popLayout">
+            {config.style === "months" && (
+              <motion.div key="months-opts" {...collapse} style={{ overflow: "hidden" }}>
+                <Field label={t.headlineLabel}>
+                  <input
+                    type="text"
+                    value={config.headline}
+                    placeholder={t.headlinePlaceholder}
+                    maxLength={40}
+                    onChange={(e) => set("headline", e.target.value)}
+                  />
+                </Field>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence initial={false} mode="popLayout">
+            {config.style === "life" && (
+              <motion.div
+                key="life-opts"
+                {...collapse}
+                style={{ overflow: "hidden", display: "flex", flexDirection: "column", gap: 16 }}
+              >
+                <Field label={t.birthDate}>
+                  <input
+                    type="date"
+                    value={config.birthDate}
+                    onChange={(e) => set("birthDate", e.target.value)}
+                  />
+                </Field>
+                <Field label={`${t.lifespanLabel} · ${config.lifespan}`}>
+                  <input
+                    type="range"
+                    min={60}
+                    max={120}
+                    value={config.lifespan}
+                    onChange={(e) => set("lifespan", Number(e.target.value))}
+                  />
+                </Field>
               </motion.div>
             )}
           </AnimatePresence>

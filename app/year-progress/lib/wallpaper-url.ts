@@ -25,6 +25,13 @@ export function buildWallpaperUrl(config: WallpaperConfig, env: UrlEnv): string 
     p.set("cols", String(config.cols));
     p.set("rows", String(config.rows));
   }
+  if (config.style === "life") {
+    p.set("birth", config.birthDate);
+    p.set("lifespan", String(config.lifespan));
+  }
+  if (config.style === "months" && config.headline.trim()) {
+    p.set("headline", config.headline.trim());
+  }
 
   p.set("fg", config.fg.replace("#", ""));
   p.set("bg", config.bg.replace("#", ""));

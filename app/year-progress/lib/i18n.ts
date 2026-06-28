@@ -20,6 +20,11 @@ export interface Dict {
   styleGrid: string;
   styleBar: string;
   styleNumber: string;
+  styleMonths: string;
+  styleLife: string;
+  lifespanLabel: string;
+  headlineLabel: string;
+  headlinePlaceholder: string;
   shape: string;
   circle: string;
   square: string;
@@ -71,6 +76,11 @@ export const DICT: Record<Lang, Dict> = {
     styleGrid: "Grid",
     styleBar: "Çubuk",
     styleNumber: "Sayı",
+    styleMonths: "Ay",
+    styleLife: "Yaşam",
+    lifespanLabel: "Ömür (yıl)",
+    headlineLabel: "Başlık / hedef (opsiyonel)",
+    headlinePlaceholder: "Yıl (ör. 2026) veya hedefin",
     shape: "Şekil",
     circle: "Daire",
     square: "Kare",
@@ -133,6 +143,11 @@ export const DICT: Record<Lang, Dict> = {
     styleGrid: "Grid",
     styleBar: "Bar",
     styleNumber: "Number",
+    styleMonths: "Months",
+    styleLife: "Life",
+    lifespanLabel: "Lifespan (yrs)",
+    headlineLabel: "Title / goal (optional)",
+    headlinePlaceholder: "Year (e.g. 2026) or your goal",
     shape: "Shape",
     circle: "Circle",
     square: "Square",

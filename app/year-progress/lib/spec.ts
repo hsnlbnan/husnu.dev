@@ -1,10 +1,19 @@
 // Turns raw params into a concrete visual spec shared by the PNG renderer and
 // the live web preview, so what you configure is exactly what gets generated.
 
-import { computeProgress, Mode, Unit, Lang } from "./progress";
+import {
+  computeProgress,
+  computeYearGrid,
+  computeLife,
+  Mode,
+  Unit,
+  Lang,
+  type YearGrid,
+  type LifeGrid,
+} from "./progress";
 import { hex, toHex, withAlpha, type Hex } from "./hex";
 
-export type Style = "grid" | "bar" | "number";
+export type Style = "grid" | "bar" | "number" | "months" | "life";
 export type Shape = "circle" | "square";
 
 export interface WallpaperParams {
@@ -20,6 +29,9 @@ export interface WallpaperParams {
   bg?: string; // background color       (#rrggbb)
   cols?: number;
   rows?: number;
+  birth?: string; // birth date for the "life" style (#yyyy-mm-dd)
+  lifespan?: number; // life expectancy in years for the "life" style
+  headline?: string; // custom header text for the "months" style
   w?: number;
   h?: number;
   now?: Date;
@@ -40,6 +52,9 @@ export interface WallpaperSpec {
   unitLabel: string;
   secondary?: string;
   caption: string;
+  headline?: string; // custom header for the "months" style
+  yearGrid?: YearGrid; // present for style === "months"
+  life?: LifeGrid; // present for style === "life"
   w: number;
   h: number;
 }
@@ -74,21 +89,64 @@ export function buildSpec(params: WallpaperParams): WallpaperSpec {
   const fg = toHex(params.fg, DEFAULT_FG);
   const bg = toHex(params.bg, DEFAULT_BG);
 
+  const style: Style = params.style ?? "grid";
+  const lang: Lang = params.lang === "tr" ? "tr" : "en";
+  const now = params.now ?? new Date();
+  const tz = params.tz ?? "UTC";
+
+  // The calendar and life layouts carry their own per-cell truth and caption;
+  // everything else is driven by the single computeProgress percent above.
+  let percent = prog.percent;
+  let primary = prog.primary;
+  let unitLabel = prog.unitLabel;
+  let secondary = prog.secondary;
+  let caption = prog.caption;
+  let yearGrid: YearGrid | undefined;
+  let life: LifeGrid | undefined;
+
+  if (style === "months") {
+    yearGrid = computeYearGrid(tz, now);
+    percent = yearGrid.percent;
+    const pct = Math.round(percent * 100);
+    const left = yearGrid.totalDays - yearGrid.elapsedDays;
+    primary = String(yearGrid.year);
+    unitLabel = "";
+    secondary = undefined;
+    caption = lang === "tr" ? `${left} gün kaldı · %${pct}` : `${left}d left · ${pct}%`;
+  } else if (style === "life") {
+    life = computeLife(params.birth ?? "1995-06-15", params.lifespan ?? 90, tz, now);
+    percent = life.percent;
+    const pct = Math.round(percent * 100);
+    primary = `${life.livedWeeks}`;
+    unitLabel = lang === "tr" ? "hafta" : "weeks";
+    secondary =
+      lang === "tr"
+        ? `${life.ageYears} yaşında · ${life.rows} yıllık ömür`
+        : `age ${life.ageYears} · ${life.rows}-year life`;
+    caption =
+      lang === "tr"
+        ? `${life.livedWeeks} / ${life.totalWeeks} hafta · %${pct}`
+        : `${life.livedWeeks} / ${life.totalWeeks} weeks · ${pct}%`;
+  }
+
   return {
-    style: params.style ?? "grid",
+    style,
     shape: params.shape ?? "circle",
     cols,
     rows,
     total,
     filled,
-    percent: prog.percent,
+    percent,
     fg,
     bg,
     dim: withAlpha(fg, 0.16),
-    primary: prog.primary,
-    unitLabel: prog.unitLabel,
-    secondary: prog.secondary,
-    caption: prog.caption,
+    primary,
+    unitLabel,
+    secondary,
+    caption,
+    headline: params.headline?.trim() || undefined,
+    yearGrid,
+    life,
     w: clampDim(params.w, 1290, 2000),
     h: clampDim(params.h, 2796, 4000),
   };

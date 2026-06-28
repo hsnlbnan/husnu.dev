@@ -65,3 +65,27 @@ export function luminance(color: Hex): number {
   const { r, g, b } = toRgb(color);
   return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
 }
+
+const toByte = (n: number) => Math.max(0, Math.min(255, Math.round(n)));
+const toHexByte = (n: number) => toByte(n).toString(16).padStart(2, "0");
+
+/** Build a Hex from raw rgb components (clamped to 0..255). */
+export function fromRgb(r: number, g: number, b: number): Hex {
+  return `#${toHexByte(r)}${toHexByte(g)}${toHexByte(b)}` as Hex;
+}
+
+/** Linear blend between two colors. `t` 0 → `a`, 1 → `b`. */
+export function mix(a: Hex, b: Hex, t: number): Hex {
+  const ca = toRgb(a);
+  const cb = toRgb(b);
+  return fromRgb(
+    ca.r + (cb.r - ca.r) * t,
+    ca.g + (cb.g - ca.g) * t,
+    ca.b + (cb.b - ca.b) * t
+  );
+}
+
+/** A readable near-black/near-white that contrasts with `color`. */
+export function contrast(color: Hex): Hex {
+  return luminance(color) > 0.55 ? hex("#0a0a0a") : hex("#f5f5f7");
+}

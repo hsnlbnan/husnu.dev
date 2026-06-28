@@ -16,6 +16,8 @@ export interface WallpaperConfig {
   readonly bg: Hex;
   readonly cols: number;
   readonly rows: number;
+  readonly lifespan: number;
+  readonly headline: string; // custom header for the "months" style (falls back to the year)
   readonly sinceDate: string;
   readonly untilDate: string;
   readonly birthDate: string;
@@ -38,9 +40,11 @@ export function createInitialConfig(): WallpaperConfig {
     bg: hex("#0a0a0a"),
     cols: 14,
     rows: 24,
+    lifespan: 90,
+    headline: "",
     sinceDate: "2024-01-01",
     untilDate: `${new Date().getFullYear() + 1}-01-01`,
-    birthDate: "1995-06-15",
+    birthDate: "1998-04-21",
     showLock: true,
   };
 }
@@ -76,6 +80,9 @@ export function toWallpaperParams(
     bg: config.bg,
     cols: config.cols,
     rows: config.rows,
+    birth: config.birthDate,
+    lifespan: config.lifespan,
+    headline: config.headline,
     w: runtime.w,
     h: runtime.h,
     now: runtime.now,

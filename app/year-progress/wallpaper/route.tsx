@@ -28,6 +28,9 @@ export async function GET(req: Request) {
     bg: g("bg"),
     cols: num("cols", 14),
     rows: num("rows", 24),
+    birth: g("birth"),
+    lifespan: num("lifespan", 90),
+    headline: g("headline"),
     w: num("w", 1290),
     h: num("h", 2796),
   };

@@ -134,6 +134,68 @@ function ymPhrase(months: number, days: number, lang: Lang) {
   return `${months} ${mo} ${days} ${dd}`;
 }
 
+// ---------------------------------------------------------------------------
+// Richer per-cell layouts for the calendar ("months") and Wait-But-Why
+// ("life") styles. Kept here so the PNG route and the live preview compute the
+// exact same truth, just like computeProgress above.
+// ---------------------------------------------------------------------------
+
+export interface MonthBlock {
+  month: number; // 1..12
+  days: number; // days in that month
+  filled: number; // elapsed days (full for past months, p.day for current, 0 for future)
+}
+export interface YearGrid {
+  year: number;
+  months: MonthBlock[]; // always 12
+  elapsedDays: number; // day-of-year (incl. today)
+  totalDays: number; // 365 / 366
+  percent: number;
+}
+
+export function computeYearGrid(tz: string, now: Date): YearGrid {
+  const p = zonedParts(tz, now);
+  const months: MonthBlock[] = [];
+  for (let m = 1; m <= 12; m++) {
+    const days = daysInMonth(p.year, m);
+    const filled = m < p.month ? days : m > p.month ? 0 : p.day;
+    months.push({ month: m, days, filled });
+  }
+  const totalDays = daysInYear(p.year);
+  const elapsedDays = dayOfYear(p.year, p.month, p.day);
+  return { year: p.year, months, elapsedDays, totalDays, percent: clamp01(elapsedDays / totalDays) };
+}
+
+export interface LifeGrid {
+  livedWeeks: number;
+  totalWeeks: number;
+  perRow: number; // 52 (Wait But Why convention)
+  rows: number; // lifespan in years
+  ageYears: number;
+  percent: number;
+}
+
+export function computeLife(birthISO: string, lifespanYears: number, tz: string, now: Date): LifeGrid {
+  const p = zonedParts(tz, now);
+  const [by, bm, bd] = birthISO.split("-").map(Number);
+  const valid = Number.isFinite(by) && Number.isFinite(bm) && Number.isFinite(bd);
+  const birthMs = valid ? utc(by, bm, bd) : utc(p.year - 30, 1, 1);
+  const todayMs = utc(p.year, p.month, p.day);
+  const livedDays = Math.max(0, Math.floor((todayMs - birthMs) / DAY_MS));
+  const perRow = 52;
+  const rows = Math.max(1, Math.min(120, Math.round(lifespanYears) || 90));
+  const totalWeeks = perRow * rows;
+  const livedWeeks = Math.min(Math.floor(livedDays / 7), totalWeeks);
+  return {
+    livedWeeks,
+    totalWeeks,
+    perRow,
+    rows,
+    ageYears: Math.floor(livedDays / 365.25),
+    percent: clamp01(livedWeeks / totalWeeks),
+  };
+}
+
 export function computeProgress(input: ProgressInput): ProgressResult {
   const tz = input.tz || "UTC";
   const lang: Lang = input.lang === "tr" ? "tr" : "en";
