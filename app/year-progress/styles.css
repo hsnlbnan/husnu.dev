@@ -15,6 +15,11 @@
   --muted: rgba(255, 255, 255, 0.5);
   --muted-2: rgba(255, 255, 255, 0.35);
   --accent: #ffffff;
+  /* Defaults for the dark theme; pageTheme() overrides these inline per fg/bg. */
+  --pop: #1b1b1f;
+  --code-bg: #000;
+  --selection: rgba(255, 255, 255, 0.18);
+  --icon-invert: 1;
 }
 
 .yp-scope * {
@@ -46,6 +51,17 @@
   transform: scale(0.96);
 }
 
+/* Keyboard-only focus ring (mouse clicks stay clean thanks to :focus-visible). */
+.yp-scope button:focus-visible,
+.yp-scope .btn:focus-visible,
+.yp-scope .cp-trigger:focus-visible,
+.yp-scope .seg-btn:focus-visible,
+.yp-scope .cp-preset:focus-visible,
+.yp-scope summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .yp-scope input, .yp-scope select {
   font-family: inherit;
 }
@@ -55,7 +71,7 @@
 }
 
 .yp-scope ::selection {
-  background: rgba(255, 255, 255, 0.18);
+  background: var(--selection);
 }
 
 /* Native color input — strip default chrome, keep just the swatch. */
@@ -108,6 +124,12 @@
 .yp-scope input[type="range"]::-webkit-slider-thumb:active {
   transform: scale(1.15);
 }
+.yp-scope input[type="range"]:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px var(--selection);
+}
+.yp-scope input[type="range"]:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 3px var(--selection);
+}
 .yp-scope input[type="range"]::-moz-range-track {
   height: 4px;
   border-radius: 4px;
@@ -140,7 +162,7 @@
   border-color: var(--line-strong);
 }
 .yp-scope input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(1);
+  filter: invert(var(--icon-invert));
   opacity: 0.6;
   cursor: pointer;
 }
@@ -337,6 +359,14 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
+}
+/* On phones the two-up rows (color pickers, cols/rows sliders) get cramped and
+   the color-picker popover would overflow the viewport — stack them full-width. */
+@media (max-width: 540px) {
+  .yp-scope .two {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
 }
 
 /* Segmented control */
@@ -577,14 +607,14 @@
 }
 .yp-scope .code-block {
   margin: 8px 0 0;
-  background: #000;
+  background: var(--code-bg);
   border: 1px solid var(--line);
   border-radius: 10px;
   padding: 12px;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 11.5px;
   line-height: 1.5;
-  color: #c9d1d9;
+  color: var(--muted);
   white-space: pre-wrap;
   word-break: break-all;
 }
@@ -610,7 +640,7 @@
   width: 22px;
   height: 22px;
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid var(--line-strong);
   flex: 0 0 auto;
 }
 .yp-scope .cp-swatch.sm {
@@ -621,6 +651,11 @@
   font-size: 12.5px;
   color: var(--text);
   letter-spacing: 0.3px;
+  /* Let the trigger shrink in a narrow column instead of forcing overflow. */
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .yp-scope .cp-pop {
@@ -628,9 +663,9 @@
   z-index: 30;
   top: calc(100% + 8px);
   left: 0;
-  width: 232px;
+  width: min(232px, calc(100vw - 24px));
   padding: 12px;
-  background: #161619;
+  background: var(--pop);
   border: 1px solid var(--line-strong);
   border-radius: 14px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 18px -8px rgba(0, 0, 0, 0.55),
@@ -721,6 +756,9 @@
 .yp-scope .cp-input:focus {
   border-color: var(--line-strong);
 }
+.yp-scope .cp-input:focus-visible {
+  border-color: var(--accent);
+}
 
 .yp-scope .cp-presets {
   display: grid;
@@ -730,9 +768,9 @@
 .yp-scope .cp-preset {
   aspect-ratio: 1;
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--line);
 }
 .yp-scope .cp-preset[data-active="true"] {
-  outline: 2px solid #fff;
+  outline: 2px solid var(--text);
   outline-offset: 1px;
 }

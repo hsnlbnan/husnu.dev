@@ -1,4 +1,4 @@
-import { hex, mix, contrast, withAlpha, type Hex } from "./hex";
+import { hex, mix, contrast, withAlpha, luminance, type Hex } from "./hex";
 import type { CSSProperties } from "react";
 
 export interface ThemePreset {
@@ -23,6 +23,11 @@ export function pageTheme(fg: Hex, bg: Hex): CSSProperties {
     "--accent": fg,
     "--on-accent": contrast(fg), // text/icon color on top of an accent fill
     "--ind": withAlpha(text, 0.1), // segmented active-pill fill
+    "--pop": mix(bg, text, 0.12), // popover surface (a step above --panel-2)
+    "--code-bg": mix(bg, text, 0.04), // code block panel
+    "--selection": withAlpha(text, 0.18),
+    // Native date icon ships dark; invert to light on dark surfaces, leave on light.
+    "--icon-invert": luminance(bg) > 0.55 ? 0 : 1,
   } as CSSProperties;
 }
 

@@ -114,7 +114,11 @@ function renderLife(spec: WallpaperSpec) {
   // Guaranteed by buildSpec whenever style === "life".
   const life = spec.life!;
   const gridW = Math.round(w * 0.9);
-  const cell = gridW / life.perRow;
+  // Constrain the cell by BOTH width (52 cols) and the vertical budget left after
+  // the top reserve + header/caption, so tall lifespans (up to 120 rows) still fit
+  // the screen instead of overflowing the bottom.
+  const gridH = Math.round(h * (1 - 0.16 - 0.22));
+  const cell = Math.max(3, Math.min(gridW / life.perRow, gridH / life.rows));
 
   return (
     <div
