@@ -5,6 +5,7 @@ import WorkflowAnimation from '@/components/LikedComponents/Workflow';
 import { PeopleAccordion } from '@/components/LikedComponents/PeopleAccordion';
 import CarBookingComponent from '@/components/DynamicIsland';
 import Volume from '@/components/Volume';
+import LikeButton from '@/components/LikedComponents/LikeButton';
 
 export interface LikedComponent {
   id: number;
@@ -34,6 +35,15 @@ export const likedComponents: LikedComponent[] = [
     title: "Car Booking",
     description: "Car booking component",
     preview: CarBookingComponent,
+    inspired: null,
+    span: "col-span-10 xs:col-span-12 md:col-span-6 lg:col-span-6",
+    isNew: true
+  },
+  {
+    id: 6,
+    title: "Like Button",
+    description: "Heart with a spring pop, particle burst and a rolling count",
+    preview: LikeButton,
     inspired: null,
     span: "col-span-10 xs:col-span-12 md:col-span-6 lg:col-span-6",
     isNew: true
