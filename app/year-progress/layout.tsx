@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./styles.css";
+import Header from "@/components/Header";
 
 export const metadata: Metadata = {
   title: "Year Progress — husnu.dev",
@@ -12,5 +13,17 @@ export default function YearProgressLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <>
+      {/* Site header so visitors landing here (e.g. from a shared link) can reach
+          the portfolio. Sits on the tool's default dark bg so it reads as one
+          surface; if the tool is themed light, this stays a dark nav strip. */}
+      <div className="yp-header-shell">
+        <div className="yp-header-inner">
+          <Header />
+        </div>
+      </div>
+      {children}
+    </>
+  );
 }

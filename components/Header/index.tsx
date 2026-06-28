@@ -173,7 +173,7 @@ const Header = () => {
                 Hüsnü <span className="font-medium text-[#dfff1f]">Lübnan</span>
               </h1>
               <div className="flex flex-row gap-4">
-                <p className="text-gray-400 text-sm">Senior Frontend Developer</p>
+                <p className="text-gray-400 text-sm">Frontend Developer</p>
               </div>
             </a>
 
