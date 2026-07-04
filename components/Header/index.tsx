@@ -310,16 +310,18 @@ const Header = () => {
                 <div
                   className="flex group-hover:border-pulse bg-[#111] px-3 py-1.5 rounded-lg cursor-pointer focus-within:ring-2 focus-within:ring-[#dfff1f] focus-within:ring-offset-2 focus-within:ring-offset-black"
                 >
-                  <div className="flex flex-row items-center gap-4">
+                  <motion.button className="flex flex-row items-center gap-4"
+                    onClick={handleDownloadResume}
+                  >
                     <ResumeIcon className="h-4 w-4 group-hover:animate-draw opacity-80" aria-hidden="true" />
-                    <button
-                      onClick={handleDownloadResume}
+                    <div
+
                       className="focus:outline-none"
                       aria-label="Download resume (CV)"
                     >
                       <p className="text-[#fff] font-medium text-sm">CV</p>
-                    </button>
-                  </div>
+                    </div>
+                  </motion.button>
                 </div>
               </motion.div>
             </div>
