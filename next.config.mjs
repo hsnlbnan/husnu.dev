@@ -6,12 +6,15 @@ const nextConfig = {
   // Optimize images
   images: {
     formats: ['image/avif', 'image/webp'],
-    minimumCacheTTL: 60,
+    // 60sn çok kısaydı; tüm görseller statik ve içerik hash'li.
+    minimumCacheTTL: 60 * 60 * 24 * 30,
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
     imageSizes: [16, 32, 48, 64, 96, 128, 256],
-    domains: [],
+    // `domains` deprecated; uzak görsel kullanılmıyor.
     remotePatterns: [],
-    dangerouslyAllowSVG: true,
+    // Uzak kaynak olmadığı için SVG optimizasyonuna izin vermeye gerek yok.
+    // Açık bırakmak, ileride bir remotePattern eklendiğinde XSS vektörü olur.
+    dangerouslyAllowSVG: false,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
@@ -41,10 +44,9 @@ const nextConfig = {
             key: 'X-DNS-Prefetch-Control',
             value: 'on',
           },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
-          },
+          // NOT: X-XSS-Protection kaldırıldı. Modern tarayıcılarda desteği
+          // sonlandırıldı ve bazı durumlarda kendisi bir güvenlik açığı
+          // oluşturuyor. Yerine CSP kullanılıyor.
           {
             key: 'X-Content-Type-Options',
             value: 'nosniff',
@@ -56,6 +58,31 @@ const nextConfig = {
           {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
+          },
+          // Clickjacking koruması. frame-ancestors modern tarayıcılarda
+          // geçerli, X-Frame-Options eski tarayıcılar için yedek.
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              // JSON-LD ve Next.js hydration inline script kullanır.
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://app.cal.com https://va.vercel-scripts.com https://cdn.vercel-insights.com",
+              // Tailwind/Framer Motion inline style üretir.
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "font-src 'self' data: https://fonts.gstatic.com",
+              "img-src 'self' data: blob: https:",
+              "connect-src 'self' https://app.cal.com https://va.vercel-scripts.com https://vitals.vercel-insights.com",
+              "frame-src 'self' https://app.cal.com",
+              "frame-ancestors 'self'",
+              "base-uri 'self'",
+              "form-action 'self'",
+              "object-src 'none'",
+              'upgrade-insecure-requests',
+            ].join('; '),
           },
         ],
       },

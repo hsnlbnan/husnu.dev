@@ -1,5 +1,9 @@
 "use client";
 
+import type { Dictionary } from "@/i18n/dictionaries";
+import { interpolate } from "@/i18n/dictionaries";
+import { defaultLocale, type Locale } from "@/i18n/config";
+
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useState, useRef } from "react";
@@ -10,6 +14,10 @@ type Work = {
   description: string;
   src: string;
   accent?: string;
+  dict: Dictionary;
+  locale: Locale;
+  subtitleTr?: string;
+  descriptionTr?: string;
 };
 
 const WorkCard = ({
@@ -18,7 +26,14 @@ const WorkCard = ({
   description,
   src,
   accent = "#dfff1f",
+  dict,
+  locale,
+  subtitleTr,
+  descriptionTr,
 }: Work) => {
+  const isDefault = locale === defaultLocale;
+  const roleLabel = isDefault ? subtitle : subtitleTr ?? subtitle;
+  const dateLabel = isDefault ? description : descriptionTr ?? description;
   const [isHovered, setIsHovered] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -75,7 +90,7 @@ const WorkCard = ({
         >
           <Image
             src={src}
-            alt={`${title} logo`}
+            alt={interpolate(dict.project.logoAlt, { title })}
             width={48}
             height={48}
             className="object-cover w-full h-full"
@@ -91,24 +106,24 @@ const WorkCard = ({
             </h3>
             <span
               className="text-[11px] md:text-[12px] font-mono uppercase tracking-[0.12em] transition-colors duration-300"
-              style={{ color: isHovered ? accent : "rgba(255,255,255,0.3)" }}
+              style={{ color: isHovered ? accent : "rgba(255,255,255,0.6)" }}
             >
-              {subtitle}
+              {roleLabel}
             </span>
           </div>
 
           {/* Date range */}
           <div className="flex items-center gap-2 flex-shrink-0 mt-1 md:mt-0">
             <span className="hidden md:block w-6 h-[1px] bg-white/10" />
-            <span className="text-[11px] md:text-[12px] font-mono text-white/25 tracking-wider whitespace-nowrap">
-              {description}
+            <span className="text-[11px] md:text-[12px] font-mono text-white/60 tracking-wider whitespace-nowrap">
+              {dateLabel}
             </span>
           </div>
         </div>
 
         {/* Arrow indicator */}
         <motion.div
-          className="flex-shrink-0 text-white/10 group-hover:text-white/30 transition-colors duration-300"
+          className="flex-shrink-0 text-white/40 group-hover:text-white/80 transition-colors duration-300"
           animate={{ x: isHovered ? 4 : 0 }}
           transition={{ duration: 0.2 }}
         >

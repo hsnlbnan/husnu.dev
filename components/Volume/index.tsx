@@ -221,11 +221,14 @@ function VolumeSlider() {
     );
 }
 
+// NOT: Bu bileşen hem /ses sayfasında hem de /liked içindeki bileşen
+// vitrininde kullanılıyor. Bu yüzden burada <main> veya <h1> OLMAMALI —
+// aksi halde /liked sayfasında ikinci bir main/h1 oluşur. Landmark ve başlık
+// route seviyesinde (app/ses/page.tsx) tanımlanır.
 export default function VolumePage() {
     return (
         <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-transparent px-6 text-white">
-            
-                <VolumeSlider />
+            <VolumeSlider />
         </div>
     );
 }

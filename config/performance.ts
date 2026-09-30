@@ -32,25 +32,14 @@ interface PageResources {
 export const criticalResources: PageResources = {
   '/': [
     // Ana sayfa için kritik kaynaklar (LCP elementleri)
-    { 
-      path: '/me.webp', 
-      type: 'image',
-      fetchPriority: 'high',
-      loadingStrategy: 'eager',
-      mediaType: 'image/webp',
-      viewport: 'all'
-    },
+    // NOT: /me.webp ve /logos/shftco.jpeg önceden yükleniyordu; ikisi de
+    // kaldırılan LinkedIn kartına aitti ve ana sayfada artık kullanılmıyor
+    // ("preloaded but not used" uyarısı). LCP öğesi hero'daki h1 metnidir.
     { 
       path: 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap', 
       type: 'style',
       fetchPriority: 'high',
       viewport: 'all'
-    },
-    { 
-      path: '/logos/shftco.jpeg', 
-      type: 'image',
-      loadingStrategy: 'lazy',
-      viewport: 'desktop'
     },
     // Sonraki sayfalar için prefetch
     {

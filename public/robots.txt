@@ -7,6 +7,9 @@ Disallow: /api/
 User-agent: GPTBot
 Allow: /
 
+User-agent: OAI-SearchBot
+Allow: /
+
 User-agent: ChatGPT-User
 Allow: /
 
@@ -19,18 +22,26 @@ Allow: /
 User-agent: anthropic-ai
 Allow: /
 
+User-agent: ClaudeBot
+Allow: /
+
 User-agent: Claude-Web
 Allow: /
 
 User-agent: PerplexityBot
 Allow: /
 
+User-agent: Applebot-Extended
+Allow: /
+
 User-agent: Bytespider
 Allow: /
 
-# Sitemap & LLM Context
+# Sitemap (İngilizce ve Türkçe sürümleri hreflang ile birlikte içerir)
 Sitemap: https://husnu.dev/sitemap.xml
 
-# LLM-friendly content
-# See https://llmstxt.org for the llms.txt specification
-# Full context: https://husnu.dev/llms.txt
+# LLM-friendly full context (llms.txt specification: https://llmstxt.org).
+# İki dilde üretilir ve her sayfada <link rel="alternate" type="text/plain">
+# olarak duyurulur, çünkü robots.txt yorumları makineler tarafından okunmaz.
+#   https://husnu.dev/llms.txt      (English)
+#   https://husnu.dev/tr/llms.txt   (Türkçe)

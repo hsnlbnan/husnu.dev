@@ -1,4 +1,32 @@
-import type { Metadata } from "next";
+import { ALL_SKILLS } from "@/data/stack";
+import type { Metadata, Viewport } from "next";
+import { projects, work } from "@/data";
+import {
+  defaultLocale,
+  localizedPath,
+  locales,
+  ogLocales,
+  type Locale,
+} from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
+
+interface Project {
+  title: string;
+  subtitle: string;
+  subtitleTr?: string;
+  description: string;
+  src: string;
+  link?: string;
+  company?: string;
+}
+
+interface WorkEntry {
+  title: string;
+  subtitle: string;
+  subtitleTr?: string;
+  description: string;
+  src: string;
+}
 
 export interface LinkDefinition {
   rel: string;
@@ -9,11 +37,13 @@ export interface LinkDefinition {
 }
 
 export interface PageSeoOptions {
+  /** Sayfanın dili. Canonical ve hreflang bunun üzerinden hesaplanır. */
+  locale: Locale;
   /** Page specific title. Uses layout template automatically */
   title?: string;
   /** Optional description override */
   description?: string;
-  /** Canonical path ("/about") or full URL */
+  /** Locale İÇERMEYEN yol: "/", "/liked", "/liked/preview/3" */
   path?: string;
   /** Override keywords */
   keywords?: string[];
@@ -60,7 +90,15 @@ const defaultImage = {
   alt: "Hüsnü Lübnan | Frontend Developer",
 };
 
-export const viewportContent = "width=device-width, initial-scale=1, viewport-fit=cover";
+// Next.js `viewport` export'u. Daha önce bu değer string olarak tanımlanıp hiç
+// kullanılmıyordu; sonuç olarak `viewport-fit=cover` kayboluyor ve
+// env(safe-area-inset-*) iOS'ta çalışmıyordu.
+export const baseViewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#1D1D1D",
+};
 
 export const faviconLinks: LinkDefinition[] = [
   { rel: "icon", href: "/favicon.ico", sizes: "any" },
@@ -79,78 +117,159 @@ export const dnsPrefetchLinks: LinkDefinition[] = [
   { rel: "dns-prefetch", href: "https://cdn.vercel-insights.com" },
 ];
 
-export const structuredData = [
+// Projeler ve iş geçmişi tek kaynaktan (data.js) türetilir. Daha önce schema
+// elle yazıldığı için sayfada 6 proje / 5 iş kaydı görünürken schema'da yalnızca
+// 3'er tane vardı — Google'ın "yapılandırılmış veri sayfada görünür olmalı"
+// kuralına aykırıydı ve AI özetleri eksik veri görüyordu.
+const MONTHS: Record<string, string> = {
+  january: "01", february: "02", march: "03", april: "04",
+  may: "05", june: "06", july: "07", august: "08",
+  september: "09", october: "10", november: "11", december: "12",
+};
+
+/** "June 2024" -> "2024-06". Tanınmazsa undefined. */
+function toIsoMonth(value: string): string | undefined {
+  const match = value.trim().match(/^([A-Za-z]+)\s+(\d{4})$/);
+  if (!match) return undefined;
+  const month = MONTHS[match[1].toLowerCase()];
+  return month ? `${match[2]}-${month}` : undefined;
+}
+
+/** "June 2024 - Present" -> { startDate, endDate? } */
+function parseDateRange(range: string): { startDate?: string; endDate?: string } {
+  const [rawStart, rawEnd] = range.split("-").map((part) => part.trim());
+  return {
+    startDate: rawStart ? toIsoMonth(rawStart) : undefined,
+    endDate: rawEnd && rawEnd.toLowerCase() !== "present" ? toIsoMonth(rawEnd) : undefined,
+  };
+}
+
+function buildProjectListItems(locale: Locale) {
+  return projects.map((project: Project, index: number) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    item: {
+      "@type": "SoftwareApplication",
+      name: project.title,
+      // Türkçe sayfada Türkçe açıklama; `inLanguage: "tr"` diyip İngilizce
+      // metin vermek karışık dilli yapılandırılmış veri üretiyordu.
+      description:
+        locale === defaultLocale ? project.subtitle : project.subtitleTr ?? project.subtitle,
+      ...(project.link ? { url: project.link } : {}),
+      image: `${siteUrl}${project.src}`,
+      applicationCategory: "WebApplication",
+      operatingSystem: "Web",
+      inLanguage: locale,
+      ...(project.company
+        ? { creator: { "@type": "Organization", name: project.company } }
+        : {}),
+    },
+  }));
+}
+
+function buildWorkListItems(locale: Locale) {
+  return work.map((entry: WorkEntry, index: number) => {
+    const { startDate, endDate } = parseDateRange(entry.description);
+    return {
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "OrganizationRole",
+        roleName:
+          locale === defaultLocale ? entry.subtitle : entry.subtitleTr ?? entry.subtitle,
+        ...(startDate ? { startDate } : {}),
+        ...(endDate ? { endDate } : {}),
+        worksFor: { "@type": "Organization", name: entry.title },
+      },
+    };
+  });
+}
+
+export function buildStructuredData(locale: Locale) {
+  const dict = getDictionary(locale);
+  const localeUrl = `${siteUrl}${localizedPath(locale, "/")}`;
+  const projectListItems = buildProjectListItems(locale);
+  const workListItems = buildWorkListItems(locale);
+
+  return [
   {
     "@context": "https://schema.org",
     "@type": "Person",
     "@id": "https://husnu.dev/#person",
     name: siteName,
     url: siteUrl,
-    jobTitle: "Senior Frontend Developer",
-    description: "Senior Frontend Developer in Turkey, specializing in Next.js, React, and high-performance web architecture.",
+    jobTitle: dict.schema.jobTitle,
+    description: dict.schema.personDescription,
     image: "https://husnu.dev/me.webp",
+    email: "mailto:hsnlbnan@gmail.com",
+    telephone: "+90 553 220 00 16",
+    // Yalnızca ülke belirtiliyor; şehir bilgisi doğrulanmadığı için eklenmedi.
+    address: {
+      "@type": "PostalAddress",
+      addressCountry: "TR",
+    },
     sameAs: [
       "https://github.com/hsnlbnan",
       "https://twitter.com/hsnlbnan",
       "https://www.linkedin.com/in/husnulubnan/",
-      "https://husnu.dev"
     ],
     knowsAbout: [
       {
         "@type": "Thing",
         name: "Next.js App Router",
-        description: "Advanced architecture with React Server Components"
+        description: "Advanced architecture with React Server Components",
       },
       {
         "@type": "Thing",
         name: "React.js",
-        description: "Modern React patterns and hooks"
+        description: "Modern React patterns and hooks",
       },
       {
         "@type": "Thing",
         name: "TypeScript",
-        description: "Strict typing and enterprise-scale development"
+        description: "Strict typing and enterprise-scale development",
       },
-      "Tailwind CSS",
-      "Framer Motion",
-      "Three.js",
+      "Micro Frontend Architecture",
       "Web Performance Optimization (Core Web Vitals)",
-      "Generative Engine Optimization (GEO)"
+      "Web Accessibility (WCAG)",
+      // Sitede görünen stack'in tamamı (data/stack.ts); yukarıda ayrıntılı
+      // anlatılanlar tekrar edilmez.
+      ...ALL_SKILLS.filter((s) => !["Next.js", "React", "TypeScript"].includes(s)),
     ],
     nationality: {
       "@type": "Country",
-      name: "Turkey"
+      name: "Turkey",
     },
-    alumniOf: {
-      "@type": "Organization",
-      name: "Frontend Developer Ecosystem Turkey"
-    }
+    // NOT: `alumniOf` kaldırıldı. "Frontend Developer Ecosystem Turkey" diye
+    // bir kurum yok; var olmayan bir entity'e atıf spam sinyali üretebilir.
   },
   {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     "@id": "https://husnu.dev/#service",
-    name: "Hüsnü Lübnan - Frontend Consultancy",
+    name: dict.schema.serviceName,
     url: siteUrl,
     image: "https://husnu.dev/og.png",
     priceRange: "$$$",
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Istanbul",
-      addressCountry: "TR"
+      addressCountry: "TR",
     },
-    description: "Professional frontend development and consultancy services for enterprise-grade React and Next.js applications.",
+    areaServed: "Worldwide",
+    description: dict.schema.serviceDescription,
     founder: {
-      "@id": "https://husnu.dev/#person"
-    }
+      "@id": "https://husnu.dev/#person",
+    },
   },
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    url: siteUrl,
+    "@id": "https://husnu.dev/#website",
+    url: localeUrl,
     name: siteName,
+    inLanguage: locale,
     author: {
-      "@id": "https://husnu.dev/#person"
+      "@id": "https://husnu.dev/#person",
     },
     potentialAction: {
       "@type": "SearchAction",
@@ -162,212 +281,115 @@ export const structuredData = [
     "@context": "https://schema.org",
     "@type": "ItemList",
     "@id": "https://husnu.dev/#projects",
-    name: "Projects by Hüsnü Lübnan",
+    name: dict.schema.projectsListName,
     description: "Featured web development projects",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        item: {
-          "@type": "SoftwareApplication",
-          name: "Otokoç 2. El",
-          description: "Used car sales platform for Koç Holding with micro frontend architecture",
-          url: "https://www.otokocikinciel.com/",
-          applicationCategory: "WebApplication",
-          operatingSystem: "Web",
-          programmingLanguage: "TypeScript",
-          offers: { "@type": "Offer", price: "0", priceCurrency: "TRY" },
-        },
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        item: {
-          "@type": "SoftwareApplication",
-          name: "Fizbot",
-          description: "Real estate intelligence platform with map-based opportunity matching",
-          applicationCategory: "WebApplication",
-          operatingSystem: "Web",
-          programmingLanguage: "TypeScript",
-        },
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        item: {
-          "@type": "SoftwareApplication",
-          name: "hayal.in",
-          description: "Anonymous dream sharing platform with edge-first architecture",
-          url: "https://hayal.in",
-          applicationCategory: "WebApplication",
-          operatingSystem: "Web",
-          programmingLanguage: "TypeScript",
-        },
-      },
-    ],
+    numberOfItems: projectListItems.length,
+    itemListElement: projectListItems,
   },
   {
     "@context": "https://schema.org",
     "@type": "ItemList",
     "@id": "https://husnu.dev/#work-history",
-    name: "Work Experience - Hüsnü Lübnan",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        item: {
-          "@type": "OrganizationRole",
-          roleName: "Frontend Developer",
-          startDate: "2024-06",
-          worksFor: { "@type": "Organization", name: "Nuevo Software House" },
-        },
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        item: {
-          "@type": "OrganizationRole",
-          roleName: "Frontend Developer",
-          startDate: "2023-10",
-          endDate: "2024-06",
-          worksFor: { "@type": "Organization", name: "SHFT" },
-        },
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        item: {
-          "@type": "OrganizationRole",
-          roleName: "Frontend Developer",
-          startDate: "2022-09",
-          endDate: "2023-10",
-          worksFor: { "@type": "Organization", name: "NoNo Company" },
-        },
-      },
-    ],
+    name: dict.schema.workListName,
+    numberOfItems: workListItems.length,
+    itemListElement: workListItems,
   },
-];
+  ];
+}
 
-export const baseMetadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: {
-    default: `${siteName} | Frontend & Javascript Developer`,
-    template: "%s | Hüsnü Lübnan",
-  },
-  description: defaultDescription,
-  keywords: defaultKeywords,
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
-    title: `${siteName} | Frontend Developer`,
-    description: defaultDescription,
-    url: siteUrl,
-    siteName: siteName,
-    locale: "en_US",
-    type: "website",
-    images: [defaultImage],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+export function buildBaseMetadata(locale: Locale): Metadata {
+  const dict = getDictionary(locale);
+  return {
+    metadataBase: new URL(siteUrl),
+    title: {
+      default: dict.meta.siteTitleDefault,
+      template: dict.meta.siteTitleTemplate,
+    },
+    description: dict.meta.description,
+    keywords: [...dict.meta.keywords],
+    openGraph: {
+      title: dict.meta.ogTitle,
+      description: dict.meta.description,
+      url: `${siteUrl}${localizedPath(locale, "/")}`.replace(/\/$/, "") || siteUrl,
+      siteName,
+      locale: ogLocales[locale],
+      alternateLocale: locales.filter((l) => l !== locale).map((l) => ogLocales[l]),
+      type: "website",
+      images: [defaultImage],
+    },
+    robots: {
       index: true,
       follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
-  },
-  authors: [{ name: siteName, url: siteUrl }],
-  creator: siteName,
-  publisher: siteName,
-  twitter: {
-    card: "summary_large_image",
-    site: "@hsnlbnan",
-    creator: "@hsnlbnan",
-    title: `${siteName} | Frontend Developer`,
-    description: defaultDescription,
-    images: [defaultImage],
-  },
-  other: {},
-};
+    authors: [{ name: siteName, url: siteUrl }],
+    creator: siteName,
+    publisher: siteName,
+    twitter: {
+      card: "summary_large_image",
+      site: "@hsnlbnan",
+      creator: "@hsnlbnan",
+      title: dict.meta.ogTitle,
+      description: dict.meta.description,
+      images: [defaultImage],
+    },
+  };
+}
 
-export function createMetadata(options: PageSeoOptions = {}): Metadata {
-  const canonical = options.path?.startsWith("http")
-    ? options.path
-    : new URL(options.path ?? "/", siteUrl).toString();
+/**
+ * Bir sayfa için tam metadata üretir.
+ *
+ * `path` DAİMA locale'siz yol olmalı ("/", "/liked", "/liked/preview/3").
+ * Canonical ve hreflang bağlantıları buradan hesaplanır; böylece her sayfanın
+ * kendi dilini gösteren canonical'ı ve diğer dile işaret eden alternate'i olur.
+ */
+export function createMetadata(options: PageSeoOptions): Metadata {
+  const { locale, path = "/" } = options;
+  const dict = getDictionary(locale);
+  const base = buildBaseMetadata(locale);
 
-  const description = options.description ?? baseMetadata.description ?? defaultDescription;
-  const keywords = options.keywords ?? baseMetadata.keywords ?? defaultKeywords;
+  const canonical = `${siteUrl}${localizedPath(locale, path)}`;
 
-  const baseTitle = baseMetadata.title;
-  let fallbackTitle: string | undefined = options.title;
-
-  if (!fallbackTitle) {
-    if (typeof baseTitle === "string") {
-      fallbackTitle = baseTitle;
-    } else if (baseTitle && typeof baseTitle === "object") {
-      const defaultCandidate = (baseTitle as { default?: unknown }).default;
-      if (typeof defaultCandidate === "string") {
-        fallbackTitle = defaultCandidate;
-      } else if (defaultCandidate != null) {
-        fallbackTitle = String(defaultCandidate);
-      }
-    }
-
-    if (!fallbackTitle) {
-      const ogTitle = baseMetadata.openGraph?.title;
-      if (typeof ogTitle === "string") {
-        fallbackTitle = ogTitle;
-      } else if (ogTitle != null) {
-        fallbackTitle = String(ogTitle);
-      }
-    }
+  // hreflang: her dil + x-default (varsayılan dile işaret eder).
+  const languages: Record<string, string> = {};
+  for (const l of locales) {
+    languages[l] = `${siteUrl}${localizedPath(l, path)}`;
   }
+  languages["x-default"] = `${siteUrl}${localizedPath(defaultLocale, path)}`;
 
-  const template =
-    baseTitle && typeof baseTitle === "object" && "template" in baseTitle
-      ? (() => {
-        const rawTemplate = (baseTitle as { template?: unknown }).template;
-        if (!rawTemplate) return undefined;
-        return typeof rawTemplate === "string" ? rawTemplate : String(rawTemplate);
-      })()
-      : undefined;
+  const description = options.description ?? dict.meta.description;
+  const keywords = options.keywords ?? [...dict.meta.keywords];
+  const previewImage = options.image ?? defaultImage;
 
-  const resolvedFallbackTitle = fallbackTitle ?? `${siteName} | Frontend Developer`;
-
-  const brandedTitle = options.title && template ? template.replace("%s", options.title) : resolvedFallbackTitle;
-
-  const baseImages = baseMetadata.openGraph?.images;
-  const baseImage = Array.isArray(baseImages) ? baseImages[0] : baseImages;
-  const previewImage = options.image ?? baseImage ?? defaultImage;
-
-  const openGraph = {
-    ...(baseMetadata.openGraph ?? {}),
-    ...options.openGraph,
-    title: options.openGraph?.title ?? brandedTitle,
-    description: options.openGraph?.description ?? description,
-    url: canonical,
-    images: options.openGraph?.images ?? (previewImage ? [previewImage] : undefined),
-  } as NonNullable<Metadata["openGraph"]>;
-
-  const twitter = {
-    ...(baseMetadata.twitter ?? {}),
-    ...options.twitter,
-    title: options.twitter?.title ?? brandedTitle,
-    description: options.twitter?.description ?? description,
-    images: options.twitter?.images ?? (previewImage ? [previewImage] : undefined),
-  } as NonNullable<Metadata["twitter"]>;
+  const brandedTitle = options.title
+    ? dict.meta.siteTitleTemplate.replace("%s", options.title)
+    : dict.meta.siteTitleDefault;
 
   return {
-    ...baseMetadata,
-    alternates: { canonical },
-    title: options.title ?? baseMetadata.title,
+    ...base,
+    alternates: { canonical, languages },
+    title: options.title ?? base.title,
     description,
     keywords,
-    openGraph,
-    twitter,
+    openGraph: {
+      ...(base.openGraph ?? {}),
+      title: brandedTitle,
+      description,
+      url: canonical,
+      images: [previewImage],
+    } as NonNullable<Metadata["openGraph"]>,
+    twitter: {
+      ...(base.twitter ?? {}),
+      title: brandedTitle,
+      description,
+      images: [previewImage],
+    } as NonNullable<Metadata["twitter"]>,
   };
 }
 
