@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { toast } from "sonner";
 import { Email, Phone, ArrowRight } from "@/icons";
@@ -5,18 +7,24 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiSend, FiCheck, FiMail } from "react-icons/fi";
 
 import EmailComponent from "../Email";
+import { openCalBooking } from "@/lib/cal";
+import { interpolate, type Dictionary } from "@/i18n/dictionaries";
 
-export default function Content() {
+export default function Content({ dict }: { dict: Dictionary }) {
   return (
-    <div className="flex flex-row justify-between bg-[#dfff1f] px-4 md:px-12 py-8 min-w-full h-full">
-      <Nav />
+    // `h-full` yerine `flex-1`: yükseklik ebeveynden miras alınmak yerine
+    // flex konteynerde kalan alana yayılıyor, böylece footer 100vh'ye
+    // ulaştığında alt tarafta boşluk kalmıyor.
+    <div className="flex flex-1 flex-row justify-between bg-[#dfff1f] px-4 md:px-12 py-8 min-w-full">
+      <Nav dict={dict} />
     </div>
   );
 }
 
-const Nav = () => {
+const Nav = ({ dict }: { dict: Dictionary }) => {
   // Formun durumu için daha anlamlı bir state yapısı oluşturalım
   const [formState, setFormState] = useState<'idle' | 'loading' | 'success'>('idle');
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [formItems, setFormItems] = React.useState<
     {
       label: string;
@@ -26,10 +34,10 @@ const Nav = () => {
       value?: string;
     }[]
   >([
-    { label: "Name", type: "text", required: true, validation: "name" },
-    { label: "Email", type: "email", required: true, validation: "email" },
+    { label: dict.contact.form.name, type: "text", required: true, validation: "name" },
+    { label: dict.contact.form.email, type: "email", required: true, validation: "email" },
     {
-      label: "Message",
+      label: dict.contact.form.message,
       type: "textarea",
       required: true,
       validation: "message",
@@ -44,7 +52,15 @@ const Nav = () => {
     if (formState === 'success') {
       setFormState('idle');
     }
-    
+
+    // Kullanıcı yazmaya başlayınca ilgili alanın hatasını temizle
+    setErrors((prev) => {
+      const validation = formItems[index]?.validation;
+      if (!validation || !prev[validation]) return prev;
+      const { [validation]: _removed, ...rest } = prev;
+      return rest;
+    });
+
     // update formItems
     setFormItems((prev) => {
       return prev.map((item, i) => {
@@ -56,42 +72,49 @@ const Nav = () => {
     });
   }
 
-  async function handleSubmit() {
+  // Alan bazlı hata mesajları. Daha önce hatalar yalnızca toast ile
+  // gösteriliyordu; hangi alanın hatalı olduğu ne görsel ne de programatik
+  // olarak belliydi (aria-invalid / aria-describedby yoktu).
+  function validate(
+    items: typeof formItems
+  ): Record<string, string> {
+    const next: Record<string, string> = {};
+
+    items.forEach((item) => {
+      const value = item.value ?? "";
+
+      if (!value.trim()) {
+        next[item.validation] = interpolate(dict.contact.form.required, { field: item.label });
+        return;
+      }
+
+      if (item.validation === "email" && !value.includes("@")) {
+        next.email = dict.contact.form.invalidEmail;
+      }
+
+      if (item.validation === "name" && value.length < 3) {
+        next.name = dict.contact.form.nameTooShort;
+      }
+
+      if (item.validation === "message" && value.length < 10) {
+        next.message = dict.contact.form.messageTooShort;
+      }
+    });
+
+    return next;
+  }
+
+  async function handleSubmit(e?: React.FormEvent) {
+    e?.preventDefault();
+
     // Eğer zaten işlem yapılıyorsa veya başarı durumundaysak çık
     if (formState !== 'idle') return;
 
-    // Validasyon işlemleri
-    if (formItems.some((item) => !item.value)) {
-      toast.error("Please fill all fields");
-      return;
-    }
+    const nextErrors = validate(formItems);
+    setErrors(nextErrors);
 
-    if (
-      formItems.some(
-        (item) =>
-          item.validation === "email" && !(item.value ?? "").includes("@")
-      )
-    ) {
-      toast.error("Invalid email");
-      return;
-    }
-
-    if (
-      formItems.some(
-        (item) => item.validation === "name" && (item.value?.length ?? 0) < 3
-      )
-    ) {
-      toast.error("Name must be at least 3 characters");
-      return;
-    }
-
-    if (
-      formItems.some(
-        (item) =>
-          item.validation === "message" && (item.value?.length ?? 0) < 10
-      )
-    ) {
-      toast.error("Message must be at least 10 characters");
+    if (Object.keys(nextErrors).length > 0) {
+      toast.error(Object.values(nextErrors)[0]);
       return;
     }
 
@@ -105,9 +128,11 @@ const Nav = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: formItems.find((item) => item.label === "Name")?.value,
-          email: formItems.find((item) => item.label === "Email")?.value,
-          message: formItems.find((item) => item.label === "Message")?.value,
+          // `validation` dile bağlı olmayan sabit anahtar; `label` çevrildiği
+          // için ona göre arama Türkçe'de undefined dönerdi.
+          name: formItems.find((item) => item.validation === "name")?.value,
+          email: formItems.find((item) => item.validation === "email")?.value,
+          message: formItems.find((item) => item.validation === "message")?.value,
         }),
       });
 
@@ -118,17 +143,17 @@ const Nav = () => {
         // Başarılı mesajını göster ve ardından formu temizle
         setTimeout(() => {
           setFormItems((prev) => prev.map((item) => ({ ...item, value: "" })));
-          toast.success("Message sent successfully!");
+          toast.success(dict.contact.form.sent);
           // Form başarı durumunda kalacak, sadece kullanıcı bir şeyler yazdığında sıfırlanacak
         }, 2000);
       } else {
         // Sunucu hatası
-        toast.error("Failed to send message.");
+        toast.error(dict.contact.form.failed);
         setFormState('idle');
       }
     } catch (error) {
       // Bağlantı veya diğer hatalar
-      toast.error("An error occurred while sending the message.");
+      toast.error(dict.contact.form.error);
       setFormState('idle');
     }
   }
@@ -138,13 +163,12 @@ const Nav = () => {
       <div className="flex flex-col gap-6 w-full md:w-1/2">
         <div className="inline-flex items-center gap-0.5 bg-black px-5 py-1.5 rounded-full w-auto max-w-40 h-auto max-h-12 text-[#dfff1f]">
           <Phone className="mt-1.5 w-6 h-6" stroke="#dfff1f" />
-          Contact Me
+          {dict.contact.badge}
         </div>
         <div className="flex flex-col gap-6">
-          <h4 className="font-semibold text-4xl text-gray-700">Get in Touch with Me</h4>
-          <p className="text-xl text-gray-500">
-            You can contact me with your problems, bugs, new developments or
-            projects.
+          <h2 className="font-semibold text-4xl text-gray-900">{dict.contact.heading}</h2>
+          <p className="text-xl text-gray-700">
+            {dict.contact.paragraph}
           </p>
 
           <EmailComponent href="mailto:hsnlbnan@gmail.com">
@@ -152,31 +176,37 @@ const Nav = () => {
               <Email className="w-6 h-6" stroke="#333" />
             </EmailComponent.Icon>
             <div className="flex flex-col w-full">
-              <EmailComponent.Title>Email</EmailComponent.Title>
+              <EmailComponent.Title>{dict.contact.emailLabel}</EmailComponent.Title>
               <EmailComponent.Description>
                 hsnlbnan@gmail.com
               </EmailComponent.Description>
             </div>
           </EmailComponent>
-          <div data-cal-link="husnu" data-cal-config='{"theme":"dark"}'>
+          {/* <button>: Cal.com tetikleyicisi eskiden düz bir <div> idi,
+              klavye veya ekran okuyucu ile açılamıyordu. */}
+          <button
+            type="button"
+            onClick={openCalBooking}
+            className="w-full text-left rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-[#dfff1f]"
+          >
             <EmailComponent>
               <EmailComponent.Icon>
                 <Email className="w-6 h-6" stroke="#333" />
               </EmailComponent.Icon>
               <div className="flex flex-col w-full">
-                <EmailComponent.Title>Or give us a meet</EmailComponent.Title>
+                <EmailComponent.Title>{dict.contact.meetLabel}</EmailComponent.Title>
                 <EmailComponent.Description>
-                  Book a meeting
+                  {dict.contact.meetValue}
                 </EmailComponent.Description>
               </div>
             </EmailComponent>
-          </div>
+          </button>
           <EmailComponent href="tel:+905532200016">
             <EmailComponent.Icon>
               <Phone className="w-6 h-6" stroke="#333" />
             </EmailComponent.Icon>
             <div className="flex flex-col w-full">
-              <EmailComponent.Title>Phone</EmailComponent.Title>
+              <EmailComponent.Title>{dict.contact.phoneLabel}</EmailComponent.Title>
               <EmailComponent.Description>
                 +90 553 220 00 16
               </EmailComponent.Description>
@@ -184,31 +214,72 @@ const Nav = () => {
           </EmailComponent>
         </div>
       </div>
-      <div className="flex flex-col gap-2 w-full md:w-1/2">
-        {formItems.map((item, index) => (
-          <div key={index} className="flex flex-col gap-2 w-full">
-            <label className="w-full text-gray-900" htmlFor={`form-item-${index}`}>
-              {item.label}
-            </label>
-            {item.type === "textarea" ? (
-              <textarea
-                id={`form-item-${index}`}
-                onChange={(e) => handleOnChange(e, index)}
-                className="bg-transparent text-black w-full p-2 rounded-none border-b border-black focus:border-b-2 w-96 h-32 focus:outline-none"
-              />
-            ) : (
-              <input
-                id={`form-item-${index}`}
-                onChange={(e) => handleOnChange(e, index)}
-                className="w-full bg-transparent text-black p-2 border-b rounded-none border-black focus:border-b-2 w-96 h-12 focus:outline-none"
-                type={item.type}
-              />
-            )}
-          </div>
-        ))}
+      {/* Gerçek bir <form>: Enter ile gönderim, tarayıcı otomatik doldurma ve
+          şifre yöneticisi entegrasyonu bunun olmadan çalışmıyordu.
+          noValidate: doğrulamayı kendimiz yapıp erişilebilir hata mesajı
+          gösteriyoruz. */}
+      <form
+        className="flex flex-col gap-2 w-full md:w-1/2"
+        onSubmit={handleSubmit}
+        noValidate
+      >
+        {formItems.map((item, index) => {
+          const fieldId = `form-item-${index}`;
+          const errorId = `${fieldId}-error`;
+          const error = errors[item.validation];
+          // min-h-[44px]: WCAG 2.5.8 hedef boyutu (eskiden 21.5px yükseklikti)
+          const fieldClass = `w-full bg-transparent text-black p-2 rounded-none border-b border-black focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-[#dfff1f] ${
+            error ? "border-b-2 border-red-700" : "focus:border-b-2"
+          }`;
+
+          return (
+            <div key={index} className="flex flex-col gap-2 w-full">
+              <label className="w-full text-gray-900" htmlFor={fieldId}>
+                {item.label}
+                {item.required && (
+                  <span aria-hidden="true" className="ml-0.5 text-gray-900">
+                    *
+                  </span>
+                )}
+              </label>
+              {item.type === "textarea" ? (
+                <textarea
+                  id={fieldId}
+                  name={item.validation}
+                  value={item.value ?? ""}
+                  onChange={(e) => handleOnChange(e, index)}
+                  required={item.required}
+                  aria-required={item.required}
+                  aria-invalid={error ? true : undefined}
+                  aria-describedby={error ? errorId : undefined}
+                  className={`${fieldClass} min-h-32`}
+                />
+              ) : (
+                <input
+                  id={fieldId}
+                  name={item.validation}
+                  value={item.value ?? ""}
+                  onChange={(e) => handleOnChange(e, index)}
+                  required={item.required}
+                  aria-required={item.required}
+                  aria-invalid={error ? true : undefined}
+                  aria-describedby={error ? errorId : undefined}
+                  autoComplete={item.validation === "email" ? "email" : "name"}
+                  className={`${fieldClass} min-h-[44px]`}
+                  type={item.type}
+                />
+              )}
+              {error && (
+                <p id={errorId} className="text-sm font-medium text-red-800">
+                  {error}
+                </p>
+              )}
+            </div>
+          );
+        })}
         <motion.button
-          className={`bg-black p-2 w-full text-white relative overflow-hidden flex items-center justify-center h-14 rounded-md ${formState !== 'idle' ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-          onClick={handleSubmit}
+          type="submit"
+          className={`bg-black p-2 w-full text-white relative overflow-hidden flex items-center justify-center h-14 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-[#dfff1f] ${formState !== 'idle' ? 'cursor-not-allowed' : 'cursor-pointer'}`}
           disabled={formState !== 'idle'}
           initial={{ opacity: 1 }}
           whileHover={formState === 'idle' ? { scale: 1.02 } : {}}
@@ -224,7 +295,7 @@ const Nav = () => {
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
               >
-                <span>Send Message</span>
+                <span>{dict.contact.form.submit}</span>
                 <FiSend className="ml-2" />
               </motion.div>
             )}
@@ -248,7 +319,7 @@ const Nav = () => {
                     animate={{ width: "auto", opacity: 1 }}
                     transition={{ delay: 0.3 }}
                   >
-                    Sending...
+                    {dict.contact.form.sending}
                   </motion.div>
                 </motion.div>
                 
@@ -485,7 +556,7 @@ const Nav = () => {
             )}
           </AnimatePresence>
         </motion.button>
-      </div>
+      </form>
     </div>
   );
 };

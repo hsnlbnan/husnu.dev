@@ -5,6 +5,8 @@ export const projects = [
       "Next.JS v14, TypeScript, Turbopack, OIDC Authentication, Axios, Zustand, TailwindCSS, HeadlessUI",
     subtitle:
       "Developed the used car sales platform for Koç Holding, Turkey's largest conglomerate. Built with micro frontend architecture serving 100K+ monthly users, implementing OIDC authentication, advanced SEO strategies, and security vulnerability mitigations across the platform.",
+    subtitleTr:
+      "Türkiye'nin en büyük holdinglerinden Koç Holding için ikinci el araç satış platformunu geliştirdim. Aylık 100.000+ kullanıcıya hizmet veren mikro frontend mimarisiyle kuruldu; OIDC kimlik doğrulama, ileri seviye SEO stratejileri ve platform genelinde güvenlik açığı önlemleri hayata geçirildi.",
     src: "/projects/otokoc.png",
     link: "https://www.otokocikinciel.com/",
     color: "#1e1e1e",
@@ -17,6 +19,8 @@ export const projects = [
       "React, TypeScript, TailwindCSS, styled-components, Redux Toolkit, Apollo Client, Sentry",
     subtitle:
       "Frontend lead at one of Turkey's leading PropTech startups. Built real-time map-based opportunity matching platform connecting real estate agents with buyers/sellers. Implemented complex geolocation features, real-time data visualization, and error monitoring with Sentry.",
+    subtitleTr:
+      "Türkiye'nin önde gelen PropTech girişimlerinden birinde frontend lideri olarak çalıştım. Emlak danışmanlarını alıcı ve satıcılarla eşleştiren, harita tabanlı gerçek zamanlı fırsat platformunu geliştirdim. Karmaşık konum özellikleri, gerçek zamanlı veri görselleştirme ve Sentry ile hata izleme kurdum.",
     src: "/projects/fizbot.png",
     link: "",
     color: "#1e1e1e",
@@ -24,8 +28,24 @@ export const projects = [
     company: "SHFT",
   },
   {
+    title: "Elasticsearch vs Zvec vs LanceDB",
+    subtitle:
+      "A reproducible search benchmark over 426K real Craigslist vehicle listings, comparing Elasticsearch 8.x against two in-process vector engines. Separates engine-internal query time from HTTP transport overhead, aligns ranking models so result quality stays constant, and reports p50/p95/p99 latency with engine agreement scores.",
+    subtitleTr:
+      "426.000 gerçek Craigslist araç ilanı üzerinde, Elasticsearch 8.x'i iki in-process vektör motoruyla karşılaştıran, tekrarlanabilir bir arama benchmark'ı. Motor içi sorgu süresini HTTP taşıma maliyetinden ayırıyor, sıralama modellerini hizalayarak sonuç kalitesini sabit tutuyor ve p50/p95/p99 gecikmelerini motor uyum skorlarıyla birlikte raporluyor.",
+    description:
+      "TypeScript, Elasticsearch 8.x, Alibaba Zvec, LanceDB, MiniLM embeddings, Node.js",
+    src: "/projects/search-benchmark.png",
+    link: "https://github.com/hsnlbnan/Elasticsearch-vs-Zvec-vs-LanceDB-search-benchmark",
+    color: "#1e1e1e",
+    accent: "#22d3ee",
+    company: "Research",
+  },
+  {
     title: "Todo App with AI Assistant FastAPI in Nextjs",
     subtitle: "Full-stack AI-powered task management application combining Next.js with FastAPI backend. Features real-time task summarization using Ollama LLM, MongoDB integration for persistent storage, and a responsive interface with AI-driven productivity insights.",
+    subtitleTr:
+      "Next.js ile FastAPI backend'ini birleştiren, yapay zekâ destekli tam yığın görev yönetimi uygulaması. Ollama LLM ile gerçek zamanlı görev özetleme, kalıcı depolama için MongoDB entegrasyonu ve yapay zekâ destekli üretkenlik içgörüleri sunan responsive bir arayüz içeriyor.",
     description:
       "Next.js, TypeScript, TailwindCSS, FastAPI, MongoDB, Python, Ollama",
     src: "/projects/nextjs-fast-api.png",
@@ -38,6 +58,8 @@ export const projects = [
     title: "hayal.in",
     subtitle:
       "Full-stack anonymous social platform where users share and explore dreams. Built with edge-first architecture using Vercel Edge Functions, real-time data handling with Redis, and optimized performance through serverless Postgres integration.",
+    subtitleTr:
+      "Kullanıcıların rüyalarını anonim olarak paylaşıp keşfettiği tam yığın sosyal platform. Vercel Edge Functions ile edge-first mimari, Redis ile gerçek zamanlı veri işleme ve serverless Postgres entegrasyonu üzerinden optimize edilmiş performans.",
     description:
       "Next.JS, TypeScript, Vercel Postgres, Vercel Redis, Vercel Edge Functions, Tailwind, Redux Toolkit",
     src: "/projects/hayalin.png",
@@ -50,6 +72,8 @@ export const projects = [
     title: "Alterego CMS",
     subtitle:
       "Enterprise multi-tenant CMS powering multiple tourism companies under one group. Implemented role-based access control with CASL, multi-site management on shared domains, and complex permission hierarchies for diverse organizational structures.",
+    subtitleTr:
+      "Tek bir grup çatısı altındaki birden fazla turizm şirketine hizmet veren, kurumsal çok kiracılı CMS. CASL ile rol tabanlı erişim kontrolü, ortak alan adları üzerinde çoklu site yönetimi ve farklı organizasyon yapıları için karmaşık yetki hiyerarşileri kurdum.",
     description:
       "Next.JS, Redux Toolkit, Redux Toolkit Query, MUI, @casl",
     src: "/projects/alterego.png",
@@ -62,6 +86,8 @@ export const projects = [
     title: "Yeditepe GO",
     subtitle:
       "Logistics management CMS for one of Turkey's leading transportation companies. Built real-time shipment tracking dashboard, optimized state management with Redux Toolkit Query for live data feeds, and streamlined operations across regional branches.",
+    subtitleTr:
+      "Türkiye'nin önde gelen nakliye şirketlerinden biri için lojistik yönetim CMS'i. Gerçek zamanlı sevkiyat takip panosu geliştirdim, canlı veri akışları için Redux Toolkit Query ile state yönetimini optimize ettim ve bölge şubeleri arasındaki operasyonları sadeleştirdim.",
     description: "React, Sass, Redux Toolkit, Redux Toolkit Query, Boostrap",
     src: "/projects/yeditepe.png",
     color: "#1e1e1e",
@@ -70,43 +96,66 @@ export const projects = [
   },
 ];
 
+// İş geçmişi. `subtitle`/`description` İngilizce; Türkçe karşılıkları
+// `subtitleTr`/`descriptionTr` alanlarında. Card/Work bileşenleri locale'e
+// göre doğru alanı seçer.
 export const work = [
   {
     title: "Nuevo Softwarehouse",
+    summary: "Building enterprise platforms with Next.js micro frontend architecture for Koç Holding.",
+    summaryTr: "Koç Holding için Next.js mikro frontend mimarisiyle kurumsal platformlar geliştiriyorum.",
     subtitle: "Frontend Developer",
+    subtitleTr: "Frontend Geliştirici",
     description: "June 2024 - Present",
+    descriptionTr: "Haziran 2024 - Halen",
     src: "/logos/nuevo.jpeg",
     color: "#1e1e1e",
     accent: "#dfff1f",
   },
   {
     title: "SHFT",
+    summary: "PropTech platform with real-time map-based features, GraphQL and Sentry monitoring.",
+    summaryTr: "Gerçek zamanlı harita tabanlı özellikler, GraphQL ve Sentry izleme ile PropTech platformu.",
     subtitle: "Frontend Developer",
+    subtitleTr: "Frontend Geliştirici",
     description: "October 2023 - June 2024",
+    descriptionTr: "Ekim 2023 - Haziran 2024",
     src: "/logos/shftco.jpeg",
     color: "#1e1e1e",
     accent: "#6366F1",
   },
   {
     title: "Nono Company",
+    summary: "Multi-tenant CMS solutions for tourism and logistics with complex role-based access control.",
+    summaryTr: "Turizm ve lojistik için karmaşık rol tabanlı yetkilendirmeye sahip çok kiracılı CMS çözümleri.",
     subtitle: "Frontend Developer",
+    subtitleTr: "Frontend Geliştirici",
     description: "September 2022 - October 2023",
+    descriptionTr: "Eylül 2022 - Ekim 2023",
     src: "/logos/nonoco.jpeg",
     color: "#1e1e1e",
     accent: "#F59E0B",
   },
   {
     title: "Appricot Software Agency",
+    summary: "Agency work building responsive web applications for a range of clients.",
+    summaryTr: "Farklı müşteriler için responsive web uygulamaları geliştirdiğim ajans dönemi.",
     subtitle: "Frontend Developer",
+    subtitleTr: "Frontend Geliştirici",
     description: "March 2022 - September 2022",
+    descriptionTr: "Mart 2022 - Eylül 2022",
     src: "/logos/appricot.jpeg",
     color: "#1e1e1e",
     accent: "#10B981",
   },
   {
     title: "Age Dijital Ajans",
+    summary: "Started professional career building client websites and CMS platforms.",
+    summaryTr: "Profesyonel kariyerime müşteri siteleri ve CMS platformları geliştirerek başladım.",
     subtitle: "Frontend Developer",
+    subtitleTr: "Frontend Geliştirici",
     description: "March 2021 - March 2022",
+    descriptionTr: "Mart 2021 - Mart 2022",
     src: "/logos/age.jpeg",
     color: "#1e1e1e",
     accent: "#EF4444",

@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion, animate } from "framer-motion";
 import { useEffect, useState } from "react";
+import type { Dictionary } from "@/i18n/dictionaries";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -52,16 +53,33 @@ const STACK_ITEMS = [
   },
 ] as const;
 
+// Kariyer başlangıcı (data.js'teki en eski kayıt: Age Dijital Ajans, Mart 2021).
+// Sabit "4+" yazmak yerine hesaplıyoruz: hem her yıl bayatlamıyor hem de
+// llms.txt / schema / site birbiriyle çelişmiyor.
+const CAREER_START = new Date(2021, 2); // Mart 2021
+
+function yearsOfExperience(now = new Date()) {
+  const months =
+    (now.getFullYear() - CAREER_START.getFullYear()) * 12 +
+    (now.getMonth() - CAREER_START.getMonth());
+  return Math.max(1, Math.floor(months / 12));
+}
+
 const METRICS = [
-  { value: 4, suffix: "+", label: "Years" },
-  { value: 20, suffix: "+", label: "Shipped" },
-  { value: 98, suffix: "", label: "Perf" },
+  { value: yearsOfExperience(), suffix: "+", labelKey: "years" as const },
+  { value: 20, suffix: "+", labelKey: "shipped" as const },
+  { value: 98, suffix: "", labelKey: "perf" as const },
 ];
 
 // ─── Counter ──────────────────────────────────────────────────────────────────
 
 function Counter({ value, suffix }: { value: number; suffix: string }) {
-  const [display, setDisplay] = useState(0);
+  // Başlangıç değeri GERÇEK sayı, 0 değil. Eskiden 0'dan başlıyordu ve sayı
+  // yalnızca client'ta animasyonla yükseldiği için server HTML'inde
+  // "0+ Yıl · 0+ Proje" yazıyordu — JS çalıştırmayan crawler'lar ve LLM'ler
+  // deneyimi sıfır olarak okuyordu. Artık SSR çıktısı doğru; animasyon
+  // hydration sonrası 0'dan başlatılıyor.
+  const [display, setDisplay] = useState(value);
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
@@ -124,6 +142,7 @@ function SkillPill({ skill }: { skill: string }) {
 
 function StackGroup({
   category,
+  categoryLabel,
   skills,
   color,
   icon,
@@ -131,6 +150,7 @@ function StackGroup({
   groupIndex,
 }: {
   category: string;
+  categoryLabel: string;
   skills: readonly string[];
   color: string;
   icon: string;
@@ -147,10 +167,10 @@ function StackGroup({
         prefersReducedMotion
           ? undefined
           : {
-              duration: 0.4,
-              delay: 0.15 + groupIndex * 0.06,
-              ease: [0.16, 1, 0.3, 1],
-            }
+            duration: 0.4,
+            delay: 0.15 + groupIndex * 0.06,
+            ease: [0.16, 1, 0.3, 1],
+          }
       }
     >
       <div className="mb-[7px] flex items-center gap-[6px]">
@@ -164,7 +184,7 @@ function StackGroup({
             color: color + "88",
           }}
         >
-          {category}
+          {categoryLabel}
         </span>
         <div
           style={{
@@ -202,7 +222,7 @@ function ScanLine() {
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
-const Languages = () => {
+const Languages = ({ dict }: { dict: Dictionary }) => {
   const prefersReducedMotion = useReducedMotion();
 
   return (
@@ -268,13 +288,13 @@ const Languages = () => {
                   fontSize: 10,
                   textTransform: "uppercase",
                   letterSpacing: "0.3em",
-                  color: "rgba(255,255,255,0.28)",
+                  color: "rgba(255,255,255,0.6)",
                   margin: "0 0 6px",
                 }}
               >
-                Frontend Developer
+                {dict.stack.role}
               </motion.p>
-              <motion.h3
+              <motion.h2
                 initial={
                   prefersReducedMotion ? undefined : { opacity: 0, y: 10 }
                 }
@@ -295,16 +315,16 @@ const Languages = () => {
                   color: "#fff",
                 }}
               >
-                I build interfaces
+                {dict.stack.headlineLead}
                 <br />
-                <span style={{ color: "#dfff1f" }}>people remember.</span>
-              </motion.h3>
+                <span style={{ color: "#dfff1f" }}>{dict.stack.headlineAccent}</span>
+              </motion.h2>
             </div>
 
             <div className="hidden shrink-0 items-start gap-5 pt-0.5 md:flex">
               {METRICS.map((m, i) => (
                 <motion.div
-                  key={m.label}
+                  key={m.labelKey}
                   initial={
                     prefersReducedMotion ? undefined : { opacity: 0, y: -8 }
                   }
@@ -335,11 +355,11 @@ const Languages = () => {
                       fontSize: 9,
                       textTransform: "uppercase",
                       letterSpacing: "0.2em",
-                      color: "rgba(255,255,255,0.25)",
+                      color: "rgba(255,255,255,0.65)",
                       margin: "2px 0 0",
                     }}
                   >
-                    {m.label}
+                    {dict.stack.metrics[m.labelKey]}
                   </p>
                 </motion.div>
               ))}
@@ -363,7 +383,12 @@ const Languages = () => {
 
           <div className="grid min-h-0 flex-1 content-start gap-x-[1.2rem] gap-y-[0.9rem] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {STACK_ITEMS.map((item, i) => (
-              <StackGroup key={item.category} {...item} groupIndex={i} />
+              <StackGroup
+                key={item.category}
+                {...item}
+                categoryLabel={dict.stack.categories[item.category]}
+                groupIndex={i}
+              />
             ))}
           </div>
 
@@ -378,12 +403,11 @@ const Languages = () => {
               borderColor: "rgba(255,255,255,0.05)",
               fontSize: 11,
               lineHeight: 1.6,
-              color: "rgba(255,255,255,0.25)",
+              color: "rgba(255,255,255,0.6)",
               margin: 0,
             }}
           >
-            Also strong on performance, a11y, responsive systems &amp;
-            maintainable architecture.
+            {dict.stack.footnote}
           </motion.p>
         </div>
       </motion.div>

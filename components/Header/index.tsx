@@ -4,13 +4,16 @@ import React, { useState, useEffect, useRef } from "react";
 import AnimatedShinyText from "../ui/animated-shiny-text";
 import Tooltip from "../Tooltip";
 import { motion, AnimatePresence } from "framer-motion";
-import { getCalApi } from "@calcom/embed-react";
+import { openCalBooking } from "@/lib/cal";
 import { ResumeIcon } from "@/icons";
 import { FiHeart } from "react-icons/fi";
 import Link from "next/link";
 import AnimatedLink from "../AnimatedLink";
 import usePageTransition from "@/hooks/usePageTransition";
 import { usePathname } from "next/navigation";
+import LanguageSwitcher from "../LanguageSwitcher";
+import { defaultLocale, type Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/dictionaries";
 
 // Neon yeşil renk paleti
 const neonGreen = "#dfff1f";
@@ -58,8 +61,16 @@ const borderVariants = {
   }
 };
 
-const Header = () => {
-  const [isBoxVisible, setIsBoxVisible] = useState(false);
+interface HeaderProps {
+  locale: Locale;
+  dict: Dictionary;
+}
+
+const Header = ({ locale, dict }: HeaderProps) => {
+  // Locale'e duyarlı iç yönlendirme: varsayılan dilde prefix yok.
+  const withLocale = (path: string) =>
+    locale === defaultLocale ? path : `/${locale}${path === "/" ? "" : path}`;
+
   const [hearts, setHearts] = useState<Array<{ id: number, index: number }>>([]);
   const [sparkles, setSparkles] = useState<Array<{ id: number, x: number, y: number }>>([]);
   const heartButtonRef = useRef<HTMLButtonElement>(null);
@@ -68,23 +79,7 @@ const Header = () => {
   const [buttonDimensions, setButtonDimensions] = useState({ width: 0, height: 0 });
   const { navigateTo } = usePageTransition();
   const pathname = usePathname();
-  const isLikedPage = pathname === '/liked';
-
-  const handleToggleBox = () => {
-    setIsBoxVisible(!isBoxVisible);
-  };
-
-  useEffect(() => {
-    (async function () {
-      const cal = await getCalApi();
-      cal("ui", {
-        theme: "dark",
-        styles: {
-          branding: { brandColor: "#000000" },
-        },
-      });
-    })();
-  }, []);
+  const isLikedPage = pathname === withLocale('/liked');
 
   // Buton boyutlarını ölç
   useEffect(() => {
@@ -149,13 +144,13 @@ const Header = () => {
     createSparkles();
 
     // Doğrudan yönlendirme yap, gecikme olmadan
-    navigateTo("/liked");
+    navigateTo(withLocale("/liked"));
   }
 
   // Handle optimized home navigation
   const handleHomeClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    navigateTo("/");
+    navigateTo(withLocale("/"));
   };
 
   return (
@@ -163,21 +158,27 @@ const Header = () => {
       <div className="md:mx-auto my-4 rounded-lg w-full lg:container">
         <div className="flex flex-col w-full lg:container my-4 rounded-lg">
           <div className="flex md:flex-row flex-col justify-between md:items-center gap-4 md:gap-0 w-full">
+            {/* Site logosu. Bilinçli olarak <h1> DEĞİL: header her route'ta
+                render edildiği için h1 olsaydı tüm sayfalar aynı başlığı
+                paylaşırdı. h1'i her sayfa kendisi tanımlar.
+                aria-label da kaldırıldı; görünen metin ("Hüsnü Lübnan
+                Frontend Developer") erişilebilir adı oluşturur, böylece sesli
+                komut kullanıcısı gördüğü metinle linki hedefleyebilir
+                (WCAG 2.5.3 Label in Name). */}
             <a
-              href="/"
+              href={withLocale("/")}
               onClick={handleHomeClick}
               className="flex flex-col -gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#dfff1f] focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-sm"
-              aria-label="Go to homepage"
             >
-              <h1 className="font-light text-2xl text-white">
+              <span className="font-light text-2xl text-white">
                 Hüsnü <span className="font-medium text-[#dfff1f]">Lübnan</span>
-              </h1>
-              <div className="flex flex-row gap-4">
-                <p className="text-gray-400 text-sm">Frontend Developer</p>
-              </div>
+              </span>
+              <span className="flex flex-row gap-4">
+                <span className="text-gray-400 text-sm">{dict.header.role}</span>
+              </span>
             </a>
 
-            <div className="flex w-full md:w-auto gap-2 justify-between" role="navigation" aria-label="Main navigation">
+            <nav className="flex w-full md:w-auto gap-2 justify-between" aria-label={dict.header.nav}>
               <motion.button
                 ref={heartButtonRef}
                 initial={{ opacity: 0 }}
@@ -194,7 +195,7 @@ const Header = () => {
                   }
                 }}
                 type="button"
-                aria-label="View liked items"
+                aria-label={dict.header.likedAria}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -271,7 +272,7 @@ const Header = () => {
                 </div>
 
                 <span className="text-white font-medium text-sm z-10">
-                  Liked
+                  {dict.header.liked}
                 </span>
               </motion.button>
 
@@ -281,22 +282,19 @@ const Header = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <div
-                  className="flex w-full h-full group-hover:border-pulse bg-[#111] px-3 py-1.5 rounded-lg cursor-pointer justify-center focus-within:ring-2 focus-within:ring-[#dfff1f] focus-within:ring-offset-2 focus-within:ring-offset-black"
-                  onClick={handleToggleBox}
+                {/* Butonun kendisi tıklanabilir alan. Daha önce dış <div>'de
+                    klavyeyle erişilemeyen ölü bir onClick vardı ve buton
+                    onun içine iç içe geçmişti. */}
+                <button
+                  type="button"
+                  onClick={openCalBooking}
+                  className="flex w-full h-full group-hover:border-pulse bg-[#111] px-3 py-1.5 rounded-lg cursor-pointer justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#dfff1f] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                 >
-                  <div className="flex flex-row items-center gap-4">
+                  <span className="flex flex-row items-center gap-4">
                     <span className="bg-[#dfff1f] rounded-full w-2 h-2 animate-pulse opacity-100" aria-hidden="true"></span>
-                    <button
-                      data-cal-link="husnu"
-                      data-cal-config='{"theme":"dark"}'
-                      aria-label="Check freelance availability status"
-                      className="focus:outline-none"
-                    >
-                      <p className="text-[#fff] font-medium text-sm">Freelance Status</p>
-                    </button>
-                  </div>
-                </div>
+                    <span className="text-[#fff] font-medium text-sm">{dict.header.freelanceStatus}</span>
+                  </span>
+                </button>
               </motion.div>
 
               {/* Desktop CV button - now in regular flow */}
@@ -307,24 +305,19 @@ const Header = () => {
                 whileHover={{ y: -1 }}
                 whileTap={{ y: 1 }}
               >
-                <div
-                  className="flex group-hover:border-pulse bg-[#111] px-3 py-1.5 rounded-lg cursor-pointer focus-within:ring-2 focus-within:ring-[#dfff1f] focus-within:ring-offset-2 focus-within:ring-offset-black"
+                <motion.button
+                  type="button"
+                  className="flex flex-row items-center gap-4 group-hover:border-pulse bg-[#111] px-3 py-1.5 rounded-lg cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#dfff1f] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                  onClick={handleDownloadResume}
+                  aria-label={dict.header.cvAria}
                 >
-                  <motion.button className="flex flex-row items-center gap-4"
-                    onClick={handleDownloadResume}
-                  >
-                    <ResumeIcon className="h-4 w-4 group-hover:animate-draw opacity-80" aria-hidden="true" />
-                    <div
-
-                      className="focus:outline-none"
-                      aria-label="Download resume (CV)"
-                    >
-                      <p className="text-[#fff] font-medium text-sm">CV</p>
-                    </div>
-                  </motion.button>
-                </div>
+                  <ResumeIcon className="h-4 w-4 group-hover:animate-draw opacity-80" aria-hidden="true" />
+                  <span className="text-[#fff] font-medium text-sm">{dict.header.cv}</span>
+                </motion.button>
               </motion.div>
-            </div>
+
+              <LanguageSwitcher locale={locale} dict={dict} />
+            </nav>
           </div>
 
           {/* CV button - full width on mobile, normal on web */}
@@ -341,9 +334,9 @@ const Header = () => {
                 <button
                   onClick={handleDownloadResume}
                   className="w-full focus:outline-none"
-                  aria-label="Download resume (CV)"
+                  aria-label={dict.header.cvAria}
                 >
-                  <p className="text-[#fff] font-medium text-sm">CV</p>
+                  <p className="text-[#fff] font-medium text-sm">{dict.header.cv}</p>
                 </button>
               </div>
             </div>

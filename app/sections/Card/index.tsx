@@ -1,5 +1,9 @@
 "use client";
 
+import type { Dictionary } from "@/i18n/dictionaries";
+import { interpolate } from "@/i18n/dictionaries";
+import { defaultLocale, type Locale } from "@/i18n/config";
+
 import Image from "next/image";
 import { useTransform, motion, useScroll, MotionValue } from "framer-motion";
 import { useRef, useState, useMemo } from "react";
@@ -11,6 +15,9 @@ type CardProps = {
   description: string;
   src: string;
   link: string;
+  dict: Dictionary;
+  locale: Locale;
+  subtitleTr?: string;
   subtitle: string;
   color: string;
   accent: string;
@@ -65,6 +72,9 @@ const Card = ({
   description,
   src,
   link,
+  dict,
+  locale,
+  subtitleTr,
   subtitle,
   color,
   accent = "#dfff1f",
@@ -178,7 +188,7 @@ const Card = ({
                       className="w-1.5 h-1.5 rounded-full"
                       style={{ backgroundColor: accent }}
                     />
-                    <span className="text-[11px] md:text-[13px] font-mono uppercase tracking-[0.15em] text-white/30">
+                    <span className="text-[11px] md:text-[13px] font-mono uppercase tracking-[0.15em] text-white/60">
                       {company}
                     </span>
                   </motion.div>
@@ -189,11 +199,11 @@ const Card = ({
             {/* External link indicator */}
             {link && (
               <motion.div
-                className="flex items-center gap-2 text-white/20 hover:text-white/60 transition-colors duration-300 cursor-pointer group"
+                className="flex items-center gap-2 text-white/60 hover:text-white transition-colors duration-300 cursor-pointer group"
                 whileHover={{ scale: 1.05 }}
               >
                 <span className="hidden md:block text-[11px] font-mono uppercase tracking-wider">
-                  View
+                  {dict.project.view}
                 </span>
                 <svg
                   width="16"
@@ -217,8 +227,8 @@ const Card = ({
               href={link || "#"}
               target="_blank"
               className="relative rounded-2xl w-full md:w-[60%] h-[200px] md:h-full overflow-hidden group"
-              aria-label={`Visit ${title} project${
-                link ? "" : " (link not available)"
+              aria-label={`${interpolate(dict.project.visitAria, { title })}${
+                link ? "" : dict.project.linkUnavailable
               }`}
               rel="noopener noreferrer"
               tabIndex={0}
@@ -237,7 +247,7 @@ const Card = ({
                 >
                   <Image
                     src={src}
-                    alt={`Screenshot of ${title} project`}
+                    alt={interpolate(dict.project.screenshotAlt, { title })}
                     fill
                     className="object-cover object-top transition-all duration-700"
                     style={{
@@ -279,7 +289,7 @@ const Card = ({
                   transition={{ duration: 0.3 }}
                 >
                   <span className="text-[12px] font-mono uppercase tracking-wider">
-                    {link ? "View Project" : "Case Study"}
+                    {link ? dict.project.viewProject : dict.project.caseStudy}
                   </span>
                   <svg
                     width="14"
@@ -302,17 +312,19 @@ const Card = ({
             <div className="flex flex-col justify-between w-full md:w-[40%] py-1">
               {/* Description */}
               <div className="flex flex-col gap-4">
-                <p className="text-[13px] md:text-[15px] leading-[1.7] text-white/40 font-light">
-                  {subtitle}
+                <p className="text-[13px] md:text-[15px] leading-[1.7] text-white/70 font-light">
+                  {locale === defaultLocale ? subtitle : subtitleTr ?? subtitle}
                 </p>
 
                 {/* Tech section */}
                 <div className="flex flex-col gap-3 mt-2">
-                  <span
-                    className="text-[10px] font-mono uppercase tracking-[0.2em]"
-                    style={{ color: `${accent}60` }}
-                  >
-                    Tech Stack
+                  <span className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.2em] text-white/70">
+                    <span
+                      aria-hidden="true"
+                      className="inline-block h-1 w-1 rounded-full"
+                      style={{ backgroundColor: accent }}
+                    />
+                    {dict.project.techStack}
                   </span>
                   <div className="flex flex-wrap gap-2">
                     {techs.map((tech, techIndex) => (
@@ -340,7 +352,7 @@ const Card = ({
                     href={link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-3 text-[13px] font-mono uppercase tracking-wider text-white/30 hover:text-white transition-colors duration-300"
+                    className="group inline-flex items-center gap-3 text-[13px] font-mono uppercase tracking-wider text-white/70 hover:text-white transition-colors duration-300"
                   >
                     <span
                       className="w-8 h-[1px] transition-all duration-500 group-hover:w-12"

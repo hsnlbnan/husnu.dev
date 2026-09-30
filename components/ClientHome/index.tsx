@@ -15,12 +15,18 @@ import {
 } from "@/utils/performanceUtils";
 import { getCriticalResourcesForPath } from "@/config/performance";
 import { LoadingFallback } from "@/components/LoadingFallback";
+import type { Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/dictionaries";
 
+// NOT: Bu bileşenler bilinçli olarak server-render edilir (ssr: false YOK).
+// Aksi halde ana sayfanın metin içeriğinin yarısı server HTML'ine hiç girmez ve
+// JS çalıştırmayan crawler'lar (Googlebot ilk geçiş, GPTBot, ClaudeBot,
+// PerplexityBot) sayfayı yarım görür. Tarayıcı API'leri yalnızca useEffect ve
+// event handler'lar içinde kullanıldığı için SSR güvenlidir.
 const Languages = dynamic(() => import("../BentoElements/Languages"), {
   loading: () => (
     <LoadingFallback variant="bento" height="min-h-[420px] lg:h-full" />
   ),
-  ssr: false,
 });
 
 const AdventureWidget = dynamic(
@@ -29,7 +35,6 @@ const AdventureWidget = dynamic(
     loading: () => (
       <LoadingFallback variant="terminal" height="min-h-[420px] lg:h-full" />
     ),
-    ssr: false,
   },
 );
 
@@ -39,7 +44,6 @@ const CurrentFocusBento = dynamic(
     loading: () => (
       <LoadingFallback variant="focus" height="min-h-[340px] h-full" />
     ),
-    ssr: false,
   },
 );
 
@@ -47,11 +51,16 @@ const ProfileCard = dynamic(() => import("@/components/LinkedInProfile"), {
   loading: () => (
     <LoadingFallback variant="profile" height="h-full min-h-[360px]" />
   ),
-  ssr: false,
 });
 
 // Main component - optimized performance
-export default function ClientHome() {
+export default function ClientHome({
+  locale,
+  dict,
+}: {
+  locale: Locale;
+  dict: Dictionary;
+}) {
   const container = useRef(null);
   const { scrollYProgress } = useScroll({
     target: container,
@@ -98,29 +107,36 @@ export default function ClientHome() {
 
   return (
     <>
-      <main className="px-4 md:px-0">
+      {/* Footer sticky olarak altta bekler; bu katman onun üzerinden kayar.
+          Opak arka plan + z-10 olmadan footer içerikten görünürdü. */}
+      <div className="relative z-10 bg-[#1D1D1D]">
+        <Header locale={locale} dict={dict} />
+        <main id="main-content" className="px-4 md:px-0">
         <div className="md:p-0">
-          <Header />
+          {/* Sayfanın tek h1'i. Bento tasarımında görünür bir başlık alanı
+              olmadığı için görsel olarak gizli, ancak meta description ve
+              llms.txt ile birebir tutarlı. */}
+          <h1 className="sr-only">{dict.home.h1}</h1>
           <div className="w-full max-w-screen">
             <div>
               <div className="md:mx-auto my-4 rounded-lg w-full lg:container">
                 <div className="flex lg:flex-row flex-col items-stretch gap-4">
                   <div className="flex w-full lg:w-8/12">
                     <div className="h-full w-full flex-1">
-                      <Languages />
+                      <Languages dict={dict} />
                     </div>
                   </div>
 
                   <div className="flex w-full lg:w-4/12">
                     <div className="h-full w-full flex-1">
-                      <AdventureWidget />
+                      <AdventureWidget dict={dict} />
                     </div>
                   </div>
                 </div>
                 <div className="flex lg:flex-row flex-col items-stretch gap-4">
                   <div className="flex flex-col w-full lg:w-9/12">
                     <div className="my-5 mb-0 md:mb-10 w-full h-full flex-1 overflow-hidden">
-                      <CurrentFocusBento />
+                      <CurrentFocusBento dict={dict} />
                     </div>
                   </div>
 
@@ -136,18 +152,20 @@ export default function ClientHome() {
                       />
 
                       <div className="relative flex h-full flex-col p-8">
-                        <h4 className="mb-8 font-light text-2xl text-white">
-                          follow the{" "}
-                          <span className="font-light text-[#dfff1f] text-2xl">
-                            adventure
-                          </span>
-                          <p className="text-sm text-gray-400">
-                            Can you contact actor?
+                        <div className="mb-8">
+                          <h2 className="font-light text-2xl text-white">
+                            {dict.home.adventureTitle}{" "}
+                            <span className="font-light text-[#dfff1f] text-2xl">
+                              {dict.home.adventureAccent}
+                            </span>
+                          </h2>
+                          <p className="mt-1 text-sm text-gray-400">
+                            {dict.home.adventureSubtitle}
                           </p>
-                        </h4>
+                        </div>
 
                         <div className="flex flex-1 flex-col justify-end gap-4">
-                          <ProfileCard />
+                          <ProfileCard dict={dict} />
                         </div>
                       </div>
                     </div>
@@ -171,18 +189,18 @@ export default function ClientHome() {
               </div>
 
               {/* Section label */}
-              <span className="relative text-[10px] font-mono uppercase tracking-[0.3em] text-[#dfff1f]/40 mb-6">
-                Featured Work
+              <span className="relative text-[10px] font-mono uppercase tracking-[0.3em] text-[#dfff1f]/80 mb-6">
+                {dict.home.featuredWork}
               </span>
 
               {/* Main reveal text */}
-              <TextReveal text="Projects I took part in action." />
+              <TextReveal text={dict.home.projectsReveal} />
 
               {/* Bottom indicator */}
               <div className="relative flex items-center gap-3 mt-8">
                 <span className="w-8 h-[1px] bg-white/10" />
-                <span className="text-[10px] font-mono text-white/20 tracking-wider">
-                  SCROLL TO EXPLORE
+                <span className="text-[10px] font-mono text-white/70 tracking-wider">
+                  {dict.home.scrollToExplore}
                 </span>
                 <span className="w-8 h-[1px] bg-white/10" />
               </div>
@@ -191,7 +209,7 @@ export default function ClientHome() {
             <section
               ref={container}
               className="relative mt-10"
-              aria-label="Projects"
+              aria-label={dict.home.projectsAria}
             >
               {projects.map((project, i) => {
                 const targetScale = 1 - (projects.length - i) * 0.05;
@@ -206,6 +224,8 @@ export default function ClientHome() {
                     range={[i * 0.25, 1]}
                     targetScale={targetScale}
                     link={project.link || ""}
+                    dict={dict}
+                    locale={locale}
                   />
                 );
               })}
@@ -213,16 +233,16 @@ export default function ClientHome() {
 
             <section
               className="relative mt-[10vh] w-full"
-              aria-label="Work Experience"
+              aria-label={dict.home.workAria}
             >
               <div className="top-0 sticky flex flex-col justify-center items-center bg-black w-full min-h-screen text-white pb-12">
                 {/* Section header */}
                 <div className="flex flex-col items-center mb-12 md:mb-16">
-                  <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#dfff1f]/50 mb-4">
-                    Career Path
+                  <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#dfff1f]/80 mb-4">
+                    {dict.home.careerPath}
                   </span>
-                  <h2 className="text-4xl md:text-7xl font-bold tracking-tighter text-white/10">
-                    Work Experience
+                  <h2 className="text-4xl md:text-7xl font-bold tracking-tighter text-white/40">
+                    {dict.home.workExperience}
                   </h2>
                 </div>
 
@@ -230,7 +250,7 @@ export default function ClientHome() {
                 <div className="flex flex-col w-full max-w-4xl px-4 md:px-8 pb-12">
                   {work.map((w, i) => {
                     return (
-                      <Work key={i} {...w} accent={w.accent || "#dfff1f"} />
+                      <Work key={i} {...w} accent={w.accent || "#dfff1f"} dict={dict} locale={locale} />
                     );
                   })}
                 </div>
@@ -238,8 +258,9 @@ export default function ClientHome() {
             </section>
           </div>
         </div>
-      </main>
-      <Footer />
+        </main>
+      </div>
+      <Footer dict={dict} />
     </>
   );
 }

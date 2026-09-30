@@ -2,8 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { interpolate, type Dictionary } from "@/i18n/dictionaries";
 import { FiEye, FiExternalLink } from "react-icons/fi";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 import { likedComponents, type LikedComponent } from "@/data/likedComponents";
 
@@ -12,7 +13,7 @@ type ComponentCardProps = LikedComponent & {
   index: number;
 };
 
-const LikedPageClient = () => {
+const LikedPageClient = ({ dict }: { dict: Dictionary }) => {
   const reduce = useReducedMotion();
   // Decorative particles use random positions; render them only after mount so the
   // static (SSR) markup matches the first client render — no hydration mismatch.
@@ -48,11 +49,15 @@ const LikedPageClient = () => {
         />
 
         <div className="relative flex flex-col items-start">
-          <motion.div
+          {/* Sayfanın h1'i. Harf harf animasyon nedeniyle içerik ekran
+              okuyucuda tek tek harf olarak okunurdu; aria-label bütün metni
+              tek seferde verir. */}
+          <motion.h1
             className="flex flex-wrap items-center overflow-hidden"
             variants={titleContainer}
             initial="hidden"
             animate="show"
+            aria-label={interpolate(dict.liked.headingAria, { count: likedComponents.length })}
           >
             {"Components".split("").map((letter, index) => (
               <motion.span
@@ -87,7 +92,7 @@ const LikedPageClient = () => {
             >
               {likedComponents.length}
             </motion.span>
-          </motion.div>
+          </motion.h1>
 
           <motion.div
             className="h-[2px] w-full origin-left bg-gradient-to-r from-[#dfff1f]/20 via-[#dfff1f] to-[#dfff1f]/20 mt-2 md:mt-3"
@@ -123,9 +128,10 @@ const LikedPageClient = () => {
         transition={{ delay: 0.9, duration: 0.5 }}
         className="text-white text-xs md:text-sm mb-6 sm:mb-8 md:mb-12 max-w-full md:max-w-[600px] [text-wrap:pretty]"
       >
-        These components were coded using React, Framer-Motion and Tailwind to learn how to make components that I like
-        and see on sites like <span className="text-[#dfff1f]">Twitter(X), Behance, Dribbble, Figma.</span> Source
-        codes are not shared out of <span className="text-[#dfff1f]">respect for designers.</span>
+        {dict.liked.intro}{" "}
+        <span className="text-[#dfff1f]">{dict.liked.introPlatforms}</span>{" "}
+        {dict.liked.introOutro}{" "}
+        <span className="text-[#dfff1f]">{dict.liked.introRespect}</span>
       </motion.p>
 
       <div className="grid grid-cols-1 xs:grid-cols-12 md:grid-cols-12 lg:grid-cols-12 gap-3 xs:gap-4 md:gap-6">
@@ -172,9 +178,12 @@ const ComponentCard = ({
   isNew,
 }: ComponentCardProps) => {
   const router = useRouter();
+  const pathname = usePathname() ?? "/liked";
+  // /liked veya /tr/liked -> aynı dilde önizleme
+  const localePrefix = pathname.startsWith("/tr") ? "/tr" : "";
 
   const openPreview = () => {
-    router.push(`/liked/preview/${id}#modal`, { scroll: false });
+    router.push(`${localePrefix}/liked/preview/${id}#modal`, { scroll: false });
   };
 
   return (

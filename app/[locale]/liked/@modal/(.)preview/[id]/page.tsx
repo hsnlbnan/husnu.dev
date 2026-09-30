@@ -3,20 +3,32 @@ import { createMetadata } from "@/config/seo";
 import { likedComponents } from "@/data/likedComponents";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { isLocale, locales, type Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 
 export const dynamic = "force-static";
 
 export function generateStaticParams() {
-  return likedComponents.map((component) => ({ id: component.id.toString() }));
+  return locales.flatMap((locale) =>
+    likedComponents.map((component) => ({ locale, id: component.id.toString() }))
+  );
 }
 
-export function generateMetadata({ params }: { params: { id: string } }): Metadata {
+export function generateMetadata({
+  params,
+}: {
+  params: { locale: string; id: string };
+}): Metadata {
+  if (!isLocale(params.locale)) return {};
+  const locale = params.locale as Locale;
+  const dict = getDictionary(locale);
   const id = Number(params.id);
   const component = likedComponents.find((item) => item.id === id);
 
   const base = createMetadata({
-    title: component ? `${component.title} Preview` : "Liked Preview",
-    description: component?.description ?? "Preview detail showcasing interactive UI components from my liked collection.",
+    locale,
+    title: component ? `${component.title} Preview` : dict.liked.title,
+    description: component?.description ?? dict.liked.description,
     path: `/liked/preview/${params.id}`,
   });
 

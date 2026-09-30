@@ -2,21 +2,12 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
+import type { Dictionary } from "@/i18n/dictionaries";
 
-const rotatingWords = ["clear", "fast", "human"] as const;
+export default function CurrentFocusBento({ dict }: { dict: Dictionary }) {
+  const rotatingWords = dict.focus.rotatingWords;
+  const notes = dict.focus.notes;
 
-const notes = [
-  {
-    title: "For users",
-    detail: "Clear next steps, calm feedback, and fewer moments of hesitation.",
-  },
-  {
-    title: "For teams",
-    detail: "Reusable patterns, safer iteration, and less visual noise to manage.",
-  },
-] as const;
-
-export default function CurrentFocusBento() {
   const prefersReducedMotion = useReducedMotion();
   const [activeWord, setActiveWord] = useState(0);
 
@@ -30,7 +21,7 @@ export default function CurrentFocusBento() {
     }, 2400);
 
     return () => window.clearInterval(interval);
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, rotatingWords.length]);
 
   return (
     <motion.div
@@ -74,18 +65,18 @@ export default function CurrentFocusBento() {
         <div className="flex items-center gap-4">
           <span className="inline-flex items-center gap-2 rounded-full border border-[#dfff1f]/20 bg-[#dfff1f]/8 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-[#dfff1f]">
             <span className="h-2 w-2 rounded-full bg-[#dfff1f]" />
-            What I optimize for
+            {dict.focus.eyebrow}
           </span>
           <div className="h-px flex-1 bg-white/10" />
         </div>
 
         <div className="mt-8 max-w-[40rem]">
-          <h4 className="font-light text-3xl leading-tight text-white md:text-[3rem] md:leading-[1.02]">
-            People remember
+          <h2 className="font-light text-3xl leading-tight text-white md:text-[3rem] md:leading-[1.02]">
+            {dict.focus.headline[0]}
             <br />
-            how an interface
+            {dict.focus.headline[1]}
             <br />
-            made them feel:
+            {dict.focus.headline[2]}
             <span className="mt-2 flex min-h-[1.2em] items-center text-[#dfff1f]">
               <AnimatePresence mode="wait">
                 <motion.span
@@ -104,10 +95,9 @@ export default function CurrentFocusBento() {
                 </motion.span>
               </AnimatePresence>
             </span>
-          </h4>
+          </h2>
           <p className="mt-4 max-w-xl text-sm leading-7 text-gray-400 md:text-[15px]">
-            Most users are not looking for novelty. They want to understand
-            what happens next, move with confidence, and never feel lost.
+            {dict.focus.paragraph}
           </p>
         </div>
 
@@ -124,9 +114,9 @@ export default function CurrentFocusBento() {
               }
               className="border-white/10 border-t pt-4"
             >
-              <h5 className="text-xs font-medium uppercase tracking-[0.24em] text-[#dfff1f]">
+              <h3 className="text-xs font-medium uppercase tracking-[0.24em] text-[#dfff1f]">
                 {note.title}
-              </h5>
+              </h3>
               <p className="mt-2 text-sm leading-6 text-gray-400">
                 {note.detail}
               </p>

@@ -1,6 +1,7 @@
 "use client";
 
 import { Verified } from "@/icons";
+import type { Dictionary } from "@/i18n/dictionaries";
 import {
   AnimatePresence,
   motion,
@@ -29,13 +30,13 @@ const PROFILES: SocialProfile[] = [
   {
     id: "linkedin",
     platform: "LinkedIn",
-    link: "https://www.linkedin.com/in/husnu/",
+    link: "https://www.linkedin.com/in/husnulubnan/",
     handle: "Hüsnü Lübnan",
     role: "Frontend Developer",
     metaLabel: "Ege Üniversitesi",
-    location: "İzmir, Türkiye",
-    footer: "500+ bağlantı",
-    actionLabel: "Bağlantı Kur",
+    location: "Izmir, Turkey",
+    footer: "500+ connections",
+    actionLabel: "Connect",
     accent: "#c37d16",
     surfaceGlow:
       "radial-gradient(circle at top left, rgba(223,255,31,0.16), transparent 36%), radial-gradient(circle at bottom right, rgba(179,255,130,0.1), transparent 34%)",
@@ -49,7 +50,7 @@ const PROFILES: SocialProfile[] = [
     metaLabel: "build notes",
     location: "x.com/hsnlbnan",
     footer: "UI experiments + product thoughts",
-    actionLabel: "Takip Et",
+    actionLabel: "Follow",
     accent: "#f2f2f2",
     surfaceGlow:
       "radial-gradient(circle at top left, rgba(212,255,122,0.14), transparent 36%), radial-gradient(circle at bottom right, rgba(156,234,132,0.09), transparent 34%)",
@@ -63,7 +64,7 @@ const PROFILES: SocialProfile[] = [
     metaLabel: "visual diary",
     location: "instagram.com/hsnlbnan",
     footer: "Frames, process, and daily captures",
-    actionLabel: "Profili Aç",
+    actionLabel: "Open profile",
     accent: "#f59eae",
     surfaceGlow:
       "radial-gradient(circle at top left, rgba(223,255,31,0.18), transparent 34%), radial-gradient(circle at bottom right, rgba(214,255,110,0.11), transparent 30%)",
@@ -77,7 +78,7 @@ const PROFILES: SocialProfile[] = [
     metaLabel: "open source",
     location: "github.com/hsnlbnan",
     footer: "Experiments, and shipped work",
-    actionLabel: "Projeleri Gör",
+    actionLabel: "View projects",
     accent: "#f2f2f2",
     surfaceGlow:
       "radial-gradient(circle at top left, rgba(196,255,118,0.14), transparent 38%), radial-gradient(circle at bottom right, rgba(223,255,31,0.08), transparent 32%)",
@@ -185,11 +186,21 @@ const contentVariants = {
   }),
 };
 
-const ProfileCard = () => {
+const ProfileCard = ({ dict }: { dict: Dictionary }) => {
   const prefersReducedMotion = useReducedMotion();
   const [[index, direction], setIndex] = useState<[number, number]>([0, 0]);
 
-  const activeProfile = PROFILES[index];
+  const staticProfile = PROFILES[index];
+  // Dile bağlı metinler sözlükten; link/accent/görsel gibi sabitler PROFILES'tan.
+  const translations = dict.social[staticProfile.id as keyof typeof dict.social];
+  const activeProfile = {
+    ...staticProfile,
+    role: translations.role,
+    metaLabel: translations.metaLabel,
+    footer: translations.footer,
+    actionLabel: translations.actionLabel,
+    location: "location" in translations ? translations.location : staticProfile.location,
+  };
   const accentSoft = toRgba(activeProfile.accent, 0.08);
   const accentBorder = toRgba(activeProfile.accent, 0.2);
 
@@ -303,9 +314,9 @@ const ProfileCard = () => {
 
               <div className="flex items-center justify-between gap-2 w-full">
                 <div className="flex items-center gap-2">
-                  <h2 className="font-semibold text-xl text-[#dfff1f]">
+                  <h3 className="font-semibold text-xl text-[#dfff1f]">
                     {activeProfile.handle}
-                  </h2>
+                  </h3>
                   <Verified className="h-4 w-4 text-white" />
                 </div>
                 <PlatformGlyph

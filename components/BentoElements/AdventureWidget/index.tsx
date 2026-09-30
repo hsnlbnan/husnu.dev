@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { Dictionary } from "@/i18n/dictionaries";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -190,12 +191,20 @@ function lineColor(kind: LineKind) {
 
 const MAX_VISIBLE_LINES = 13;
 
-export default function AdventureWidget() {
+export default function AdventureWidget({ dict }: { dict: Dictionary }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const badgeRef = useRef<HTMLDivElement>(null);
   const tabTitleRef = useRef<HTMLSpanElement>(null);
   const branchRef = useRef<HTMLSpanElement>(null);
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  // Simüle terminal gövdesi YALNIZCA client'ta render edilir.
+  // Sebebi SEO değil doğruluk: içerideki pipeline numaraları, "All checks
+  // passed" ve deploy zaman damgaları sahte sahne verisi. Server HTML'inde
+  // yer alırlarsa bir LLM bunları gerçek bir deploy kaydı sanıp aktarabilir.
+  // Dekoratif oldukları için server-render edilmelerinin hiçbir kazancı yok.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const [runIndex, setRunIndex] = useState(0);
   const [displayedLines, setDisplayedLines] = useState<VisibleLine[]>([]);
@@ -297,7 +306,7 @@ export default function AdventureWidget() {
         );
       });
     },
-    { scope: rootRef, dependencies: [displayedLines.length], revertOnUpdate: false }
+    { scope: rootRef, dependencies: [displayedLines.length, mounted], revertOnUpdate: false }
   );
 
   useGSAP(
@@ -345,16 +354,31 @@ export default function AdventureWidget() {
         pulseTween?.kill();
       };
     },
-    { scope: rootRef, dependencies: [runIndex, status] }
+    { scope: rootRef, dependencies: [runIndex, status, mounted] }
   );
 
   const statusStyle = STATUS_STYLES[status];
 
   return (
-    <div
+    // Bu widget dekoratif bir CI/CD terminal animasyonu: içindeki pipeline
+    // numaraları, "All checks passed" ve deploy zaman damgaları SABİT KODLU
+    // sahne verisi, gerçek bir sistemden gelmiyor. Eskiden ssr:false olduğu
+    // için crawler'lar hiç görmüyordu; server-render'a alınca düz metne
+    // indirgenip "11 dakika önce production'a deploy edildi" gibi GERÇEK bir
+    // iddia olarak özetlenebilir hale geldi. Bu yüzden görsel gövde tamamen
+    // aria-hidden ve yerine ne olduğunu dürüstçe anlatan bir metin veriliyor.
+    <section
       ref={rootRef}
+      aria-labelledby="adventure-widget-heading"
       className="relative flex h-full min-h-[420px] w-full flex-col overflow-hidden rounded-xl border border-white/10 bg-[#0c0c0c] font-mono shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] lg:min-h-0"
     >
+      <h2 id="adventure-widget-heading" className="sr-only">
+        {dict.terminal.heading}
+      </h2>
+      <p className="sr-only">{dict.terminal.description}</p>
+
+      {mounted && (
+      <div className="contents" aria-hidden="true">
       <div
         className="pointer-events-none absolute inset-0"
         aria-hidden="true"
@@ -413,16 +437,16 @@ export default function AdventureWidget() {
         data-shell-chrome
         className="flex flex-shrink-0 items-center gap-2 border-b border-white/5 bg-[#111] px-4 py-[7px]"
       >
-        <span className="text-[10px] text-white/20">~/</span>
-        <span className="text-[10px] text-white/35">projects</span>
-        <span className="text-[10px] text-white/20">/</span>
+        <span className="text-[10px] text-white/60">~/</span>
+        <span className="text-[10px] text-white/70">projects</span>
+        <span className="text-[10px] text-white/60">/</span>
         <span className="text-[10px] text-[#dfff1f]/80">husnu.dev</span>
 
         <span
           ref={branchRef}
-          className="ml-auto flex items-center gap-1 text-[9px] text-white/30"
+          className="ml-auto flex items-center gap-1 text-[9px] text-white/70"
         >
-          <span className="text-[#4caf50]">⎇</span>
+          <span className="text-[#6fdc72]">⎇</span>
           <span>{currentRun.branch}</span>
         </span>
       </div>
@@ -432,12 +456,12 @@ export default function AdventureWidget() {
         className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-[#0c0c0c] px-4 pb-3 pt-3 text-[10px] leading-[1.55]"
       >
         <div className="mb-3 flex-shrink-0 border-b border-white/5 pb-3">
-          <div className="text-white/20">
+          <div className="text-white/60">
             Last session · Pipeline #{previousRun.pipeline} · {previousRun.branch}
           </div>
-          <div className="mt-1 text-[#4caf50]/70">
+          <div className="mt-1 text-[#6fdc72]">
             ✓ All checks passed · Deployed → {previousRun.target} ·{" "}
-            <span className="text-white/22">{previousRun.ago}</span>
+            <span className="text-white/60">{previousRun.ago}</span>
           </div>
         </div>
 
@@ -476,6 +500,8 @@ export default function AdventureWidget() {
           50% { opacity: 0; }
         }
       `}</style>
-    </div>
+      </div>
+      )}
+    </section>
   );
 }
