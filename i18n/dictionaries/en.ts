@@ -40,8 +40,15 @@ const en = {
     switchToEnglish: "Switch to English",
   },
 
+  hero: {
+    name: "Hüsnü Lübnan",
+    // h1'in görsel olarak gizli devamı; eski sr-only h1 metniyle aynı.
+    h1Suffix:
+      " — Senior Frontend Developer building high-performance React, Next.js and TypeScript applications",
+    scrollHint: "scroll",
+  },
+
   home: {
-    h1: "Hüsnü Lübnan — Senior Frontend Developer building high-performance React, Next.js and TypeScript applications",
     featuredWork: "Featured Work",
     projectsReveal: "Projects I took part in action.",
     scrollToExplore: "Scroll to explore",
@@ -49,31 +56,42 @@ const en = {
     workExperience: "Work Experience",
     projectsAria: "Projects",
     workAria: "Work Experience",
-    adventureTitle: "follow the",
-    adventureAccent: "adventure",
-    adventureSubtitle: "Find me on the platforms I actually use.",
+    cookingStatus: "In the oven",
   },
 
   stack: {
-    role: "Senior Frontend Developer",
     headlineLead: "I build interfaces",
     headlineAccent: "people remember.",
-    metrics: {
-      years: "Years",
-      shipped: "Shipped",
-      perf: "Perf",
-    },
-    categories: {
-      "Core Stack": "Core Stack",
-      "UI Layer": "UI Layer",
-      Motion: "Motion",
-      "State & API": "State & API",
-      Backend: "Backend",
-      Testing: "Testing",
-      "DevOps & Git": "DevOps & Git",
-    },
-    footnote:
-      "Also strong on performance, a11y, responsive systems & maintainable architecture.",
+  },
+
+  // Üst bölüm (hero sonrası ilk ekran). TASLAK metinler: onay bekliyor.
+  top: {
+    headlineLead: "I sweat the details you only notice",
+    headlineAccent: "when they're missing.",
+    // {…} içindeki teknolojiler etkileşimlidir (kullanıldığı projeleri gösterir).
+    stackSentence:
+      "Every day I write {Next.js}, {React}, {TypeScript} and {Tailwind CSS}. I move things with {Framer Motion} and {GSAP}, reach for {Three.js} when a page needs a stage, test with {Cypress} and go full-stack with {Node.js} and {PostgreSQL}. Lately: {SwiftUI} and {Bun}.",
+    years: "years",
+    shipped: "shipped",
+    thisPage: "this page",
+    nowShowing: "Now showing",
+    audienceFor: "for {audience}",
+    curveNote: "one curve, whole section",
+    contactLine: "Building a product that should feel right from the first tap? Let's talk.",
+    bookCall: "Book a call",
+    bookShort: "Book",
+    stackIndex: "Stack index",
+    recruiterNote: "Recruiters: all plain text — ⌘F works",
+    hoverHint: "Hover any skill to see where it shipped.",
+    tapHint: "Tap any skill to see where it shipped.",
+    inspect: "Inspect",
+    colophon: [
+      "3D hero lazy-loaded",
+      "Every character instanced",
+      "Pixel-aligned DOM handoff",
+      "Respects reduced motion",
+      "EN / TR",
+    ],
   },
 
   focus: {
@@ -82,24 +100,8 @@ const en = {
     rotatingWords: ["clear", "fast", "human"],
     paragraph:
       "Most users are not looking for novelty. They want to understand what happens next, move with confidence, and never feel lost.",
-    notes: [
-      {
-        title: "For users",
-        detail: "Clear next steps, calm feedback, and fewer moments of hesitation.",
-      },
-      {
-        title: "For teams",
-        detail: "Reusable patterns, safer iteration, and less visual noise to manage.",
-      },
-    ],
   },
 
-  // Simüle terminal widget'ı için dürüst açıklama.
-  terminal: {
-    heading: "Build pipeline animation",
-    description:
-      "A decorative animation of a CI/CD terminal. The pipeline numbers, check results and deploy timestamps are illustrative sample data, not a live feed from a real build system.",
-  },
 
   schema: {
     jobTitle: "Senior Frontend Developer",

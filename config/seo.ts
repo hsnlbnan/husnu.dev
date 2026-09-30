@@ -1,3 +1,4 @@
+import { ALL_SKILLS } from "@/data/stack";
 import type { Metadata, Viewport } from "next";
 import { projects, work } from "@/data";
 import {
@@ -228,11 +229,12 @@ export function buildStructuredData(locale: Locale) {
         name: "TypeScript",
         description: "Strict typing and enterprise-scale development",
       },
-      "Tailwind CSS",
-      "Framer Motion",
       "Micro Frontend Architecture",
       "Web Performance Optimization (Core Web Vitals)",
       "Web Accessibility (WCAG)",
+      // Sitede görünen stack'in tamamı (data/stack.ts); yukarıda ayrıntılı
+      // anlatılanlar tekrar edilmez.
+      ...ALL_SKILLS.filter((s) => !["Next.js", "React", "TypeScript"].includes(s)),
     ],
     nationality: {
       "@type": "Country",

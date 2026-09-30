@@ -1,12 +1,17 @@
 export const projects = [
   {
     title: "Otokoç 2. El",
+    // Kimin için yapıldı: üst bölümdeki "Sahnede" kartı ve proje künyeleri.
+    audience: "people buying used cars",
+    audienceTr: "ikinci el araç arayanlar",
+    // Üst bölümdeki "Sahnede" kartında gösterilir; `order` sahneye çıkış sırası.
+    showcase: { order: 1, status: "Live · Nuevo", statusTr: "Yayında · Nuevo", color: "#2FBF71" },
     description:
-      "Next.JS v14, TypeScript, Turbopack, OIDC Authentication, Axios, Zustand, TailwindCSS, HeadlessUI",
+      "Next.js 16, TypeScript, Turbopack, OIDC Authentication, Axios, Zustand, TailwindCSS, HeadlessUI, Cypress",
     subtitle:
-      "Developed the used car sales platform for Koç Holding, Turkey's largest conglomerate. Built with micro frontend architecture serving 100K+ monthly users, implementing OIDC authentication, advanced SEO strategies, and security vulnerability mitigations across the platform.",
+      "Developed the used car sales platform for Koç Holding, Turkey's largest conglomerate. Built with micro frontend architecture serving 100K+ monthly users, implementing OIDC authentication, advanced SEO strategies, and security vulnerability mitigations across the platform. Migrated the platform from Next.js 14 to 16, grew the test suite to 3,400+ unit tests and 100 Cypress E2E tests, and raised Lighthouse scores into the 98–100 range.",
     subtitleTr:
-      "Türkiye'nin en büyük holdinglerinden Koç Holding için ikinci el araç satış platformunu geliştirdim. Aylık 100.000+ kullanıcıya hizmet veren mikro frontend mimarisiyle kuruldu; OIDC kimlik doğrulama, ileri seviye SEO stratejileri ve platform genelinde güvenlik açığı önlemleri hayata geçirildi.",
+      "Türkiye'nin en büyük holdinglerinden Koç Holding için ikinci el araç satış platformunu geliştirdim. Aylık 100.000+ kullanıcıya hizmet veren mikro frontend mimarisiyle kuruldu; OIDC kimlik doğrulama, ileri seviye SEO stratejileri ve platform genelinde güvenlik açığı önlemleri hayata geçirildi. Platformu Next.js 14'ten 16'ya taşıdım, test altyapısını 3.400+ unit ve 100 Cypress E2E testine çıkardım, Lighthouse skorlarını 98–100 bandına yükselttim.",
     src: "/projects/otokoc.png",
     link: "https://www.otokocikinciel.com/",
     color: "#1e1e1e",
@@ -14,7 +19,64 @@ export const projects = [
     company: "Nuevo Software House",
   },
   {
+    title: "bi el at",
+    audience: "households arguing about chores",
+    audienceTr: "ev işi yüzünden tartışan evler",
+    showcase: { order: 3, status: "Live · 1,500+ users", statusTr: "Yayında · 1.500+ kullanıcı", color: "#2FBF71" },
+    subtitle:
+      "My own iOS app that settles the \"who does more at home?\" argument with data and a laugh, used by 1,500+ people. Every chore scores points on a shared house map, overdue chores send a playful nudge to the right person, and a champion is crowned every month. Native SwiftUI + SpriteKit client with a Bun/ElysiaJS backend, real-time WebSocket sync and APNs push.",
+    subtitleTr:
+      "\"Evde kim daha çok iş yapıyor?\" tartışmasını veriyle ve kahkahayla bitiren, 1.500+ kişinin kullandığı kendi iOS uygulamam. Her iş ortak ev haritasında puan kazandırıyor, günü geçen işler doğru kişiye esprili bir dırdır bildirimi gönderiyor, ay sonunda şampiyon ilan ediliyor. SwiftUI + SpriteKit ile native istemci, Bun/ElysiaJS backend, WebSocket ile gerçek zamanlı senkron ve APNs bildirimleri.",
+    description: "SwiftUI, SpriteKit, Bun, ElysiaJS, PostgreSQL, WebSocket, APNs, Docker",
+    src: "/projects/bi-el-at.webp",
+    phone: "/projects/phone/bi-el-at.webp",
+    link: "https://www.bielat.site/",
+    color: "#1e1e1e",
+    accent: "#FF8A3D",
+    company: "Indie iOS App",
+  },
+  // status: "cooking" → henüz yayınlanmadı; kartta "Fırında" rozeti çıkar.
+  {
+    title: "Kılıbık",
+    audience: "couples",
+    audienceTr: "çiftler",
+    showcase: { order: 4, status: "In the oven", statusTr: "Fırında", color: "#FF8A3D" },
+    subtitle:
+      "A task + location app for couples. Write a task once and the app remembers where it belongs: your partner gets nudged when they're near the right store, red zones drawn on a shared live map raise an alert, and finished tasks hang on a clothesline. Press-and-hold calls and a weekly Wrapped, in Turkish, English and German.",
+    subtitleTr:
+      "Çiftler için görev + konum uygulaması. Görevi bir kez yaz, nereye ait olduğunu uygulama hatırlasın: partnerin doğru markete yaklaşınca dürtülüyor, ortak canlı haritada çizilen kırmızı bölgeler uyarı veriyor, biten görevler çamaşır ipine asılıyor. Basılı tutunca çalan arama ve haftalık Wrapped; Türkçe, İngilizce ve Almanca.",
+    description: "SwiftUI, Bun, ElysiaJS, PostgreSQL, PostGIS, LiveKit, APNs",
+    src: "/projects/kilibik.webp",
+    phone: "/projects/phone/kilibik.webp",
+    link: "",
+    color: "#1e1e1e",
+    accent: "#E8375A",
+    company: "Indie iOS App",
+    status: "cooking",
+  },
+  {
+    title: "Quillwood",
+    audience: "people planning their lives",
+    audienceTr: "hayatını planlayanlar",
+    showcase: { order: 5, status: "In the oven", statusTr: "Fırında", color: "#FF8A3D" },
+    subtitle:
+      "A hand-drawn, cinematic, gamified life planner. Every plan you keep grows a living world drawn entirely in code: 6 regions, 19 scenes, 3 themes. Voice task entry parsed in 8 languages, Apple Health integration, widgets and Shortcuts, and a Pro progress journal.",
+    subtitleTr:
+      "El çizimi, sinematik ve oyunlaştırılmış bir yaşam planlayıcısı. Tuttuğun her plan, tamamen kodla çizilmiş yaşayan bir dünyayı büyütüyor: 6 bölge, 19 sahne, 3 tema. 8 dilde sesle görev ekleme, Apple Health entegrasyonu, widget'lar ve Kestirmeler, Pro ilerleme günlüğü.",
+    description: "SwiftUI, SwiftData, StoreKit 2, HealthKit, WidgetKit, App Intents",
+    src: "/projects/quillwood.webp",
+    phone: "/projects/phone/quillwood.webp",
+    link: "",
+    color: "#1e1e1e",
+    accent: "#7FA35B",
+    company: "Indie iOS App",
+    status: "cooking",
+  },
+  {
     title: "Fizbot",
+    audience: "real-estate agents",
+    audienceTr: "emlak danışmanları",
+    showcase: { order: 2, status: "Shipped · SHFT", statusTr: "Teslim edildi · SHFT", color: "#9CA3AF" },
     description:
       "React, TypeScript, TailwindCSS, styled-components, Redux Toolkit, Apollo Client, Sentry",
     subtitle:
@@ -29,6 +91,10 @@ export const projects = [
   },
   {
     title: "Elasticsearch vs Zvec vs LanceDB",
+    audience: "engineers picking a search engine",
+    audienceTr: "arama motoru seçen mühendisler",
+    // Proje listesinde tek satıra sığan kısa ad; tam başlık detayda.
+    shortTitle: "Search Benchmark",
     subtitle:
       "A reproducible search benchmark over 426K real Craigslist vehicle listings, comparing Elasticsearch 8.x against two in-process vector engines. Separates engine-internal query time from HTTP transport overhead, aligns ranking models so result quality stays constant, and reports p50/p95/p99 latency with engine agreement scores.",
     subtitleTr:
@@ -43,6 +109,9 @@ export const projects = [
   },
   {
     title: "Todo App with AI Assistant FastAPI in Nextjs",
+    audience: "people with too many to-dos",
+    audienceTr: "yapılacakları birikenler",
+    shortTitle: "AI Todo",
     subtitle: "Full-stack AI-powered task management application combining Next.js with FastAPI backend. Features real-time task summarization using Ollama LLM, MongoDB integration for persistent storage, and a responsive interface with AI-driven productivity insights.",
     subtitleTr:
       "Next.js ile FastAPI backend'ini birleştiren, yapay zekâ destekli tam yığın görev yönetimi uygulaması. Ollama LLM ile gerçek zamanlı görev özetleme, kalıcı depolama için MongoDB entegrasyonu ve yapay zekâ destekli üretkenlik içgörüleri sunan responsive bir arayüz içeriyor.",
@@ -56,6 +125,8 @@ export const projects = [
   },
   {
     title: "hayal.in",
+    audience: "dreamers",
+    audienceTr: "rüyalarını paylaşanlar",
     subtitle:
       "Full-stack anonymous social platform where users share and explore dreams. Built with edge-first architecture using Vercel Edge Functions, real-time data handling with Redis, and optimized performance through serverless Postgres integration.",
     subtitleTr:
@@ -70,6 +141,8 @@ export const projects = [
 
   {
     title: "Alterego CMS",
+    audience: "tourism companies",
+    audienceTr: "turizm şirketleri",
     subtitle:
       "Enterprise multi-tenant CMS powering multiple tourism companies under one group. Implemented role-based access control with CASL, multi-site management on shared domains, and complex permission hierarchies for diverse organizational structures.",
     subtitleTr:
@@ -84,11 +157,13 @@ export const projects = [
   },
   {
     title: "Yeditepe GO",
+    audience: "logistics teams",
+    audienceTr: "lojistik ekipleri",
     subtitle:
       "Logistics management CMS for one of Turkey's leading transportation companies. Built real-time shipment tracking dashboard, optimized state management with Redux Toolkit Query for live data feeds, and streamlined operations across regional branches.",
     subtitleTr:
       "Türkiye'nin önde gelen nakliye şirketlerinden biri için lojistik yönetim CMS'i. Gerçek zamanlı sevkiyat takip panosu geliştirdim, canlı veri akışları için Redux Toolkit Query ile state yönetimini optimize ettim ve bölge şubeleri arasındaki operasyonları sadeleştirdim.",
-    description: "React, Sass, Redux Toolkit, Redux Toolkit Query, Boostrap",
+    description: "React, Sass, Redux Toolkit, Redux Toolkit Query, Bootstrap",
     src: "/projects/yeditepe.png",
     color: "#1e1e1e",
     accent: "#EF4444",

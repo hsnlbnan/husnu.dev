@@ -41,40 +41,55 @@ const tr: typeof en = {
     switchToEnglish: "İngilizce'ye geç",
   },
 
+  hero: {
+    name: "Hüsnü Lübnan",
+    h1Suffix:
+      " — React, Next.js ve TypeScript ile yüksek performanslı uygulamalar geliştiren Senior Frontend Geliştirici",
+    scrollHint: "kaydır",
+  },
+
   home: {
-    h1: "Hüsnü Lübnan — React, Next.js ve TypeScript ile yüksek performanslı uygulamalar geliştiren Senior Frontend Geliştirici",
     featuredWork: "Öne Çıkan İşler",
-    projectsReveal: "Yer aldığım projeler.",
+    projectsReveal: "Rol aldığım projeler, iş başında.",
     scrollToExplore: "Keşfetmek için kaydır",
     careerPath: "Kariyer Yolu",
     workExperience: "İş Deneyimi",
     projectsAria: "Projeler",
     workAria: "İş Deneyimi",
-    adventureTitle: "maceraya",
-    adventureAccent: "katıl",
-    adventureSubtitle: "Beni gerçekten kullandığım platformlarda bulabilirsiniz.",
+    cookingStatus: "Fırında",
   },
 
   stack: {
-    role: "Senior Frontend Geliştirici",
     headlineLead: "Akılda kalan",
     headlineAccent: "arayüzler kuruyorum.",
-    metrics: {
-      years: "Yıl",
-      shipped: "Proje",
-      perf: "Perf",
-    },
-    categories: {
-      "Core Stack": "Temel Yığın",
-      "UI Layer": "Arayüz Katmanı",
-      Motion: "Animasyon",
-      "State & API": "State & API",
-      Backend: "Backend",
-      Testing: "Test",
-      "DevOps & Git": "DevOps & Git",
-    },
-    footnote:
-      "Ayrıca performans, erişilebilirlik, responsive sistemler ve sürdürülebilir mimari konularında güçlüyüm.",
+  },
+
+  top: {
+    headlineLead: "Ancak eksik olduğunda fark edilen",
+    headlineAccent: "detayların peşindeyim.",
+    stackSentence:
+      "Her gün {Next.js}, {React}, {TypeScript} ve {Tailwind CSS} yazıyorum. {Framer Motion} ve {GSAP} ile hareket veriyorum, sayfa bir sahne istediğinde {Three.js}'e uzanıyorum, {Cypress} ile test ediyor, {Node.js} ve {PostgreSQL} ile full-stack'e geçiyorum. Son zamanlarda: {SwiftUI} ve {Bun}.",
+    years: "yıl",
+    shipped: "yayında",
+    thisPage: "bu sayfa",
+    nowShowing: "Sahnede",
+    audienceFor: "{audience} için",
+    curveNote: "tek eğri, bütün bölüm",
+    contactLine: "İlk dokunuştan itibaren doğru hissettirmesi gereken bir ürün mü yapıyorsun? Konuşalım.",
+    bookCall: "Görüşme ayarla",
+    bookShort: "Ayarla",
+    stackIndex: "Stack dizini",
+    recruiterNote: "İK için: hepsi düz metin — ⌘F ile arayın",
+    hoverHint: "Nerede kullanıldığını görmek için bir teknolojinin üstüne gel.",
+    tapHint: "Nerede kullanıldığını görmek için bir teknolojiye dokun.",
+    inspect: "İncele",
+    colophon: [
+      "3D hero ayrı yüklenir",
+      "Tüm karakterler instanced",
+      "Piksel hizalı DOM devri",
+      "Azaltılmış hareketi gözetir",
+      "EN / TR",
+    ],
   },
 
   focus: {
@@ -83,24 +98,8 @@ const tr: typeof en = {
     rotatingWords: ["anlaşılır", "hızlı", "insani"],
     paragraph:
       "Kullanıcıların çoğu yenilik aramıyor. Sırada ne olduğunu anlamak, kendinden emin ilerlemek ve hiçbir noktada kaybolmamak istiyorlar.",
-    notes: [
-      {
-        title: "Kullanıcı için",
-        detail: "Net sonraki adımlar, sakin geri bildirim ve daha az tereddüt anı.",
-      },
-      {
-        title: "Ekip için",
-        detail:
-          "Yeniden kullanılabilir örüntüler, güvenli iterasyon ve yönetilecek daha az görsel gürültü.",
-      },
-    ],
   },
 
-  terminal: {
-    heading: "Build pipeline animasyonu",
-    description:
-      "Bir CI/CD terminalinin dekoratif animasyonu. Görünen pipeline numaraları, kontrol sonuçları ve deploy zaman damgaları temsili örnek verilerdir; gerçek bir build sisteminden canlı olarak gelmez.",
-  },
 
   schema: {
     jobTitle: "Senior Frontend Geliştirici",
