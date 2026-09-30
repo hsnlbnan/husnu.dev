@@ -33,6 +33,14 @@ if (typeof window !== "undefined") {
 const HeroCanvas = dynamic(() => import("./HeroCanvas"), { ssr: false });
 
 const PHASE_NAMES = ["A", "B", "C", "D", "E"] as const;
+/**
+ * Dalış (D) ve devir (E) aralığında durulmaz: ara kareler — özellikle dik
+ * ekranda ekranın altındaki boş bant — tek başına bir sayfa gibi kalıyordu.
+ * Kaydırma bu aralıkta biterse aşağı yönde dalış tamamlanır, yukarı yönde
+ * "ekran açığa çıktı" karesine (faz C'nin bekleme anı) dönülür.
+ */
+const SNAP_FROM = PHASES.D;
+const SCENE_REST = (PHASES.C + PHASES.D) / 2;
 const PHASE_STARTS = [PHASES.A, PHASES.B, PHASES.C, PHASES.D, PHASES.E];
 
 type Props = {
@@ -111,6 +119,14 @@ export default function HeroSection({ dict, children }: Props) {
           pinSpacing: false,
           scrub: 1,
           anticipatePin: 1,
+          // Bkz. SNAP_FROM: yalnızca kaydırma durunca devreye girer.
+          snap: {
+            snapTo: (v: number, self?: ScrollTrigger) =>
+              v > SNAP_FROM && v < 1 ? ((self?.direction ?? 1) < 0 ? SCENE_REST : 1) : v,
+            duration: { min: 0.35, max: 1.1 },
+            delay: 0.08,
+            ease: "power2.inOut",
+          },
           invalidateOnRefresh: true,
           // Sayfa doğrudan pin'in ötesinde açılırsa onUpdate hiç tetiklenmeyebilir.
           onRefresh: (self) => {

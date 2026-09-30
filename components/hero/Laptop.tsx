@@ -133,6 +133,15 @@ export default function Laptop({ scale, screenPx }: Props) {
     [env]
   );
 
+  // Kararma için gövde materyallerinin taban rengi ve yansıma şiddeti.
+  const bodyTone = useMemo(
+    () =>
+      [materials.aluminium, materials.well, materials.keys, materials.trackpad, materials.grille, materials.hinge].map(
+        (m) => [m, m.color.clone(), m.envMapIntensity] as const
+      ),
+    [materials]
+  );
+
   useLayoutEffect(
     () => () => {
       Object.values(materials).forEach((m) => m.dispose());
@@ -153,6 +162,13 @@ export default function Laptop({ scale, screenPx }: Props) {
 
     // Ekran başlangıçta da açık: ışığı kalabalığın yüzlerine vurur.
     materials.screen.emissiveIntensity = 1 + rig.screenOn * 1.5;
+    // Dalışta gövde de kalabalıkla birlikte kararır: dik ekranda laptop ekranı
+    // viewport'un yalnızca üstünü kaplar ve alttaki alüminyum şerit parlıyordu.
+    const k = 1 - 0.94 * rig.crowdDim;
+    for (const [m, base, env0] of bodyTone) {
+      m.color.copy(base).multiplyScalar(k);
+      m.envMapIntensity = env0 * k;
+    }
     if (glow.current) glow.current.intensity = (1.1 + 0.7 * rig.screenOn) * (1 - rig.handoff);
     screen.current?.getWorldPosition(targets.laptop);
     // En sonda: kapak dönüşü bu karede uygulandıktan sonra ekranı yansıt.
