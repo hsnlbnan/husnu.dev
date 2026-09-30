@@ -95,7 +95,8 @@ export default function ClientHome({
               className="relative mt-[10vh] w-full"
               aria-label={dict.home.workAria}
             >
-              <div className="top-0 sticky flex flex-col justify-center items-center bg-black w-full min-h-screen text-white pb-12">
+              {/* Mobilde kenardan kenara (ebeveynin px-4 boşluğunu taşar). */}
+              <div className="top-0 sticky -mx-4 flex w-[calc(100%+2rem)] flex-col justify-center items-center bg-black min-h-screen text-white pb-12 md:mx-0 md:w-full">
                 {/* Section header */}
                 <div className="flex flex-col items-center mb-12 md:mb-16">
                   <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#dfff1f]/80 mb-4">

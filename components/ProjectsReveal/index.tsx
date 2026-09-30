@@ -122,7 +122,7 @@ export default function ProjectsReveal({ eyebrow, text, hint }: Props) {
   return (
     <div
       ref={sectionRef}
-      className="relative z-10 flex min-h-[70vh] flex-col items-center justify-center overflow-hidden rounded-lg bg-black px-4 py-24 md:min-h-[90vh]"
+      className="relative z-10 -mx-4 flex min-h-[70vh] flex-col items-center justify-center overflow-hidden bg-black px-4 py-24 md:mx-0 md:min-h-[90vh] md:rounded-lg"
     >
       {/* Arka plan: ince lime çizgiler ve hafif hale */}
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">

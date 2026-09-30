@@ -28,7 +28,11 @@ export default function Footer({ dict }: { dict: Dictionary }) {
     // kullanıyor ve bu, yüksekliği belirsiz bir ebeveynde `auto`ya düşüyor.
     // Rengi burada vermek, içerik 100vh'den kısa kaldığında altta koyu bir
     // boşluk oluşmasını her viewport boyutunda engelliyor.
-    <footer className="sticky bottom-0 z-0 flex min-h-screen flex-col bg-[#dfff1f]">
+    // Sticky yalnızca footer ekrana sığdığında: ekrandan uzun sticky bir öğenin
+    // alt kenarı ekranın altına sabitlenir ve ÜST kısmı (başlık, e-posta,
+    // görüşme aksiyonları) içeriğin arkasında hiç görünmeden kalır. Mobilde
+    // footer ~1190px; orada normal akışta durur.
+    <footer className="relative z-0 flex min-h-screen flex-col bg-[#dfff1f] [@media(min-width:768px)_and_(min-height:680px)]:sticky [@media(min-width:768px)_and_(min-height:680px)]:bottom-0">
       <div className="flex flex-1 flex-col">
         <Content dict={dict} />
       </div>
