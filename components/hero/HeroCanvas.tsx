@@ -11,6 +11,7 @@ import { SCREEN_ASPECT } from "./constants";
 import { attachPointer } from "./focus";
 import { detectTier, getLayout, lowerTier, TIERS, type Tier } from "./quality";
 import Scene from "./Scene";
+import { ScreenOverlay } from "./ScreenContent";
 
 type Props = {
   /** Hero görünür ve sekans bitmemişse true; değilse render durur. */
@@ -138,6 +139,9 @@ export default function HeroCanvas({ active, still, onReady, onFail }: Props) {
         {still && <SettleFrames />}
         <Scene layout={layout} characters={characters} tier={settings} screenPx={screenPx} still={still} />
       </Canvas>
+      {/* Laptop ekranındaki önizleme: canvas'ın üstünde düz bir DOM katmanı,
+          sahnedeki projektör her karede ekran dörtgenine oturtur. */}
+      <ScreenOverlay width={screenPx.width} height={screenPx.height} />
     </div>
   );
 }

@@ -81,7 +81,10 @@ const nextConfig = {
               "base-uri 'self'",
               "form-action 'self'",
               "object-src 'none'",
-              'upgrade-insecure-requests',
+              // Yalnızca üretimde: Safari bu yönergeyi localhost'a da uygular ve
+              // http://localhost varlıklarını https'e yükseltip yükleyemez
+              // (Chrome localhost'u muaf tutar). iOS Simulator'da yerel test için.
+              ...(process.env.NODE_ENV === 'production' ? ['upgrade-insecure-requests'] : []),
             ].join('; '),
           },
         ],

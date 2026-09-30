@@ -4,7 +4,7 @@
 //
 // Yapı:
 //   [pinlenen blok]
-//     stage   (absolute, 100svh) : canvas + başlık katmanı
+//     stage   (absolute, 100lvh) : canvas + başlık katmanı
 //     content (akışta)           : gerçek Header + üst bento (children)
 //   [spacer] (320–400svh)        : pin mesafesi, SSR'da render edilir
 //
@@ -235,11 +235,20 @@ export default function HeroSection({ dict, children }: Props) {
       <div ref={pinRef} className="relative flow-root">
         <div
           data-hero-stage=""
-          className={`absolute inset-x-0 top-0 z-20 h-[100svh] overflow-hidden isolate motion-reduce:relative ${
+          // 100lvh: iOS 26 Safari'nin yarı saydam alt çubuğunun ARKASI da
+          // sahneyle dolsun; svh olunca çubuğun altından alttaki içerik
+          // görünüyordu. lvh sabittir, çubuk açılıp kapanınca canvas boyutu
+          // değişmez.
+          // overflow bilinçli olarak AÇIK: alttaki etek (skirt) sahnenin dışına taşar.
+          className={`absolute inset-x-0 top-0 z-20 h-[100lvh] isolate motion-reduce:relative ${
             finished ? "invisible" : ""
           }`}
         >
           <div ref={sceneLayerRef} className="absolute inset-0 bg-[#050505]" aria-hidden="true">
+            {/* Etek: iOS 26 Safari'de 100lvh bile yüzen alt çubuğun arkasına
+                tam uzanmıyor; oradan alttaki içerik sızıyordu. Canvas boyutunu
+                değiştirmeden sahnenin altını kapatır, sahneyle birlikte söner. */}
+            <div data-hero-skirt="" className="absolute inset-x-0 top-full h-[40vh] bg-black motion-reduce:hidden" />
             {/* Poster: canvas hazır olana kadar ve WebGL yoksa görünür. */}
             <div
               className="absolute inset-0 bg-cover bg-center"
@@ -293,7 +302,8 @@ export default function HeroSection({ dict, children }: Props) {
 
           <div
             ref={hintRef}
-            className="absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-2 text-[11px] font-mono uppercase tracking-[0.25em] text-white/70 motion-reduce:hidden md:bottom-8"
+            // Görünür alanın altında dursun (lvh sahnede çubuğun arkasında kalmasın).
+            className="absolute bottom-[calc(100lvh-100svh+1.5rem)] left-1/2 flex -translate-x-1/2 items-center gap-2 text-[11px] font-mono uppercase tracking-[0.25em] text-white/70 motion-reduce:hidden md:bottom-[calc(100lvh-100svh+2rem)]"
             aria-hidden="true"
           >
             <motion.span
@@ -317,7 +327,7 @@ export default function HeroSection({ dict, children }: Props) {
         className="h-[320svh] md:h-[400svh] motion-reduce:hidden"
       />
       <noscript>
-        <style>{`[data-hero-spacer]{display:none}[data-hero-stage]{position:relative}`}</style>
+        <style>{`[data-hero-spacer],[data-hero-skirt]{display:none}[data-hero-stage]{position:relative}`}</style>
       </noscript>
     </>
   );

@@ -61,11 +61,29 @@ function useGuides(headRef: React.RefObject<HTMLElement>, deps: unknown[]) {
   return lines;
 }
 
-type Seg = string | { skill: string };
+type Seg = string | { skill: string; after: string };
 
-/** "Every day I write {Next.js}, …" → metin ve etkileşimli teknoloji parçaları. */
+/**
+ * "Every day I write {Next.js}, …" → metin ve etkileşimli teknoloji parçaları.
+ * Teknolojiden hemen sonra gelen noktalama/ek ("," "." "'e") teknolojiye
+ * yapıştırılır: Safari'de buton satır içi blok olduğundan virgül tek başına
+ * yeni satırın başına düşüyordu.
+ */
 function parseSentence(sentence: string): Seg[] {
-  return sentence.split(/(\{[^}]+\})/).filter(Boolean).map((part) => (part.startsWith("{") ? { skill: part.slice(1, -1) } : part));
+  const out: Seg[] = [];
+  for (const part of sentence.split(/(\{[^}]+\})/).filter(Boolean)) {
+    const prev = out[out.length - 1];
+    if (part.startsWith("{")) {
+      out.push({ skill: part.slice(1, -1), after: "" });
+    } else if (prev && typeof prev !== "string") {
+      const m = part.match(/^[^\s]*/)![0];
+      prev.after = m;
+      if (part.length > m.length) out.push(part.slice(m.length));
+    } else {
+      out.push(part);
+    }
+  }
+  return out;
 }
 
 export function StatementTile({ dict, play }: { dict: Dictionary; play: number }) {
@@ -154,8 +172,8 @@ export function StatementTile({ dict, play }: { dict: Dictionary; play: number }
             typeof seg === "string" ? (
               <Fragment key={i}>{seg}</Fragment>
             ) : (
+              <span key={i} className="whitespace-nowrap">
               <button
-                key={i}
                 type="button"
                 onMouseEnter={() => setSkill(seg.skill)}
                 onMouseLeave={() => setSkill(null)}
@@ -165,6 +183,8 @@ export function StatementTile({ dict, play }: { dict: Dictionary; play: number }
               >
                 {seg.skill}
               </button>
+              {seg.after}
+              </span>
             )
           )}
         </p>

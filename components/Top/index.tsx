@@ -25,11 +25,11 @@ import { InspectProvider, InspectSwitch, useArrival } from "./ui";
 
 function Colophon({ dict }: { dict: Dictionary }) {
   return (
-    <div className="flex flex-wrap items-center gap-x-5 gap-y-2 px-1 font-mono text-[10px] uppercase tracking-[0.18em] text-white/30">
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-1 font-mono md:gap-x-5 text-[10px] uppercase tracking-[0.18em] text-white/30">
       <InspectSwitch label={dict.top.inspect} />
       {dict.top.colophon.map((f) => (
         <span key={f} className="flex items-center gap-5">
-          <span className="h-px w-3 bg-white/15" />
+          <span className="hidden h-px w-3 bg-white/15 md:block" />
           {f}
         </span>
       ))}

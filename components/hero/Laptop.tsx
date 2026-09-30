@@ -22,7 +22,7 @@ import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeom
 import { LAPTOP, LIME, PALETTE } from "./constants";
 import { targets } from "./focus";
 import { rig } from "./rig";
-import ScreenContent from "./ScreenContent";
+import { useScreenProjection } from "./ScreenContent";
 
 const DEG = Math.PI / 180;
 
@@ -143,6 +143,8 @@ export default function Laptop({ scale, screenPx }: Props) {
 
   const { baseW, baseH, baseD, lidW, lidH, lidT, screenW, screenH, screenCenterY } = LAPTOP;
 
+  const { anchor: screenAnchor, project: projectScreen, position: screenPos } = useScreenProjection(screenPx);
+
   useFrame(() => {
     if (!lift.current || !spin.current || !hinge.current) return;
     lift.current.position.y = rig.laptopLift;
@@ -153,6 +155,8 @@ export default function Laptop({ scale, screenPx }: Props) {
     materials.screen.emissiveIntensity = 1 + rig.screenOn * 1.5;
     if (glow.current) glow.current.intensity = (1.1 + 0.7 * rig.screenOn) * (1 - rig.handoff);
     screen.current?.getWorldPosition(targets.laptop);
+    // En sonda: kapak dönüşü bu karede uygulandıktan sonra ekranı yansıt.
+    projectScreen();
   });
 
   return (
@@ -238,7 +242,7 @@ export default function Laptop({ scale, screenPx }: Props) {
               intensity={1.1}
             />
 
-            <ScreenContent width={screenPx.width} height={screenPx.height} />
+            <object3D ref={screenAnchor} position={screenPos} />
           </group>
         </group>
       </group>

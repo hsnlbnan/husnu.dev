@@ -219,7 +219,8 @@ function Details({
       className={`flex min-w-0 flex-col gap-3 self-start md:gap-4 xl:self-center ${active ? "" : "pointer-events-none"}`}
       initial={false}
       animate={{ opacity: active ? 1 : 0, y: active ? 0 : 10 }}
-      transition={{ duration: 0.35, delay: active ? 0.1 : 0 }}
+      // Hızlı kaydırmada künyeler üst üste binmesin: çıkan hızlı söner.
+      transition={active ? { duration: 0.35, delay: 0.12 } : { duration: 0.12 }}
     >
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
         <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.15em] text-white/60">
@@ -252,7 +253,7 @@ function Details({
           >
             {p.title}
             <span aria-hidden="true" className="text-base text-white/40 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
-              ↗
+              ↗︎
             </span>
           </a>
         ) : (
@@ -307,8 +308,11 @@ function Laptop({ src, alt }: { src: string; alt: string }) {
 
 function Phone({ src, alt }: { src: string; alt: string }) {
   return (
-    <div className="h-full max-h-[min(62vh,640px)] rounded-[42px] bg-[#0b0b0c] p-[9px] shadow-[0_40px_80px_-30px_rgba(0,0,0,0.9)] ring-1 ring-white/15">
-      <div className="relative aspect-[9/19.5] h-full overflow-hidden rounded-[33px] bg-white">
+    // Oran DIŞ kutuda: Safari, yüksekliği yüzdeyle verilmiş bir çocuğun
+    // aspect-ratio'sundan ebeveyn genişliğini hesaplamıyor ve çerçeve ince
+    // bir çubuğa çöküyordu. Ekran, çerçevenin içine mutlak konumlanır.
+    <div className="relative aspect-[9/19.5] h-full max-h-[min(62vh,640px)] rounded-[42px] bg-[#0b0b0c] shadow-[0_40px_80px_-30px_rgba(0,0,0,0.9)] ring-1 ring-white/15">
+      <div className="absolute inset-[9px] overflow-hidden rounded-[33px] bg-white">
         <ScreenImage src={src} alt={alt} sizes="300px" />
       </div>
     </div>

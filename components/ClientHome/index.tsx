@@ -73,8 +73,9 @@ export default function ClientHome({
             pinlenen bloğunun içinde, canvas'ın altında durur: sekans sonunda
             canvas söndüğünde görünen, yerinde duran bu gerçek içeriktir. */}
         <HeroSection dict={dict}>
-          <Header locale={locale} dict={dict} />
+          {/* Header ve üst bölüm aynı yatay boşlukta (mobilde Header kenara yapışıyordu). */}
           <div className="px-4 md:px-0">
+            <Header locale={locale} dict={dict} />
             <div className="mx-auto my-4 w-full lg:container">
               <TopSection locale={locale} dict={dict} />
             </div>

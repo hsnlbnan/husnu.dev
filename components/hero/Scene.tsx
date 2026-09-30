@@ -92,9 +92,11 @@ export default function Scene({ layout, characters, tier, screenPx, still }: Pro
         <planeGeometry args={[10, 10]} />
       </mesh>
 
-      {/* Masa */}
-      <mesh position={[0, 0, 2.7]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[8, 3]} />
+      {/* Masa / zemin: kameranın altına kadar uzanır. Dik (mobil) kamera
+          masanın ön kenarının ötesini de görüyordu; orada siyah bir bant
+          kalıyordu. Uzak kısım sisle arka plana karışır. */}
+      <mesh position={[0, 0, 4]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+        <planeGeometry args={[40, 30]} />
         <meshStandardMaterial color={PALETTE.table} roughness={0.9} />
       </mesh>
       {/* Laptopun altında sahte temas gölgesi */}
@@ -102,6 +104,9 @@ export default function Scene({ layout, characters, tier, screenPx, still }: Pro
         <planeGeometry args={[2.2, 1.7]} />
       </mesh>
 
+      {/* Kamera ilk: useFrame sırası kayıt sırasıdır; laptop ekran projeksiyonu
+          ve kalabalığın imleç ışını o karenin kamerasını kullanmalı. */}
+      <CameraRig layout={layout} />
       <Laptop scale={layout.laptopScale} screenPx={screenPx} />
       <Crowd
         characters={characters}
@@ -110,7 +115,6 @@ export default function Scene({ layout, characters, tier, screenPx, still }: Pro
         shadows={tier.shadows}
         still={still}
       />
-      <CameraRig layout={layout} />
     </>
   );
 }
