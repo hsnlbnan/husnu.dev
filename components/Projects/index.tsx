@@ -251,25 +251,42 @@ function Details({
             className="group inline-flex items-baseline gap-2 decoration-white/30 underline-offset-4 hover:underline"
             aria-label={interpolate(dict.project.visitAria, { title: p.title })}
           >
-            {p.title}
+            <Title p={p} />
             <span aria-hidden="true" className="text-base text-white/40 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
               ↗︎
             </span>
           </a>
         ) : (
-          p.title
+          <Title p={p} />
         )}
       </h3>
 
-      <p className="line-clamp-3 text-base leading-[1.55] text-white/90 md:line-clamp-none md:text-lg">{emphasizeNumbers(lead)}</p>
-      {body && (
-        <p className="line-clamp-3 max-w-[62ch] text-[15px] leading-[1.65] text-white/60 md:line-clamp-none md:text-base">
-          {emphasizeNumbers(body)}
-        </p>
-      )}
+      <p className="text-[15px] leading-[1.55] text-white/90 [text-wrap:pretty] md:text-lg">{emphasizeNumbers(lead)}</p>
+      {/* Mobilde sahne tek ekrana sığmalı: gövde paragrafı yok (giriş cümlesi
+          yeterli), yığın tek satırlık metin. Geniş ekranda tamamı. */}
+      {body && <p className="hidden max-w-[62ch] text-base leading-[1.65] text-white/60 md:block">{emphasizeNumbers(body)}</p>}
 
-      <TechStack techs={techs} label={dict.project.techStack} accent={accent} />
+      <div className="hidden md:block">
+        <TechStack techs={techs} label={dict.project.techStack} accent={accent} />
+      </div>
+      <p className="font-mono text-[11px] leading-relaxed tracking-wide text-white/45 md:hidden">
+        <span className="sr-only">{dict.project.techStack}: </span>
+        {techs.join(" · ")}
+      </p>
     </motion.article>
+  );
+}
+
+/** Mobilde kısa ad (varsa), geniş ekranda tam başlık; ekran okuyucu hep tam başlığı duyar. */
+function Title({ p }: { p: Project }) {
+  if (!p.shortTitle) return <>{p.title}</>;
+  return (
+    <>
+      <span className="md:hidden" aria-hidden="true">
+        {p.shortTitle}
+      </span>
+      <span className="sr-only md:not-sr-only">{p.title}</span>
+    </>
   );
 }
 
@@ -311,8 +328,11 @@ function Phone({ src, alt }: { src: string; alt: string }) {
     // Oran DIŞ kutuda: Safari, yüksekliği yüzdeyle verilmiş bir çocuğun
     // aspect-ratio'sundan ebeveyn genişliğini hesaplamıyor ve çerçeve ince
     // bir çubuğa çöküyordu. Ekran, çerçevenin içine mutlak konumlanır.
-    <div className="relative aspect-[9/19.5] h-full max-h-[min(62vh,640px)] rounded-[42px] bg-[#0b0b0c] shadow-[0_40px_80px_-30px_rgba(0,0,0,0.9)] ring-1 ring-white/15">
-      <div className="absolute inset-[9px] overflow-hidden rounded-[33px] bg-white">
+    // Köşe ve çerçeve boyuta oranlı (yüzde): sabit 42px, küçük telefonda
+    // çerçeveyi bir kapsüle çeviriyordu. iPhone oranları: köşe ≈ genişliğin
+    // %17'si, çerçeve ≈ %3.5'i.
+    <div className="relative aspect-[9/19.5] h-full max-h-[min(62vh,640px)] rounded-[17%_/_7.8%] bg-[#0b0b0c] shadow-[0_40px_80px_-30px_rgba(0,0,0,0.9)] ring-1 ring-white/15">
+      <div className="absolute inset-x-[3.5%] inset-y-[1.6%] overflow-hidden rounded-[14%_/_6.5%] bg-white">
         <ScreenImage src={src} alt={alt} sizes="300px" />
       </div>
     </div>
